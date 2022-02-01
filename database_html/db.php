@@ -17,40 +17,40 @@
         die("Error: Connection could not found");
       }
     }
-   public function insert($query)
+   public function insert($aname,$acity,$aphno)
     { 
-      //$name= $aname;
-      //$city= $acity;
-      //$phone= $aphno;
+      $name= $aname;
+      $city= $acity;
+      $phone= $aphno;
       
-      //$query="insert into student(name,city,phno) values ('$name','$city','$phone')";
-     
+      //$query="insert into student_master(name,city,phno) values ('".$name."','".$city."','".$phone."')";
+      $query="insert into student(name,city,phno) values ('$name','$city','$phone')";
+      echo "insert successfully";
       mysqli_query($this->con,$query);
-       echo "insert successfully";
   
     }
 
 
-    function delete($query)
+    function delete($aid)
     {
-      //$id = $aid;
+      $id = $aid;
       
-      //$query = "delete from student where id = '$id'";
+      $query = "delete from student where id = '$id'";
       
       mysqli_query($this->con,$query);
       echo "delete successfully";
     }
 
 
-    function update($query)
+    function update($aid,$aname,$acity,$aphno)
     {
       
-      //$id = $aid;
-      //$name = $aname;
-      //$city = $acity;
-      //$phone = $aphno;
+      $id = $aid;
+      $name = $aname;
+      $city = $acity;
+      $phone = $aphno;
       
-      //$query = "update student set name='". $name ."',city = '". $city ."', phno = '".$phone ."' where id =" . $id;
+      $query = "update student set name='". $name ."',city = '". $city ."', phno = '".$phone ."' where id =" . $id;
       mysqli_query($this->con,$query);
       echo "update successfully";
 
@@ -68,6 +68,7 @@
           <th align="center">Name</th>
           <th align="center">City</th>
           <th align="center">Phone</th>
+          <th align="center">Action</th>
         </tr>
         <?php
           while($row = mysqli_fetch_array($rs))
@@ -76,7 +77,8 @@
             echo "<td>" . $row['name'] ."</td>";
             echo "<td>" . $row['city']."</td>";
             echo "<td>" . $row['phno'] ."</td>";
-            
+            echo "<td align='center'><a href='edit.php?j=" . $row['id'] ."'>Edit</a> ||
+              <a href='delete.php?j=" . $row['id'] ."'>Delete</a></td></tr>";
           }         
         ?>
       </table>
@@ -87,9 +89,9 @@
   }
   $obj = new adapter();
   $obj->connection();
-  //$obj->insert("insert into student(name,city,phno) values ('name','city','12')");
-  //$obj->delete("delete from student where id = '22'");
-  $obj->update("update student set name='paul',city = 'brazil', phno = '456456' where id = '24'");
+  //$obj->insert('dvc','monm','4545455');
+  //$obj->delete(15);
+  //$obj->update(1,'dc','morbi','123456');
  $obj->view();
 
 ?>
