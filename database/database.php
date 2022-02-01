@@ -2,65 +2,65 @@
 
   class adapter
   {
-   public function insert()
+    private $hostname = "localhost";
+    private $user = "root";
+    private $password = '';
+    private $dbname = "student";
+    public $con;
+
+    public function connection()
+    {
+      $this->con = mysqli_connect($this->hostname,$this->user,$this->password,$this->dbname);
+  
+      if($this->con== false)
+      {
+        die("Error: Connection could not found");
+      }
+    }
+   public function insert($aname,$acity,$aphno)
     { 
-     require("connection.php");
-      $name='dosrfsm';
-      $city='gvot';
-      $phone='874560';
+      $name= $aname;
+      $city= $acity;
+      $phone= $aphno;
       
       //$query="insert into student_master(name,city,phno) values ('".$name."','".$city."','".$phone."')";
       $query="insert into student(name,city,phno) values ('$name','$city','$phone')";
-      echo "insert into student(name,city,phno) values ('$name','$city','$phone')";
       echo "insert successfully";
-      mysqli_query($con,$query);
+      mysqli_query($this->con,$query);
   
     }
 
 
-    function delete()
+    function delete($aid)
     {
-      require("connection.php");
-      $id = 9;
+      $id = $aid;
       
       $query = "delete from student where id = '$id'";
-      echo "delete from student where id = '$id'";
       
-      mysqli_query($con,$query);
+      mysqli_query($this->con,$query);
       echo "delete successfully";
     }
 
 
-    function update()
+    function update($aid,$aname,$acity,$aphno)
     {
-      require("connection.php");
       
-      $id = '2';
-      $name = 'opo';
-      $city = 'qwert';
-      $phone = '956235';
+      $id = $aid;
+      $name = $aname;
+      $city = $acity;
+      $phone = $aphno;
       
       $query = "update student set name='". $name ."',city = '". $city ."', phno = '".$phone ."' where id =" . $id;
-      
-      mysqli_query($con,$query);
+      mysqli_query($this->con,$query);
       echo "update successfully";
 
     }
 
 
 
-
-
-
-
-
-
-
-
     function view()
     {
-      require("connection.php");
-      $rs=mysqli_query($con,"select * from student");
+      $rs=mysqli_query($this->con,"select * from student");
 ?>
       <table align="center" widht="50%" border="1">
         <tr>
@@ -70,7 +70,7 @@
           <th align="center">Phone</th>
         </tr>
         <?php
-          while($row = mysqli_fetch_array($rs))
+          while(mysqli_fetch_array($rs))
           {
             echo "<tr><td>". $row['id'] ."</td>";
             echo "<td>" . $row['name'] ."</td>";
@@ -86,10 +86,10 @@
 
   }
   $obj = new adapter();
- 
-  $obj->insert();
-  //$obj->delete();
-  //$obj->update();
- // $obj->view();
+  $obj->connection();
+  //$obj->insert('dvc','monm','4545455');
+  //$obj->delete(15);
+  //$obj->update(1,'dc','morbi','123456');
+ $obj->view();
 
 ?>
