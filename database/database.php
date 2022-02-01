@@ -70,7 +70,7 @@
           <th align="center">Phone</th>
         </tr>
         <?php
-          while(mysqli_fetch_array($rs))
+          while($row = mysqli_fetch_array($rs))
           {
             echo "<tr><td>". $row['id'] ."</td>";
             echo "<td>" . $row['name'] ."</td>";
