@@ -19,7 +19,7 @@ require('Adapter.php');
 <html>
 			<center>
 				<table>
-				<form name="update" action="product_save.php" method="post">
+				<form name="update" action="category_save.php" method="post">
 				<tr>
 					<td>Name :-</td>
 					<td><input type="text" name="sname" id="sname" value="<?php echo $row['name']; ?>"/></td>

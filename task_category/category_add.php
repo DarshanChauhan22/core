@@ -3,7 +3,7 @@
 		<title> Insert Form </title>
 	</head>
 	<body>
-		<form name ="insert" action="product_save.php" method="post">
+		<form name ="insert" action="category_save.php" method="post">
 			<table align="center"  width="50%" cellpadding="5" cellspacing="5">
 				
 				<tr>

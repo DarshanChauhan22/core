@@ -30,14 +30,14 @@
 						echo "<td>" . $data['status'] ."</td>";
 						echo "<td>" . $data['created_at'] ."</td>";
 						echo "<td>" . $data['updated_at'] ."</td>";
-						echo "<td align='center'><a href='product_edit.php?j=" . $data['id'] ."'>Edit</a></td>";
-						echo	"<td><a href='product_delete.php?j=" . $data['id'] ."'>Delete</a></td></tr>";
+						echo "<td align='center'><a href='category_edit.php?j=" . $data['id'] ."'>Edit</a></td>";
+						echo	"<td><a href='category_delete.php?j=" . $data['id'] ."'>Delete</a></td></tr>";
 					}					
 				?>
 			</table>
 			<br>
 			<center>
-			<form action="product_add.php" method="post">
+			<form action="category_add.php" method="post">
 				<input type="submit" name="sub" value="Add New">
 			</form>
 			</center>

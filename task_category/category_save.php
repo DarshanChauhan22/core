@@ -22,14 +22,14 @@
 
 			$adapter->insert($query);
 
-			header("Location: product_grid.php");
+			header("Location: category_grid.php");
 			}
 
 			$query="update category set name=' $name ', status = '$status ', created_at = '$created ', updated_at = '$date ' where id =  $id";
 
 			$adapter->update($query);
 
-			header("Location: product_grid.php");
+			header("Location: category_grid.php");
 		}
-		header("Location: product_grid.php");
+		header("Location: category_grid.php");
 ?>

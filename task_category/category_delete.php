@@ -9,6 +9,6 @@ require('Adapter.php');
 			$query ="DELETE FROM category where id =  $id";
 
 			$row = $adapter->delete($query);
-			header("Location: product_grid.php");
+			header("Location: category_grid.php");
 
 ?>
