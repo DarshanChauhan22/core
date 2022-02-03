@@ -1,7 +1,7 @@
 <?php
 		
 
-		print_r(date('d-m-y h:i:s'));
+		
 			require('Adapter.php');
 			$adapter->connect();
 			

@@ -4,7 +4,7 @@ class Adapter{
         'host'=>'localhost',
         'user'=>'root',
         'password'=>'',
-        'dbname'=>'category'
+        'dbname'=>'php'
     ];
     private $connect = NULL;
     public function connect()
