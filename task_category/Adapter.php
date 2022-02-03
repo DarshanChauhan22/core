@@ -4,13 +4,13 @@ class Adapter{
         'host'=>'localhost',
         'user'=>'root',
         'password'=>'',
-        'dbname'=>'product'
+        'dbname'=>'category'
     ];
     private $connect = NULL;
     public function connect()
     {
         $connect = mysqli_connect($this->config['host'],$this->config['user'],$this->config['password'],$this->config['dbname']);
-       $this->setConnect($connect);
+        $this->setConnect($connect);
         return $connect;
     }
 
@@ -92,9 +92,9 @@ class Adapter{
 $adapter = new Adapter();
 
 
-
+/*
  $adapter->insert("INSERT INTO product(name,price,quantity,status,created_at,updated_at) VALUES ('test','200','2','1','','')");
-
+*/
 /*
 $adapter->update("UPDATE product SET name = 'dom' WHERE product_id = 32");
 */

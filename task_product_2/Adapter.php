@@ -43,7 +43,6 @@ class Adapter{
             $this->connect();
         }
         $result = $this->getConnect()->query($query);
-        echo "sus";
         return $result;
  
     }
@@ -93,17 +92,5 @@ class Adapter{
 $adapter = new Adapter();
 
 
-/*
- $adapter->insert("INSERT INTO product(name,price,quantity,status,created_at,updated_at) VALUES ('test','200','2','1','','')");
-*/
-/*
-$adapter->update("UPDATE product SET name = 'dom' WHERE product_id = 32");
-*/
 
-/*
-$adapter->delete("DELETE FROM product where product_id = 32");
-*/
-
-//$data = $adapter->fetchAll("SELECT * FROM product");
-//print_r($data);
 ?>

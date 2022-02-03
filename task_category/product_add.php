@@ -11,30 +11,22 @@
 					<td><input type="text" name="sname" id="sname"/></td>
 				</tr>
 				<tr>
-					<td>price :-</td>
-					<td><input type="text" name="sprice" id="sprice"/></td>
-				</tr>
-				<tr>
-					<td>quantity :-</td>
-					<td><input type="text" name="squan" id="squan"/></td>
-				</tr>
-				<tr>
 					<td>status :-</td>
 					<td><input type="text" name="sstatus" id="sstatus"/></td>
 				</tr>
 				<tr>
-					<td>created At :-</td>
-					<td><input type="text" name="screated" id="screated"/></td>
+					<td><input type="hidden" name="screated" id="screated"/></td>
 				</tr>
 				<tr>
-					<td>updated At :-</td>
-					<td><input type="text" name="supdated" id="supdated"/></td>
+					<td><input type="hidden" name="supdated" id="supdated"/></td>
 				</tr>
 				<tr>
-					<td colspan="2" align="center"><input type="submit" name="submit" value="SAVE"/></td>
-					
+					<td><input type="submit" name="submit" value="SAVE"/>
+					 <input type="submit" name="cancle" value="CANCLE"/></td>
 				</tr>
 			</table>
+		
+			
 		</form>
 	</body>
 </html>

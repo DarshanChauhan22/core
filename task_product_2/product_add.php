@@ -3,8 +3,8 @@
 		<title> Insert Form </title>
 	</head>
 	<body>
-		<form name ="insert" action="product_add.php" method="post">
-			<table align="center"  width="50%" cellpadding="5" cellspacing="5">
+		<form name ="insert" action="product_save.php" method="post">
+			<table align="center">
 				
 				<tr>
 					<td>Name :-</td>
@@ -23,17 +23,20 @@
 					<td><input type="text" name="sstatus" id="sstatus"/></td>
 				</tr>
 				<tr>
-					<td>created At :-</td>
-					<td><input type="text" name="screated" id="screated"/></td>
+					
+					<td><input type="hidden" name="screated" id="screated"/></td>
 				</tr>
 				<tr>
-					<td>updated At :-</td>
-					<td><input type="text" name="supdated" id="supdated"/></td>
+					
+					<td><input type="hidden" name="supdated" id="supdated"/></td>
 				</tr>
 				<tr>
-					<td colspan="2" align="center"><input type="submit" name="submit" value="SAVE"/></td>
+					<td><input type="submit" name="submit" value="SAVE"/>
+					 <input type="submit" name="cancle" value="CANCLE"/></td>
 				</tr>
 			</table>
+		
+			
 		</form>
 	</body>
 </html>
