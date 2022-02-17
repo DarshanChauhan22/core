@@ -18,21 +18,36 @@ class Controller_Admin extends Controller_Core_Action{
 		/*$adminTable->update(['firstName' => 'mmmf' , 'lastName' => 'mmhg' , 'email' => 'mmkb.com' ,'password' => 'mmmkkbc' , 'status' => '1'],['adminId' => 8]);*/
 		//$adminTable->delete(['adminId' => '6']);
 		
-		$adminTable->fetchRow("select * from admin where adminId = 7");
+		//$adminTable->fetchRow("select * from admin where adminId = 7");
         //$adminTable->fetchAll("select * from admin");
 	}
 	public function gridAction()
 	{
+		//index.php?c=category&a=grid&id=5&tab=menu
+
+        //$this->getUrl(); //index.php?c=category&a=grid&id=5&tab=menu
+        //$this->getUrl('save'); //index.php?c=category&a=save&id=5&tab=menu
+        //$this->getUrl('save','admin'); //index.php?c=admin&a=save&id=5&tab=menu
+        //$this->getUrl('save','category',['id' => 10]); //index.php?c=category&a=save&id=10&tab=menu
+        //$this->getUrl('save','category',['id' => 10,'tab' => 'hello']); //index.php?c=category&a=save&id=10&tab=hello
+        //$this->getUrl('save','category',['id' => 51,'tab' => 'asd'],false); //index.php?c=category&a=save&id=5
+        //$this->getUrl('save','category',null,true); //index.php?c=category&a=save
+        //$this->getUrl(null,'category',null,true); //index.php?c=category&a=grid
+        //$this->getUrl(null,'category',['module' => 'Admin'],true); //index.php?c=category&a=grid&module=Admin
+		$adminTable = new Model_Admin(); 
+		
 		global $adapter; 
 		$query = "SELECT 
 					* 
 				FROM Admin";
-		$admin = $adapter-> fetchAll($query);
+			$admin=	$adminTable->fetchAll($query);
+			//$admin = $adapter-> fetchAll($query);
 		$view = $this->getView();
 		$view->setTemplate('view/admin/grid.php');
 		$view->addData('admin',$admin);
 		$view->toHtml();
 		//require_once('view/admin/grid.php');
+
 	}
 
 	public function addAction()
@@ -44,13 +59,16 @@ class Controller_Admin extends Controller_Core_Action{
 	}
 
 	public function editAction()
-	{
+	{	
+		$adminTable = new Model_Admin(); 
 		global $adapter;
 		$request = new Model_Core_Request();
 		$getId = $request->getRequest('id');
-      	$query = "SELECT * FROM Admin  
+		$query = "SELECT * FROM Admin  
             WHERE adminId=".$getId;
-      	$admin = $adapter-> fetchRow($query);
+      	//$admin = $adapter-> fetchRow($query);
+		$admin = $adminTable->fetchRow($query);
+      	
       	$view = $this->getView();
 		$view->setTemplate('view/admin/edit.php');
 		$view->addData('admin',$admin);
@@ -60,6 +78,7 @@ class Controller_Admin extends Controller_Core_Action{
 	
 	public function saveAction()
 	{
+		$adminTable = new Model_Admin(); 
 		$request = new Model_Core_Request();
 		try
 		{
@@ -78,7 +97,10 @@ class Controller_Admin extends Controller_Core_Action{
 					throw new Exception("Invalid Request.", 1);
 				}
 				$adminId = $row["adminId"];
-				$query = "UPDATE Admin 
+				$update=$adminTable->update(['firstName' => $row['firstName'] , 'lastName' => $row['lastName'] , 'email' => $row['email'] ,'password' => $row['password'] , 'status' => $row['status']],['adminId' => $adminId]);
+		//$adminTable->delete(['adminId' => '6']);
+
+				/*$query = "UPDATE Admin 
 					SET firstName='".$row['firstName']."',
 						lastName='".$row['lastName']."',
 						email='".$row['email']."',
@@ -88,7 +110,7 @@ class Controller_Admin extends Controller_Core_Action{
 						updatedAt='".$date."' 
 					WHERE adminId='".$adminId."'";
 
-				$update = $adapter->update($query);
+				$update = $adapter->update($query);*/
 
 				if(!$update){ 
 					throw new Exception("System is unable to update.", 1);
@@ -101,7 +123,9 @@ class Controller_Admin extends Controller_Core_Action{
 					throw new Exception("password must be same.", 1);
 
 				}
-				$query = "INSERT INTO admin(firstName,lastName,email,password,mobile,status,createdAt) 	
+				$adminId = $adminTable->insert(['firstName' => $row['firstName'] , 'lastName' => $row['lastName'] , 'email' => $row['email'] ,'password' => $row['password'] , 'status' => $row['status']]);
+
+				/*$query = "INSERT INTO admin(firstName,lastName,email,password,mobile,status,createdAt) 	
 				VALUES('".$row['firstName']."',
 						   '".$row['lastName']."',
 						   '".$row['email']."',
@@ -109,7 +133,7 @@ class Controller_Admin extends Controller_Core_Action{
 						   '".$row['mobile']."',
 						   '".$row['status']."',
 						   '".$date."')";
-				$adminId=$adapter->insert($query);
+				$adminId=$adapter->insert($query);*/
 				if(!$adminId)
 				{	
 						throw new Exception("System is unable to insert.", 1);
@@ -126,6 +150,7 @@ class Controller_Admin extends Controller_Core_Action{
 
 	public function deleteAction()
 	{
+		$adminTable = new Model_Admin(); 
 		$request = new Model_Core_Request();
 		try 
 		{	
@@ -136,8 +161,9 @@ class Controller_Admin extends Controller_Core_Action{
 			}
 			
 			global $adapter;
-			$query = "DELETE FROM Admin WHERE adminId = ".$getId;
-			$delete = $adapter->delete($query); 
+			$delete = $adminTable->delete(['adminId' => $getId]);
+			/*$query = "DELETE FROM Admin WHERE adminId = ".$getId;
+			$delete = $adapter->delete($query); */
 			if(!$delete)
 			{
 				throw new Exception("System is unable to delete record.", 1);

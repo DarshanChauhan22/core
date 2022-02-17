@@ -1,5 +1,6 @@
 <?php require_once('Model\Core\Adapter.php'); 
 	Ccc::loadClass('Controller_Core_Front');
+	Ccc::loadClass('Model_Core_Request');
    date_default_timezone_set("Asia/Kolkata");
    $date = date('Y-m-d H:i:s');
  ?>
@@ -27,21 +28,22 @@
 
 class Ccc
 {
-	public $front = null;
+	protected static $front = null;
 
-	public function getFront()
+	public static function getFront()
 	{
-		if(!$this->front)
+		if(!self::$front)
 		{
+			Ccc::loadClass('Controller_Core_Front');
 			$front = new Controller_Core_Front();
-			$this->setFront($front);
+			self::setFront($front);
 		}
-		return $this->front;
+		return self::$front;
 	}
-	public function setFront($front)
+	public static function setFront($front)
 	{
-		$this->front=$front;
-		return $this;
+		self::$front=$front;
+		//return self::$front;
 	}
 	public static function loadFile($path)
 	{
@@ -54,11 +56,19 @@ class Ccc
 	}
 	public static function init()
 	{
-		$this->init();
+		self::getFront()->init();
+
+	}
+
+	public static function getModel($className)
+	{
+		$className = 'Model_'.$className;
+		self::loadClass($className);
+		return new $className();
 	}
 }
-$c = new Ccc();
-$c->getFront()->init();
-//Ccc::init();
+//$c = new Ccc();
+//$c->getFront()->init();
+Ccc::init();
 
 ?>

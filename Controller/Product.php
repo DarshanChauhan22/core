@@ -101,7 +101,7 @@ class Controller_Product extends Controller_Core_Action{
 		$request = new Model_Core_Request();
 		try 
 		{
-			$getId = $request->getRequest('id'); 
+			$getId = Ccc::getFront()->getRequest('id'); 
 			if (!isset($getId)) 
 			{
 				throw new Exception("Invalid Request.", 1);

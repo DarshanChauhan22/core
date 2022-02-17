@@ -43,6 +43,7 @@ class Model_Core_Table
 
 			$sql4 = "INSERT INTO $tableName ($sql1) values($sql3);" ;
 			$result = $adapter->insert($sql4);
+			return $result;
 		
 	}
 
@@ -60,6 +61,7 @@ class Model_Core_Table
 		$imp = implode(',', $set);
 		$update = "UPDATE $tableName SET $imp ,updatedAt = '".$date."'  WHERE $key = $value;";
 		$result = $adapter->update($update);
+		return $result;
 	}	
 
 	public function delete(array $arr2)
@@ -70,6 +72,7 @@ class Model_Core_Table
 		$tableName = $this->tableName;
 		$query = "DELETE FROM $tableName WHERE $key = $id;";
 		$result = $adapter->delete($query);
+		return $result;
 	}
 
 	public function fetchRow($queryFetchRow)
@@ -77,8 +80,7 @@ class Model_Core_Table
         global $adapter;
         $tableName = $this->getTableName();
         $result = $adapter->fetchRow($queryFetchRow);
-        print_r($result);
-        exit();
+       return $result;
     }
 
     public function fetchAll($queryFetchAll)
@@ -86,7 +88,7 @@ class Model_Core_Table
         global $adapter;
         $tableName = $this->getTableName();
         $result = $adapter->fetchAll($queryFetchAll);
-        
+        return $result;
     }
 }
 
