@@ -1,11 +1,12 @@
 <?php
 Ccc::loadClass('Controller_Core_Action');
 Ccc::loadClass('Model_Core_Request');
-Ccc::loadClass('Model_Core_Request');
 
 class Controller_Product extends Controller_Core_Action{
 	public function gridAction()
 	{
+		Ccc::getBlock('Product_grid')->toHtml();
+		/*
 		global $adapter;
 		$query = "SELECT * FROM Product";
 		$product = $adapter-> fetchAll($query);
@@ -14,20 +15,46 @@ class Controller_Product extends Controller_Core_Action{
 		$view->addData('product',$product);
 		$view->toHtml();
 		//require_once('view/product/grid.php');
-		
+		*/
 	}
 
 	public function addAction()
 	{
-		
+		Ccc::getBlock('Product_Add')->toHtml();
+		/*
 		$view = $this->getView();
 		$view->setTemplate('view/product/add.php')->toHtml();
-		//require_once('view/product/add.php');
+		//require_once('view/product/add.php');*/
 	}
 
 	public function editAction()
 	{
-		global $adapter;
+
+		try 
+		{
+			$id = (int) $this->getRequest()->getRequest('id');
+			if(!$id){
+				throw new Exception("Id not valid.");
+			}
+			$productModel = Ccc::getModel('Product');
+			$product = $productModel->fetchRow("SELECT * FROM product WHERE productId = {$id} ");
+			if(!$product){
+				throw new Exception("unable to load product.");
+			}
+			Ccc::getBlock('Product_Edit')->addData('product',$product)->toHtml();		
+		} 
+		catch (Exception $e) 
+		{
+			echo $e->getMessage();
+		}
+
+
+		/*try {
+			$id = (int)$this->getRequest()->getRequest('id');
+			if(!id){
+				throw new Exception("invalid");
+			}
+			global $adapter;
 		$request = new Model_Core_Request();
 		$getId = $request->getRequest('id');
       	$pid=$getId;
@@ -36,10 +63,11 @@ class Controller_Product extends Controller_Core_Action{
      	$view = $this->getView();
 		$view->setTemplate('view/product/edit.php');
 		$view->addData('product',$product);
-		$view->toHtml();
+		$view->toHtml();*/
 		
 		//require_once('view/product/edit.php');
 	}
+		
 
 	public function saveAction()
 	{
@@ -98,25 +126,21 @@ class Controller_Product extends Controller_Core_Action{
 
 	public function deleteAction()
 	{
-		$request = new Model_Core_Request();
+		
 		try 
-		{
-			$getId = Ccc::getFront()->getRequest('id'); 
+		{	
+			$getId = $this->getRequest()->getRequest('id');
 			if (!isset($getId)) 
 			{
 				throw new Exception("Invalid Request.", 1);
 			}
 			global $adapter;
-			$request = new Model_Core_Request();
-			//$getId = $request->getRequest('id');
-			//$id=$getId;
 			$query = "DELETE FROM Product WHERE productId = ".$getId;
 			$delete = $adapter->delete($query); 
 			if(!$delete)
 			{
 				throw new Exception("System is unable to delete.", 1);							
 			}
-			
 			$this->redirect("index.php?c=product&a=grid");
 		} catch (Exception $e) 
 		{

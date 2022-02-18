@@ -36,7 +36,7 @@ class Model_Core_View{
 		if(!array_key_exists($key, $this->data))
 		{
 			return false;
-		}
+		}	
 		return $this->data[$key];
 	}
 

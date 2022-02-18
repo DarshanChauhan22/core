@@ -1,7 +1,10 @@
 <?php
+
   $row = $this->getData('category');
+  
   $categoryPathPair = $this->getData('categoryPathPair');
   $categoryPath = $this->getData('categoryPath');
+  
 ?>
 <html>
 <head>  

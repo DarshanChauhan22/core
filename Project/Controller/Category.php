@@ -62,6 +62,8 @@ class Controller_Category extends Controller_Core_Action {
 			global $adapter;
 			global $date;
 			$row = $_POST['category'];
+			print_r($row);
+			exit();
 			$path = '';
 
 			if (array_key_exists('id', $row)) 
@@ -218,11 +220,15 @@ class Controller_Category extends Controller_Core_Action {
     {
     	global $adapter;
         $categoryName=$adapter->fetchPair('SELECT categoryId,name FROM Category');
+        
         $categoryPath=$adapter->fetchPair('SELECT categoryId,categoryPath FROM Category');
+     
         $categories=[];
         foreach ($categoryPath as $key => $value) 
         {
                 $explodeArray=explode('/', $value);
+             
+       
                 $tempArray = [];
 
                 foreach ($explodeArray as $keys => $value) 
@@ -235,7 +241,7 @@ class Controller_Category extends Controller_Core_Action {
 
                 $implodeArray = implode('/', $tempArray);
                 $categories[$key]= $implodeArray;
-        }
+        } 
         return $categories;
 
     }
