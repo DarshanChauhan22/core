@@ -9,11 +9,21 @@ class Block_Category_Grid extends Block_Core_Template{
 
 	public function getCategories()
 	{
-
 		$categoryModel = Ccc::getModel('category');
 		$categories = $categoryModel->fetchAll("SELECT * FROM category");
 		return $categories;
 	}
+
+	public function getCategoriePath()
+	{
+		
+		Ccc::loadClass('Controller_Category');
+		$categoryModel = new Controller_Category();
+		//$categoryModel = Ccc::getModel('category');
+		$categoryPath = $categoryModel->getCategoryToPath();
+		return $categoryPath;
+	}
+
 }
 
 ?>

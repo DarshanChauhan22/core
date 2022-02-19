@@ -1,8 +1,9 @@
 <?php
   $category = $this->getCategory();
+  $categoriepath = $this->getCategoriePath();
   //$row = $this->getData('category');
-  $categoryPathPair = $this->getData('categoryPathPair');
-  $categoryPath = $this->getData('categoryPath');
+  //$categoryPathPair = $this->getData('categoryPathPair');
+  //$categoryPath = $this->getData('categoryPath');
   $controllerCoreAction = new Controller_Core_Action();
 ?>
 <html>
@@ -32,22 +33,16 @@
           </td>
         </tr>
         <tr>
-          <td width="10%">Parent Category</td>
-          <td>
-            <select name="category[parentId]">
-              
-              <option value=<?php echo $category['parentId'] ?>><?php echo $categoryPath[$category['categoryId']]?></option>
-              <option value="NULL">Root</option>
-              <?php foreach ($categoryPathPair as $key=>$value): ?>
-                  <?php if(strpos($value,$category['categoryPath']) !='false'):?>
-                    <option value=<?php echo $key ?>><?php echo $categoryPath[$key] ?></option>
-                  <?php endif; ?>
-              <?php endforeach;?>
-
-            </select>
-          </td>
-        </tr>
-    
+      <td width="10%">Parent Category</td>
+      <td>
+        <select name="category[parentId]">
+          <option value="NULL">Root</option>
+            <?php foreach ($categoriepath as $key=>$value):?>
+                <option value=<?php echo $key?>><?php echo $value; ?></option>
+            <?php endforeach;?>
+        </select>
+      </td>
+    </tr>
         <tr>
           <td width="25%">&nbsp;</td>
           <td>

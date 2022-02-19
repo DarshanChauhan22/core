@@ -29,8 +29,6 @@ class Model_Core_View{
 
 	public function getData($key=null)
 	{
-		print_r($key);
-		exit();
 		if(!$key)
 		{
 			return $this->data;

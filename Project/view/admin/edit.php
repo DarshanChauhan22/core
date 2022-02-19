@@ -1,5 +1,6 @@
 <?php
   $admin = $this->getAdmin();
+  
  $controllerCoreAction = new Controller_Core_Action();
 
 ?>

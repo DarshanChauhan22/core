@@ -1,8 +1,10 @@
 <?php
 	$categories = $this->getCategories();
+	$categoriepath = $this->getCategoriePath();
+
 	//$result = $this->getData('category');
-	$getCategoryToPath = $this->getData('getCategoryToPath');
-	$controllerCoreAction = new Controller_Core_Action();
+	//$getCategoryToPath = $this->getData('getCategoryToPath');
+		$controllerCoreAction = new Controller_Core_Action();
 ?>
 <html>
 <head>
@@ -22,9 +24,10 @@
 			<table border=1 width=100%>
 				<tr>
 					<th> Id </th>
-					<th> Name </th>
-					<th> Created_At </th>
-					<th> Updated_At </th>
+				
+					<th> Category Name </th>
+					<th> Created At </th>
+					<th> Updated At </th>
 					<th> Status </th>
 					<th> Action </th>
 				</tr>
@@ -32,8 +35,8 @@
 					<?php foreach ($categories as $row):?>
 						<tr>
 				    		<td><?php echo $row["categoryId"] ?></td>
-				    		<td><?php echo $getCategoryToPath[$row['categoryId']];?>
-				    		</td>
+				    			
+				    		<td><?php echo $categoriepath[$row['categoryId']];?>	
 				    		<td><?php echo $row["createdAt"] ?></td>
 				    		<td><?php echo $row["updatedAt"] ?></td>
 				    		<td>

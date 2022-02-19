@@ -1,5 +1,7 @@
 <?php 
-  $result = $this->getData('getCategoryToPath');
+  //$result = $this->getData('getCategoryToPath');
+$categoriepath = $this->getCategoriePath();
+
   $controllerCoreAction = new Controller_Core_Action();
 ?>
 <html>
@@ -27,7 +29,7 @@
       <td>
         <select name="category[parentId]">
           <option value="NULL">Root</option>
-            <?php foreach ($result as $key=>$value):?>
+            <?php foreach ($categoriepath as $key=>$value):?>
                 <option value=<?php echo $key?>><?php echo $value; ?></option>
             <?php endforeach;?>
         </select>

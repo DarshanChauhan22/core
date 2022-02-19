@@ -36,23 +36,26 @@ class Controller_Category extends Controller_Core_Action {
 
 	public function editAction()
 	{
+		$categoryModel = Ccc::getModel('category');
 		global $adapter;      
 	    $pid=$_GET['id'];
 	    $query = "SELECT 
 	                  * 
 	    FROM Category WHERE categoryId=".$pid;
-	    $row = $adapter-> fetchRow($query);
-	 	$view = $this->getView();
+	    $row = $categoryModel-> fetchRow($query);
+	
+	 	//$view = $this->getView();
 		
-		$view->setTemplate('view/category/edit.php');
-		$view->addData('category',$row);
+		//$view->setTemplate('view/category/edit.php');
+		//$view->addData('category',$row);
 		
-	    $categoryPathPair = $adapter->fetchPair('SELECT categoryId,categoryPath FROM Category');
-	    $view->addData('categoryPathPair',$categoryPathPair);
+	    $categoryPathPair = $categoryModel->fetchAll('SELECT categoryId,categoryPath FROM Category');
+	    Ccc::getBlock('Category_Edit')->addData('category',$row)->toHtml();	
+	    //$view->addData('categoryPathPair',$categoryPathPair);
  
-	    $categoryPath = $this->getCategoryToPath();
-	    $view->addData('categoryPath',$categoryPath);
- 		$view->toHtml();
+	   // $categoryPath = $this->getCategoryToPath();
+	   // $view->addData('categoryPath',$categoryPath);
+ 		//$view->toHtml();
  		//require_once('view/category/edit.php');
 	}
 
