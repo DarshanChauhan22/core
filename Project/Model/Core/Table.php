@@ -29,6 +29,7 @@ class Model_Core_Table
 
 	public function insert(array $arr1)
 	{
+		
 		$cn = [];
 		$vn =[];
 		global $adapter;
@@ -42,6 +43,7 @@ class Model_Core_Table
 			$tableName = $this->tableName;
 			
 			$sql4 = "INSERT INTO $tableName ($sql1) values($sql3);" ;
+
 			$result = $adapter->insert($sql4);
 			return $result;
 	}
