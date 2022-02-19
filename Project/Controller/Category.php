@@ -1,10 +1,14 @@
 <?php
 Ccc::loadClass('Controller_Core_Action');
+Ccc::loadClass('Model_Admin');
+Ccc::loadClass('Model_Core_Request');
 
 class Controller_Category extends Controller_Core_Action {
 	public function gridAction()
 	{
-		global $adapter; 
+		Ccc::getBlock('Category_grid')->toHtml();
+		
+		/*global $adapter; 
 		$query = "SELECT 
 					* 
 				FROM Category order by categoryPath";
@@ -15,18 +19,19 @@ class Controller_Category extends Controller_Core_Action {
 		$categoryPath = $this->getCategoryToPath();
 	    $view->addData('getCategoryToPath',$categoryPath);
  		$view->toHtml();
-		//require_once('view/category/grid.php');
+		//require_once('view/category/grid.php');*/
 		
 	}
 
 	public function addAction()
 	{
-		$view = $this->getView();
+		Ccc::getBlock('Category_Add')->toHtml();
+		/*$view = $this->getView();
 		$view->setTemplate('view/category/add.php');
 		$categoryPath = $this->getCategoryToPath();
 	    $view->addData('getCategoryToPath',$categoryPath);
  		$view->toHtml();
-		//require_once('view/category/add.php');
+		//require_once('view/category/add.php');*/
 	}
 
 	public function editAction()
@@ -62,8 +67,7 @@ class Controller_Category extends Controller_Core_Action {
 			global $adapter;
 			global $date;
 			$row = $_POST['category'];
-			print_r($row);
-			exit();
+			
 			$path = '';
 
 			if (array_key_exists('id', $row)) 
@@ -127,10 +131,10 @@ class Controller_Category extends Controller_Core_Action {
 					throw new Exception("System is unable to update.", 1);
 				}				
 			}
-		$this->redirect("index.php?c=category&a=grid");
+		$this->redirect($this->getUrl('grid','category',null,true));
 		
 		} catch (Exception $e) {
-			$this->redirect("index.php?c=category&a=grid");	
+			$this->redirect($this->getUrl('grid','category',null,true));	
 		}
 	}
 	
@@ -179,7 +183,7 @@ class Controller_Category extends Controller_Core_Action {
 			}	
 
 		}
-		$this->redirect("index.php?c=category&a=grid");
+		$this->redirect($this->getUrl('grid','category',null,true));
 	}
 
 	public function deleteAction()
@@ -199,9 +203,9 @@ class Controller_Category extends Controller_Core_Action {
 				throw new Exception("System is unable to  delete.", 1);
 				
 			}
-			$this->redirect("index.php?c=category&a=grid");		
+			$this->redirect($this->getUrl('grid','category',null,true));		
 		} catch (Exception $e) {
-			$this->redirect("index.php?c=category&a=grid");		
+			$this->redirect($this->getUrl('grid','category',null,true));		
 		}
 			
 	}

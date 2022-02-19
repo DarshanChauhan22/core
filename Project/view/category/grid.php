@@ -1,7 +1,8 @@
 <?php
-	$result = $this->getData('category');
+	$categories = $this->getCategories();
+	//$result = $this->getData('category');
 	$getCategoryToPath = $this->getData('getCategoryToPath');
-		
+	$controllerCoreAction = new Controller_Core_Action();
 ?>
 <html>
 <head>
@@ -13,7 +14,7 @@
 <body>
 	<div class = 'container'style="text-align: center; ">
 		<h1> Category Details </h1> 
-		<form action="index.php?c=category&a=add" method="POST">
+		<form action="<?php echo $controllerCoreAction->getUrl('add','category',null,true) ?>" method="POST">
 			<button type="submit" name="Add" class="Registerbtn"> Add New </button>
 		</form>
 
@@ -27,8 +28,8 @@
 					<th> Status </th>
 					<th> Action </th>
 				</tr>
-				<?php if($result): ?>
-					<?php foreach ($result as $row):?>
+				<?php if($categories): ?>
+					<?php foreach ($categories as $row):?>
 						<tr>
 				    		<td><?php echo $row["categoryId"] ?></td>
 				    		<td><?php echo $getCategoryToPath[$row['categoryId']];?>
@@ -44,8 +45,8 @@
 				    		</td>
 
 				    		<td>
-				    			<a href="index.php?c=category&a=delete&id=<?php echo $row['categoryId'] ?>">Delete</a> 
-				    			<a href="index.php?c=category&a=edit&id=<?php echo $row['categoryId'] ?>">Update</a>
+				    			<a href="<?php echo$controllerCoreAction->getUrl('delete','category',['id' =>  $row['categoryId']],true) ?>">Delete</a> 
+				    			<a href="<?php echo$controllerCoreAction->getUrl('edit','category',['id' =>  $row['categoryId']],true) ?>">Update</a>
 				    		</td>
 				   		</tr>
 				  	<?php endforeach; ?>

@@ -1,15 +1,16 @@
 <?php
-      $product = $this->getProduct(); 
+      $product = $this->getProduct();
+      $controllerCoreAction = new Controller_Core_Action(); 
 ?>
 <html>
 <head>
   
 </head>
   <body>
-   <form action='index.php?c=product&a=save' method='post'>
+   <form action='<?php echo $controllerCoreAction->getUrl('save','product',null,true) ?>' method='post'>
     <table border="1" width="100%" cellspacing="4">
         <tr>
-          <input type="hidden" name="product[id]" value="<?php echo $product['productId'] ?>">
+          <input type="hidden" name="product[productId]" value="<?php echo $product['productId'] ?>">
           <td width="10%"> Name</td>
           <td><input type="text" name="product[name]" value="<?php echo $product['name'] ?>"></td>
         </tr>
@@ -39,7 +40,7 @@
           <td width="25%">&nbsp;</td>
           <td>
             <button type="submit" name="submit" class="Registerbtn">Save </button>
-            <a href="index.php?c=product&a=grid"><button type="button" class="cancelbtn">Cancel</button></a>
+            <a href="<?php echo $controllerCoreAction->getUrl('grid','product',null,true) ?>"><button type="button" class="cancelbtn">Cancel</button></a>
           </td>
         </tr>    
       </div>  

@@ -40,27 +40,28 @@ class Model_Core_Table
 			$sql2= implode("','", $vn);
 			$sql3 = "'" . $sql2 . "'";
 			$tableName = $this->tableName;
-
+			
 			$sql4 = "INSERT INTO $tableName ($sql1) values($sql3);" ;
 			$result = $adapter->insert($sql4);
 			return $result;
-		
 	}
 
 	public function update(array $arr3 , array $arr4)
-	{
+	{	
 		global $adapter;
 		global $date;
 		$set = [];
 		$tableName = $this->getTableName();
 		$key = key($arr4);
-		$value = $arr4['adminId'];
+		$value = $arr4[$this->getPrimaryKey()];
+
 		foreach($arr3 as $k => $v){
 			$set[] = "$k='$v'";
 		}
 		$imp = implode(',', $set);
 		$update = "UPDATE $tableName SET $imp ,updatedAt = '".$date."'  WHERE $key = $value;";
 		$result = $adapter->update($update);
+
 		return $result;
 	}	
 
@@ -68,7 +69,7 @@ class Model_Core_Table
 	{
 		global $adapter;
 		$key = key($arr2);
-		$id = $arr2['adminId'];
+		$id = $arr2[$this->primaryKey];
 		$tableName = $this->tableName;
 		$query = "DELETE FROM $tableName WHERE $key = $id;";
 		$result = $adapter->delete($query);

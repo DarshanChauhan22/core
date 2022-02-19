@@ -1,6 +1,8 @@
 <?php
 Ccc::loadClass('Controller_Core_Action');
 Ccc::loadClass('Model_Core_Request');
+Ccc::loadClass('Model_Product');
+
 
 class Controller_Product extends Controller_Core_Action{
 	public function gridAction()
@@ -71,62 +73,69 @@ class Controller_Product extends Controller_Core_Action{
 
 	public function saveAction()
 	{
-		$request = new Model_Core_Request();
+		$customerTable = Ccc::getModel('Product');
+		//$adminTable = new Model_Product(); 
+		//$request = new Model_Core_Request();
 		try {
-			$row = $request->getPost('product');
+			$row =  $this->getRequest()->getRequest('product');
+			
 			if (!isset($row)) 
 			{
 				throw new Exception("Invalid Request.", 1);				
 			}
+			$productId = $row["productId"];
 			global $adapter;
 			global $date;
 			//$request = new Model_Core_Request();
 			//$row = $request->getPost('product');
 			//$row = $_POST['product'];
-			if (array_key_exists('id', $row)) 
+			if (array_key_exists('productId', $row)) 
 			{
-				if(!(int)$row['id'])
+				if(!(int)$row['productId'])
 				{
 					throw new Exception("Invalid Request.", 1);
 				}
-				$query = "UPDATE Product 
+				/*$query = "UPDATE Product 
 					SET name='".$row['name']."',
 						price=".$row['price'].",
 						quantity='".$row['quantity']."',
 						updatedAt='".$date."',
 						status='".$row['status']."' 
-					Where productId='".$row['id']."'";	
-				$update = $adapter->update($query);
+					Where productId='".$row['id']."'";	*/
+				$update = $customerTable->update($row,['productId' => $productId]);
+
+				
 				if(!$update)
 				{
 					throw new Exception("System is unable to update.", 1);					
 				}
 			}
 			else{
-				$query = "INSERT INTO Product(name,price,quantity,status,createdAt) 
+			
+				/*$query = "INSERT INTO Product(name,price,quantity,status,createdAt) 
 				VALUES('".$row['name']."',
 					   '".$row['price']."',
 					   '".$row['quantity']."',
 					   '".$row['status']."',
 					   '".$date."'
-					   );";
-				$insert=$adapter->insert($query);
-				var_dump($insert);
+					   );";*/
+				$insert=$customerTable->insert($row);
+				
 				if(!$insert)
 				{
 					throw new Exception("System is unable to insert.", 1);					
 				}
 			}
-			$this->redirect("index.php?c=product&a=grid");
+			$this->redirect($this->getUrl('grid','product',null,true));
 			
 		} catch (Exception $e) {
-			$this->redirect("index.php?c=product&a=grid");
+			$this->redirect($this->getUrl('grid','product',null,true));
 		}
 	}
 
 	public function deleteAction()
 	{
-		
+		$customerTable = Ccc::getModel('Product');
 		try 
 		{	
 			$getId = $this->getRequest()->getRequest('id');
@@ -134,24 +143,18 @@ class Controller_Product extends Controller_Core_Action{
 			{
 				throw new Exception("Invalid Request.", 1);
 			}
-			global $adapter;
-			$query = "DELETE FROM Product WHERE productId = ".$getId;
-			$delete = $adapter->delete($query); 
+			//global $adapter;
+			//$query = "DELETE FROM Product WHERE productId = ".$getId;
+			$delete = $customerTable->delete(['productId' => $getId]); 
 			if(!$delete)
 			{
 				throw new Exception("System is unable to delete.", 1);							
 			}
-			$this->redirect("index.php?c=product&a=grid");
+			$this->redirect($this->getUrl('grid','product',null,true));
 		} catch (Exception $e) 
 		{
-			$this->redirect("index.php?c=product&a=grid");
+			$this->redirect($this->getUrl('grid','product',null,true));
 		}
-	}
-
-	public function redirect($url)
-	{
-		header('location:'.$url);	
-		exit();			
 	}
 
 	public function errorAction()

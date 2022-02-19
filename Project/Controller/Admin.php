@@ -73,7 +73,8 @@ class Controller_Admin extends Controller_Core_Action{
 			if(!$admin){
 				throw new Exception("unable to load admin.");
 			}
-			Ccc::getBlock('Admin_Edit')->addData('admin',$admin)->toHtml();		
+			Ccc::getBlock('Admin_Edit')->addData('admin',$admin)->toHtml();	
+				
 		} 
 		catch (Exception $e) 
 		{
@@ -100,17 +101,15 @@ class Controller_Admin extends Controller_Core_Action{
 	
 	public function saveAction()
 	{
-		$adminTable = new Model_Admin(); 
+		$adminTable = Ccc::getModel('Admin');
+		//$adminTable = new Model_Admin(); 
 		//$request = new Model_Core_Request();
 		try
 		{
 			$row = $this->getRequest()->getRequest('admin');
-
 			if (!isset($row)) {
 				throw new Exception("Invalid Request.", 1);				
 			}			
-			global $adapter;
-			global $date;
 			//$request = new Model_Core_Request();
 			//$row = $request->getPost('admin');
 			//$row = $_POST['admin'];
@@ -120,7 +119,8 @@ class Controller_Admin extends Controller_Core_Action{
 					throw new Exception("Invalid Request.", 1);
 				}
 				$adminId = $row["adminId"];
-				$update=$adminTable->update(['firstName' => $row['firstName'] , 'lastName' => $row['lastName'] , 'email' => $row['email'] ,'password' => $row['password'] , 'status' => $row['status']],['adminId' => $adminId]);
+				
+				$update=$adminTable->update($row,['adminId' => $adminId]);
 		//$adminTable->delete(['adminId' => '6']);
 
 				/*$query = "UPDATE Admin 
@@ -141,12 +141,8 @@ class Controller_Admin extends Controller_Core_Action{
 				
 			}
 			else{
-				if($row['password'] !=$row['confirmPassword'])
-				{
-					throw new Exception("password must be same.", 1);
-
-				}
-				$adminId = $adminTable->insert(['firstName' => $row['firstName'] , 'lastName' => $row['lastName'] , 'email' => $row['email'] ,'password' => $row['password'] , 'status' => $row['status']]);
+				
+				$adminId = $adminTable->insert($row);
 
 				/*$query = "INSERT INTO admin(firstName,lastName,email,password,mobile,status,createdAt) 	
 				VALUES('".$row['firstName']."',
@@ -174,17 +170,16 @@ class Controller_Admin extends Controller_Core_Action{
 
 	public function deleteAction()
 	{
-		$adminTable = new Model_Admin(); 
-		$request = new Model_Core_Request();
+		$adminTable = Ccc::getModel('Admin');
+		//$adminTable = new Model_Admin(); 
+		//$request = new Model_Core_Request();
 		try 
 		{	
-			$getId = $request->getRequest('id'); 
+			$getId = $this->getRequest()->getRequest('id'); 
 			if (!isset($getId)) 
 			{
 				throw new Exception("Invalid Request.", 1);
 			}
-			
-			global $adapter;
 			$delete = $adminTable->delete(['adminId' => $getId]);
 			/*$query = "DELETE FROM Admin WHERE adminId = ".$getId;
 			$delete = $adapter->delete($query); */

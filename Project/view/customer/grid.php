@@ -1,6 +1,6 @@
 <?php
-	  $result = $this->getData('customer');
-	  $address = $this->getData('address');
+	  $customers = $this->getCustomers();
+	 $controllerCoreAction = new Controller_Core_Action();
 ?>
 <html>
 <head>
@@ -10,7 +10,7 @@
 <body>
 	<div class='container' style="text-align: center; ">
 	<h1> Customer Details </h1> 
-	<form action="index.php?c=customer&a=add" method="POST">
+	<form action="<?php echo $controllerCoreAction->getUrl('add','customer',null,true) ?>" method="POST">
 		<button type="submit" name="Add" class="Registerbtn"> Add New </button>
 	</form>
 
@@ -28,28 +28,28 @@
 			<th> Update Date </th>
 			<th> Action </th>
 		</tr>
-		<?php if($result):
-			foreach ($result as $index => $value): ?>
+		<?php if($customers):
+			foreach ($customers as $customer): ?>
 				 
 				<tr>
-		      		<td><?php echo $result[$index]["customerId"] ?></td>
-		    		<td><?php echo $result[$index]["firstName"] ?></td>
-		    		<td><?php echo $result[$index]["lastName"] ?></td>
-		    		<td><?php echo $result[$index]["email"] ?></td>
-		    		<td><?php echo $result[$index]["mobile"] ?></td>
+		      		<td><?php echo $customer["customerId"] ?></td>
+		    		<td><?php echo $customer["firstName"] ?></td>
+		    		<td><?php echo $customer["lastName"] ?></td>
+		    		<td><?php echo $customer["email"] ?></td>
+		    		<td><?php echo $customer["mobile"] ?></td>
 		    		<td>
-			    		<?php if ($result[$index]['status'] == 1):
+			    		<?php if ($customer['status'] == 1):
 			    			echo 'Active';
 			    		else:
 			    			echo 'InActive';
 			    		endif; ?>
 		    		</td>
-		    		<td> <?php echo $address[$index]['address'] ?> </td>
-		    		<td><?php echo $result[$index]["createdAt"] ?></td>
-		    		<td><?php echo $result[$index]["updatedAt"] ?></td>
+		    		<td> <?php echo $customer['address'] ?> </td>
+		    		<td><?php echo $customer["createdAt"] ?></td>
+		    		<td><?php echo $customer["updatedAt"] ?></td>
 		    		<td>
-		    			<a href="index.php?a=delete&id=<?php echo $result[$index]['customerId'] ?>">Delete</a> 
-		    			<a href="index.php?a=edit&id=<?php echo $result[$index]['customerId']?>">Update</a>
+		    			<a href="<?php echo $controllerCoreAction->getUrl('delete','customer',['id' =>  $customer['customerId']],true) ?>">Delete</a> 
+		    			<a href="<?php echo $controllerCoreAction->getUrl('edit','customer',['id' =>  $customer['customerId']],true) ?>">Update</a>
 		    		</td>
 		   		</tr>
 		 	<?php endforeach;?>

@@ -1,7 +1,6 @@
 <?php
-	//$result = $this->getData('product');
 	$products = $this->getProducts();	
-
+	$controllerCoreAction = new Controller_Core_Action();
 ?>
 <html>
 <head>
@@ -11,7 +10,7 @@
 <body>
 	<div class='container' style="text-align: center; ">
 	<h1> Product Details </h1> 
-	<form action="index.php?c=product&a=add" method="POST">
+	<form action="<?php echo $controllerCoreAction->getUrl('add','product',null,true) ?>" method="POST">
 		<button type="submit" name="Add" class="Registerbtn"> Add New </button>
 	</form>
 	
@@ -45,8 +44,8 @@
 			    		endif; ?>
 		    		</td>
 		    		<td>
-		    			<a href="index.php?c=product&a=delete&id=<?php echo $row['productId'] ?>">Delete</a> 
-		    			<a href="index.php?c=product&a=edit&id=<?php echo $row['productId']?>">Update</a>
+		    			<a href="<?php echo$controllerCoreAction->getUrl('delete','product',['id' =>  $row['productId']],true) ?>">Delete</a> 
+		    			<a href="<?php echo$controllerCoreAction->getUrl('edit','product',['id' =>  $row['productId']],true) ?>">Update</a>
 		    		</td>
 		    	</tr
 		  	<?php endforeach; ?>

@@ -26,10 +26,7 @@
       <td width="10%">Password</td>
       <td><input type="Password" name="admin[password]" value="<?php echo $admin['password'] ?>"></td>
     </tr>
-    <tr>
-      <td width="10%">Mobile</td>
-      <td><input type="text" name="admin[mobile]" value="<?php echo $admin['mobile'] ?>"></td>
-    </tr>
+    
     <tr>
       <td width="10%">Status</td>
       <td>

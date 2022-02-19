@@ -1,8 +1,6 @@
 <?php
 	$admins = $this->getAdmins();
 	$controllerCoreAction = new Controller_Core_Action();
-	//print_r($controllerCoreAction->getUrl('save','admin',null,false));
-	//exit();
 ?>
 
 <html>
@@ -25,7 +23,6 @@
 				<th> Last Name </th>
 				<th> Email </th>
 				<th> Password </th>
-				<th> Mobile </th>
 				<th> Status </th>
 				<th> Create Date </th>
 				<th> Update Date </th>
@@ -39,7 +36,7 @@
 			    		<td><?php echo $row["lastName"] ?></td>
 			    		<td><?php echo $row["email"] ?></td>
 			    		<td><?php echo $row["password"] ?></td>
-			    		<td><?php echo $row["mobile"] ?></td>
+			    		
 			    		<td>
 				    		<?php if ($row['status'] == 1):
 				    			echo 'Active';

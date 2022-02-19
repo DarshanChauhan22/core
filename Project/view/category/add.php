@@ -1,13 +1,13 @@
 <?php 
   $result = $this->getData('getCategoryToPath');
-
+  $controllerCoreAction = new Controller_Core_Action();
 ?>
 <html>
 <head>
 
 </head>
 <body>
-  <form action="index.php?c=category&a=save" method="POST">
+  <form action="<?php echo $controllerCoreAction->getUrl('save','category',null,true) ?>" method="POST">
   <table border="1" width="100%" cellspacing="4">
     <tr>
       <td width="10%"> Name</td>
@@ -37,7 +37,7 @@
       <td width="25%">&nbsp;</td>
       <td>
         <button type="submit" name="submit" class="Registerbtn">Save </button>
-        <a href="index.php?c=category&a=grid"><button type="button" class="cancelbtn">Cancel</button></a>
+        <a href="<?php echo $controllerCoreAction->getUrl('grid','category',null,true) ?>"><button type="button" class="cancelbtn">Cancel</button></a>
       </td>
     </tr>    
   </table>  

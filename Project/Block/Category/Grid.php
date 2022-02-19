@@ -9,6 +9,7 @@ class Block_Category_Grid extends Block_Core_Template{
 
 	public function getCategories()
 	{
+
 		$categoryModel = Ccc::getModel('category');
 		$categories = $categoryModel->fetchAll("SELECT * FROM category");
 		return $categories;

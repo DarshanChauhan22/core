@@ -22,14 +22,6 @@
       <td><input type="Password" name="admin[password]"></td>
     </tr>
     <tr>
-      <td width="10%">Confirm Password</td>
-      <td><input type="Password" name="admin[confirmPassword]"></td>
-    </tr>
-    <tr>
-      <td width="10%">Mobile</td>
-      <td><input type="text" name="admin[mobile]"></td>
-    </tr>
-    <tr>
       <td width="10%">Status</td>
       <td>
         <select name="admin[status]">
