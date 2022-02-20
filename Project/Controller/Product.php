@@ -8,25 +8,11 @@ class Controller_Product extends Controller_Core_Action{
 	public function gridAction()
 	{
 		Ccc::getBlock('Product_grid')->toHtml();
-		/*
-		global $adapter;
-		$query = "SELECT * FROM Product";
-		$product = $adapter-> fetchAll($query);
-		$view = $this->getView();
-		$view->setTemplate('view/product/grid.php');
-		$view->addData('product',$product);
-		$view->toHtml();
-		//require_once('view/product/grid.php');
-		*/
 	}
 
 	public function addAction()
 	{
 		Ccc::getBlock('Product_Add')->toHtml();
-		/*
-		$view = $this->getView();
-		$view->setTemplate('view/product/add.php')->toHtml();
-		//require_once('view/product/add.php');*/
 	}
 
 	public function editAction()
@@ -50,32 +36,12 @@ class Controller_Product extends Controller_Core_Action{
 			echo $e->getMessage();
 		}
 
-
-		/*try {
-			$id = (int)$this->getRequest()->getRequest('id');
-			if(!id){
-				throw new Exception("invalid");
-			}
-			global $adapter;
-		$request = new Model_Core_Request();
-		$getId = $request->getRequest('id');
-      	$pid=$getId;
-     	$query = "SELECT * FROM Product WHERE productId=".$pid;
-     	$product = $adapter->fetchRow($query);
-     	$view = $this->getView();
-		$view->setTemplate('view/product/edit.php');
-		$view->addData('product',$product);
-		$view->toHtml();*/
-		
-		//require_once('view/product/edit.php');
 	}
 		
 
 	public function saveAction()
 	{
 		$customerTable = Ccc::getModel('Product');
-		//$adminTable = new Model_Product(); 
-		//$request = new Model_Core_Request();
 		try {
 			$row =  $this->getRequest()->getRequest('product');
 			
@@ -84,25 +50,21 @@ class Controller_Product extends Controller_Core_Action{
 				throw new Exception("Invalid Request.", 1);				
 			}
 			$productId = $row["productId"];
-			global $adapter;
 			global $date;
-			//$request = new Model_Core_Request();
-			//$row = $request->getPost('product');
-			//$row = $_POST['product'];
 			if (array_key_exists('productId', $row)) 
 			{
 				if(!(int)$row['productId'])
 				{
 					throw new Exception("Invalid Request.", 1);
 				}
-				/*$query = "UPDATE Product 
-					SET name='".$row['name']."',
-						price=".$row['price'].",
-						quantity='".$row['quantity']."',
-						updatedAt='".$date."',
-						status='".$row['status']."' 
-					Where productId='".$row['id']."'";	*/
-				$update = $customerTable->update($row,['productId' => $productId]);
+				$query = [
+                    "name" => $row['name'],
+                    "price" => $row['price'],
+                    "quantity" => $row['quantity'],
+                    "status" =>$row['status'],
+                    "updatedAt" => $date];
+
+				$update = $customerTable->update($query,['productId' => $productId]);
 
 				
 				if(!$update)
@@ -112,13 +74,6 @@ class Controller_Product extends Controller_Core_Action{
 			}
 			else{
 			
-				/*$query = "INSERT INTO Product(name,price,quantity,status,createdAt) 
-				VALUES('".$row['name']."',
-					   '".$row['price']."',
-					   '".$row['quantity']."',
-					   '".$row['status']."',
-					   '".$date."'
-					   );";*/
 				$insert=$customerTable->insert($row);
 				
 				if(!$insert)
@@ -143,8 +98,6 @@ class Controller_Product extends Controller_Core_Action{
 			{
 				throw new Exception("Invalid Request.", 1);
 			}
-			//global $adapter;
-			//$query = "DELETE FROM Product WHERE productId = ".$getId;
 			$delete = $customerTable->delete(['productId' => $getId]); 
 			if(!$delete)
 			{

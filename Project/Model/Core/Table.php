@@ -30,19 +30,19 @@ class Model_Core_Table
 	public function insert(array $arr1)
 	{
 		
-		$cn = [];
-		$vn =[];
+		$columns = [];
+		$values =[];
 		global $adapter;
 		foreach ($arr1 as $columnName => $value ){
-			array_push($cn,$columnName);
-			array_push($vn,$value);
+			array_push($columns,$columnName);
+			array_push($values,$value);
 		}
-			$sql1= implode(',', $cn);
-			$sql2= implode("','", $vn);
+			$sql1= implode(',', $columns);
+			$sql2= implode("','", $values);
 			$sql3 = "'" . $sql2 . "'";
 			$tableName = $this->tableName;
 			
-			$sql4 = "INSERT INTO $tableName ($sql1) values($sql3);" ;
+			$sql4 = "INSERT INTO $tableName  ($sql1) values($sql3);" ;
 
 			$result = $adapter->insert($sql4);
 			return $result;
@@ -50,6 +50,7 @@ class Model_Core_Table
 
 	public function update(array $arr3 , array $arr4)
 	{	
+		
 		global $adapter;
 		global $date;
 		$set = [];
@@ -57,13 +58,15 @@ class Model_Core_Table
 		$key = key($arr4);
 		$value = $arr4[$this->getPrimaryKey()];
 
-		foreach($arr3 as $k => $v){
-			$set[] = "$k='$v'";
+		foreach($arr3 as $arrKey => $arrValue){
+			$set[] = "$arrKey='$arrValue'";
 		}
 		$imp = implode(',', $set);
-		$update = "UPDATE $tableName SET $imp ,updatedAt = '".$date."'  WHERE $key = $value;";
+		$update = "UPDATE $tableName SET $imp WHERE $key = $value;";
 		$result = $adapter->update($update);
+		print_r($result);
 
+//,updatedAt = '".$date."'
 		return $result;
 	}	
 

@@ -1,9 +1,5 @@
-<?php 
-  //$result = $this->getData('getCategoryToPath');
-$categoriepath = $this->getCategoriePath();
-
-  $controllerCoreAction = new Controller_Core_Action();
-?>
+<?php $categoriepath = $this->getCategoriePath(); ?>
+<?php $controllerCoreAction = new Controller_Core_Action(); ?>
 <html>
 <head>
 
@@ -20,7 +16,7 @@ $categoriepath = $this->getCategoriePath();
       <td>
         <select name="category[status]">
           <option value="1">Active</option>
-          <option value="2">Inactive</option>
+          <option value="0">Inactive</option>
         </select>
       </td>
     </tr>

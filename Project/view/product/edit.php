@@ -1,7 +1,5 @@
-<?php
-      $product = $this->getProduct();
-      $controllerCoreAction = new Controller_Core_Action(); 
-?>
+<?php $product = $this->getProduct(); ?>
+<?php $controllerCoreAction = new Controller_Core_Action(); ?>
 <html>
 <head>
   

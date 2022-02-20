@@ -7,68 +7,37 @@ class Controller_Category extends Controller_Core_Action {
 	public function gridAction()
 	{
 		Ccc::getBlock('Category_grid')->toHtml();
-		
-		/*global $adapter; 
-		$query = "SELECT 
-					* 
-				FROM Category order by categoryPath";
-		$result = $adapter->fetchAll($query);	
-		$view = $this->getView();
-		$view->setTemplate('view/category/grid.php');
-		$view->addData('category',$result);
-		$categoryPath = $this->getCategoryToPath();
-	    $view->addData('getCategoryToPath',$categoryPath);
- 		$view->toHtml();
-		//require_once('view/category/grid.php');*/
-		
 	}
 
 	public function addAction()
 	{
 		Ccc::getBlock('Category_Add')->toHtml();
-		/*$view = $this->getView();
-		$view->setTemplate('view/category/add.php');
-		$categoryPath = $this->getCategoryToPath();
-	    $view->addData('getCategoryToPath',$categoryPath);
- 		$view->toHtml();
-		//require_once('view/category/add.php');*/
 	}
 
 	public function editAction()
 	{
-		$categoryModel = Ccc::getModel('category');
-		global $adapter;      
+		$categoryModel = Ccc::getModel('category');      
 	    $pid=(int) $this->getRequest()->getRequest('id');
 	    $query = "SELECT 
 	                  * 
 	    FROM Category WHERE categoryId=".$pid;
 	    $row = $categoryModel-> fetchRow($query);
-	
-	 	//$view = $this->getView();
-		
-		//$view->setTemplate('view/category/edit.php');
-		//$view->addData('category',$row);
 		
 	    $categoryPathPair = $categoryModel->fetchAll('SELECT categoryId,categoryPath FROM Category');
 	    Ccc::getBlock('Category_Edit')->addData('category',$row)->toHtml();	
-	    //$view->addData('categoryPathPair',$categoryPathPair);
- 
-	   // $categoryPath = $this->getCategoryToPath();
-	   // $view->addData('categoryPath',$categoryPath);
- 		//$view->toHtml();
- 		//require_once('view/category/edit.php');
+	   
 	}
 
 	public function saveAction()
 	{
 		try 
-		{	$adminTable = Ccc::getModel('Category');
+		{	$categoryTable = Ccc::getModel('Category');
 			$row = $this->getRequest()->getRequest('category');
+			
 			if (!isset($row)) 
 			{
 				throw new Exception("Invalid Request.", 1);				
 			}
-			global $adapter;
 			global $date;
 			
 			$path = '';
@@ -80,16 +49,9 @@ class Controller_Category extends Controller_Core_Action {
 					throw new Exception("Invalid Request.", 1);
 				}
 				
-				$query = ['name' => $row['name'] , 'updatedAt' => $date , 'status' => $row['status']];
+					$query = ['name' => $row['name'] , 'updatedAt' => $date , 'parentId' => $row['parentId'], 'status' => $row['status']];
 
-
-
-				/*"UPDATE Category 
-				SET name='".$row['name']."',
-					updatedAt='".$date."',
-					status='".$row['status']."'
-				WHERE categoryId='".$row['id']."'";*/
-				$update = $adminTable->update($query , ['categoryId' => $row['id']]);
+				$update = $categoryTable->update($query , ['categoryId' => $row['id']]);
 				if(!$update)
 				{
 					throw new Exception("System is unable to update.", 1);
@@ -103,35 +65,18 @@ class Controller_Category extends Controller_Core_Action {
 				{
 					$query = ['name' => $row['name'] , 'createdAt' => $date , 'status' => $row['status']];
 
-
-
-                     /*
-					"INSERT INTO Category(name,createdAt,status) 
-					VALUES('".$row['name']."',
-						   '".$date."',
-						   '".$row['status']."')";
-                     */
-
 				}
 				else
 				{
 					$query = ['name' => $row['name'] , 'createdAt' => $date , 'status' => $row['status'] , 'parentId' => $row['parentId']];
-
-
-                    /*
-					"INSERT INTO Category(name,createdAt,status,parentId) 
-					VALUES('".$row['name']."',
-							'".$date."',
-							'".$row['status']."',
-							'".$row['parentId']."')";*/
 				}
-				$insert=$adminTable->insert($query);
+				$insert=$categoryTable->insert($query);
 				if(!$insert)
 				{
 					throw new Exception("System is unable to insert.", 1);			
 				}
 
-				$parent=$adminTable->fetchRow("SELECT parentId FROM Category WHERE categoryId=".$insert);
+				$parent=$categoryTable->fetchRow("SELECT parentId FROM Category WHERE categoryId=".$insert);
 				$parent = array_shift($parent);
 				
 				if ($parent == NULL) 
@@ -140,13 +85,14 @@ class Controller_Category extends Controller_Core_Action {
 				}
 				else
 				{
-					$result=$adminTable->fetchRow("SELECT * FROM Category WHERE categoryId= ".$parent);
+					$result=$categoryTable->fetchRow("SELECT * FROM Category WHERE categoryId= ".$parent);
 					
 					$path = $result['categoryPath'].'/'.$insert;
 
 				}
-				$query = "UPDATE Category SET categoryPath = '".$path."' WHERE categoryId = ".$insert;
-				$update = $adapter->update($query);
+				$query = ['categoryPath' => $path , 'status' => $row['status']];
+
+				$update = $categoryTable->update($query , ['categoryId' => $insert]);
 				if(!$update)
 				{
 					throw new Exception("System is unable to update.", 1);
@@ -161,28 +107,25 @@ class Controller_Category extends Controller_Core_Action {
 	
 	public function updatePathIntoCategory($categoryId,$parentId)
 	{
-		$adminTable = Ccc::getModel('Category');
-		global $adapter;
 		global $date;
-
-		$category=$adminTable->fetchRow("SELECT * FROM Category WHERE categoryId= ".$categoryId);
-		$categoryPath=$adminTable->fetchAll("SELECT * FROM Category WHERE categoryPath LIKE '".$category['categoryPath'].'/%'."' ORDER BY categoryPath");
+		$categoryTable = new Model_Category(); 
+		$category=$categoryTable->fetchRow("SELECT * FROM Category WHERE categoryId= ".$categoryId);
+		$categoryPath=$categoryTable->fetchAll("SELECT * FROM Category WHERE categoryPath LIKE '".$category['categoryPath'].'/%'."' ORDER BY categoryPath");
 		if($parentId == 'NULL')
 		{	
-			$query = "UPDATE Category 
-			SET parentId=null, 
-			categoryPath= $categoryId
-			WHERE categoryId=$categoryId";
+			$query = [
+                    "parentId" => null,
+                    "categoryPath" => $categoryId];
 		}
 		else
 		{
-			$parent=$adminTable->fetchRow("SELECT * FROM Category WHERE categoryId= ".$parentId);
-			$query = "UPDATE Category 
-			SET parentId=".$parentId.", 
-			categoryPath= '".$parent['categoryPath'].'/'.$categoryId."' 
-			WHERE categoryId=".$categoryId;
+			$parent=$categoryTable->fetchRow("SELECT * FROM Category WHERE categoryId= ".$parentId);
+			$parent = $parent['categoryPath'].'/'.$categoryId;
+			$query = [
+                    "parentId" => $parentId,
+                    "categoryPath" => $parent];
 		}
-		$update = $adapter->update($query);
+		$update = $categoryTable->update($query , ['categoryId' => $categoryId]);
 		if(!$update)
 		{
 			echo "error";
@@ -191,37 +134,36 @@ class Controller_Category extends Controller_Core_Action {
 		}	
 		foreach ($categoryPath as $row) 
 		{
-			$parent=$adminTable->fetchRow("SELECT * FROM Category WHERE categoryId= ".$row['parentId']);
+			$parent=$categoryTable->fetchRow("SELECT * FROM Category WHERE categoryId= ".$row['parentId']);
 			$newPath = $parent['categoryPath'].'/'.$row['categoryId'];
 
-			$query = "UPDATE Category
-				SET categoryPath = '".$newPath."',
-					updatedAt = '".$date."'
-					WHERE categoryId = ".$row['categoryId'];
-			$update = $adapter->update($query);
+			$query = [
+                    "categoryPath" => $newPath,
+                    "updatedAt" => $date];
+			$update = $categoryTable->update($query , ['categoryId' => $row['categoryId']]);
 			if(!$update)
 			{
 				throw new Exception("System is unable to update.", 1);
 			}	
 
 		}
-		$this->redirect($this->getUrl('grid','category',null,true));
+		$this->redirect("index.php?c=category&a=grid");
 	}
+
 
 	public function deleteAction()
 	{
 		try 
 		{
-			$adminTable = Ccc::getModel('Category');
+			$categoryTable = Ccc::getModel('Category');
 			$id = $this->getRequest()->getRequest('id');
 			if (!isset($id)) 
 			{
 				throw new Exception("Invalid Request.", 1);
 			}
-			global $adapter;
 			
 			//$query = "DELETE FROM Category WHERE categoryId = ".$id;
-			$delete = $adminTable->delete(['categoryId' => $id]); 
+			$delete = $categoryTable->delete(['categoryId' => $id]); 
 			if(!$delete)
 			{
 				throw new Exception("System is unable to  delete.", 1);
@@ -245,8 +187,7 @@ class Controller_Category extends Controller_Core_Action {
 	}
 
 	public function getCategoryToPath()
-    {	
-    	
+    {		
     	global $adapter;
         $categoryName=$adapter->fetchPair('SELECT categoryId,name FROM Category');
         

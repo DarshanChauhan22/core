@@ -1,11 +1,6 @@
-<?php
-  $category = $this->getCategory();
-  $categoriepath = $this->getCategoriePath();
-  //$row = $this->getData('category');
-  //$categoryPathPair = $this->getData('categoryPathPair');
-  //$categoryPath = $this->getData('categoryPath');
-  $controllerCoreAction = new Controller_Core_Action();
-?>
+<?php $category = $this->getCategory(); ?>
+<?php $categoriepath = $this->getCategoriePath(); ?>
+<?php $controllerCoreAction = new Controller_Core_Action(); ?>
 <html>
 <head>  
  
@@ -21,12 +16,12 @@
         <tr>
           <td width="10%">Status</td>
           <td>
-            <select name="category[status]">
+            <select name="category[status]" value="<?php echo $category['status'];?>">
               <?php if ($category['status' ] == 1):?>
                   <option value='1'>Active</option>
-                  <option value='2'>InActive</option>
+                  <option value='0'>InActive</option>
               <?php else: ?>
-                  <option value='2'>InActive</option>
+                  <option value='0'>InActive</option>
                   <option value='1'>Active</option>
               <?php endif;?>
             </select>
@@ -36,6 +31,7 @@
       <td width="10%">Parent Category</td>
       <td>
         <select name="category[parentId]">
+          <option value=<?php echo $category['parentId'] ?>><?php echo $categoriepath[$category['categoryId']]?></option>
           <option value="NULL">Root</option>
             <?php foreach ($categoriepath as $key=>$value):?>
                 <option value=<?php echo $key?>><?php echo $value; ?></option>
@@ -43,7 +39,7 @@
         </select>
       </td>
     </tr>
-        <tr>
+    <tr>
           <td width="25%">&nbsp;</td>
           <td>
             <button type="submit" name="submit" class="Registerbtn">Save </button>

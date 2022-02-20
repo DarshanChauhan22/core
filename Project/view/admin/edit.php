@@ -1,9 +1,7 @@
-<?php
-  $admin = $this->getAdmin();
-  
- $controllerCoreAction = new Controller_Core_Action();
+<?php $admin = $this->getAdmin(); ?>
+<?php $controllerCoreAction = new Controller_Core_Action(); ?>
 
-?>
+
 
 <html>
 <head>

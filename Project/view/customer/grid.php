@@ -1,7 +1,5 @@
-<?php
-	  $customers = $this->getCustomers();
-	 $controllerCoreAction = new Controller_Core_Action();
-?>
+<?php $customers = $this->getCustomers(); ?>
+<?php $controllerCoreAction = new Controller_Core_Action(); ?>
 <html>
 <head>
 	<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0' />

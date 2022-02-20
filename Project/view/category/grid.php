@@ -1,11 +1,6 @@
-<?php
-	$categories = $this->getCategories();
-	$categoriepath = $this->getCategoriePath();
-
-	//$result = $this->getData('category');
-	//$getCategoryToPath = $this->getData('getCategoryToPath');
-		$controllerCoreAction = new Controller_Core_Action();
-?>
+<?php $categories = $this->getCategories(); ?>
+<?php $categoriepath = $this->getCategoriePath(); ?>
+<?php $controllerCoreAction = new Controller_Core_Action(); ?>
 <html>
 <head>
 	<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0' />

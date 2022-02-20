@@ -1,7 +1,5 @@
-<?php
-    $customer = $this->getCustomer();
-    $controllerCoreAction = new Controller_Core_Action();
-?>
+<?php $customer = $this->getCustomer(); ?>
+<?php $controllerCoreAction = new Controller_Core_Action(); ?>
 <html>
 <head>
   
