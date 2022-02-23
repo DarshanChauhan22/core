@@ -29,7 +29,7 @@ class Controller_Admin extends Controller_Core_Action{
 			if(!$id){
 				throw new Exception("Id not valid.");
 			}
-			$adminModel = Ccc::getModel('Admin');
+			$adminModel = Ccc::getModel('Admin_Resource');
 			$admin = $adminModel->fetchRow("SELECT * FROM admin WHERE adminId = {$id} ");
 			if(!$admin){
 				throw new Exception("unable to load admin.");
@@ -46,16 +46,43 @@ class Controller_Admin extends Controller_Core_Action{
 	public function saveAction()
 	{
 		global $date;
-		$adminTable = Ccc::getModel('Admin');
+		//$adminTable = Ccc::getModel('Admin_Resource');
 		try
 		{
+			$adminModel = Ccc::getModel('Admin_Resource');
+
+       		$admin = $adminModel->getRow();
 			$row = $this->getRequest()->getRequest('admin');
 
 			if (!isset($row)) {
 				throw new Exception("Invalid Request.", 1);				
 			}			
 
-			if (array_key_exists('adminId', $row)) {
+
+			 if(!array_key_exists('adminId',$row))
+       		 {
+                $admin->firstName = $row['firstName'];
+                $admin->lastName =  $row['lastName'];
+                $admin->email =  $row['email'];
+                $admin->password =  $row['password'];
+                $admin->status =  $row['status'];
+                $admin->save();
+        	}
+        	else
+        	{
+
+                $admin = $adminModel->load($row['adminId']);
+                $admin->firstName = $row['firstName'];
+                $admin->lastName =  $row['lastName'];
+                $admin->email =  $row['email'];
+                $admin->password =  $row['password'];
+                $admin->status =  $row['status'];
+                $admin->updatedAt =  $date;
+                $admin->save();
+       			}
+
+
+			/*if (array_key_exists('adminId', $row)) {
 				if(!(int)$row['adminId']){
 					throw new Exception("Invalid Request.", 1);
 				}
@@ -95,7 +122,7 @@ class Controller_Admin extends Controller_Core_Action{
 						throw new Exception("System is unable to insert.", 1);
 				}
 				
-			}
+			}*/
 			$this->redirect($this->getUrl('grid','admin',null,true));
 		} 
 		catch (Exception $e) 
@@ -106,7 +133,7 @@ class Controller_Admin extends Controller_Core_Action{
 
 	public function deleteAction()
 	{
-		$adminTable = Ccc::getModel('Admin');
+		$adminTable = Ccc::getModel('Admin_Resource');
 		try 
 		{	
 			$getId = $this->getRequest()->getRequest('id'); 

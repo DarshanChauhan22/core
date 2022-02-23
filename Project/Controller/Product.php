@@ -24,7 +24,7 @@ class Controller_Product extends Controller_Core_Action{
 			if(!$id){
 				throw new Exception("Id not valid.");
 			}
-			$productModel = Ccc::getModel('Product');
+			$productModel = Ccc::getModel('Product_Resource');
 			$product = $productModel->fetchRow("SELECT * FROM product WHERE productId = {$id} ");
 			if(!$product){
 				throw new Exception("unable to load product.");
@@ -41,8 +41,11 @@ class Controller_Product extends Controller_Core_Action{
 
 	public function saveAction()
 	{
-		$customerTable = Ccc::getModel('Product');
+		//$customerTable = Ccc::getModel('Product_Resource');
 		try {
+			$productModel = Ccc::getModel('Product_Resource');
+
+       		$product = $productModel->getRow();
 			$row =  $this->getRequest()->getRequest('product');
 			
 			if (!isset($row)) 
@@ -51,7 +54,29 @@ class Controller_Product extends Controller_Core_Action{
 			}
 			$productId = $row["productId"];
 			global $date;
-			if (array_key_exists('productId', $row)) 
+
+			 if(!array_key_exists('productId',$row))
+       		 {
+                $product->name = $row['name'];
+                $product->price =  $row['price'];
+                $product->quantity =  $row['quantity'];
+                $product->status =  $row['status'];
+                $product->save();
+        	}
+        	else
+        	{
+        		$product = $productModel->load($row['productId']);
+                $product->name = $row['name'];
+                $product->price =  $row['price'];
+                $product->quantity =  $row['quantity'];
+                $product->status =  $row['status'];
+                $product->updatedAt =  $date;
+                $product->save();
+       			}
+
+
+
+			/*if (array_key_exists('productId', $row)) 
 			{
 				if(!(int)$row['productId'])
 				{
@@ -80,7 +105,7 @@ class Controller_Product extends Controller_Core_Action{
 				{
 					throw new Exception("System is unable to insert.", 1);					
 				}
-			}
+			}*/
 			$this->redirect($this->getUrl('grid','product',null,true));
 			
 		} catch (Exception $e) {
@@ -90,7 +115,7 @@ class Controller_Product extends Controller_Core_Action{
 
 	public function deleteAction()
 	{
-		$customerTable = Ccc::getModel('Product');
+		$customerTable = Ccc::getModel('Product_Resource');
 		try 
 		{	
 			$getId = $this->getRequest()->getRequest('id');

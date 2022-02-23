@@ -1,9 +1,28 @@
+<?php Ccc::loadClass('Model_Core_Table_Row'); ?>
+
 <?php
 
 class Model_Core_Table
 {
 	protected $tableName = NULL;
 	protected $primaryKey = NULL;
+	protected $rowClassName;
+
+	public function getRowClassName()
+	{
+		return $this->rowClassName;
+	}
+
+	public function setRowClassName($rowClassName)
+	{
+		$this->rowClassName = $rowClassName;
+		return $this;
+	}
+
+	public function getRow()
+	{
+		return Ccc::getModel($this->getRowClassName());
+	}
   
 	public function getTableName()
 	{
@@ -29,7 +48,6 @@ class Model_Core_Table
 
 	public function insert(array $arr1)
 	{
-		
 		$columns = [];
 		$values =[];
 		global $adapter;
@@ -43,7 +61,6 @@ class Model_Core_Table
 			$tableName = $this->tableName;
 			
 			$sql4 = "INSERT INTO $tableName  ($sql1) values($sql3);" ;
-
 			$result = $adapter->insert($sql4);
 			return $result;
 	}
@@ -64,7 +81,7 @@ class Model_Core_Table
 		$imp = implode(',', $set);
 		$update = "UPDATE $tableName SET $imp WHERE $key = $value;";
 		$result = $adapter->update($update);
-		print_r($result);
+		
 
 //,updatedAt = '".$date."'
 		return $result;
@@ -96,6 +113,19 @@ class Model_Core_Table
         $result = $adapter->fetchAll($queryFetchAll);
         return $result;
     }
+
+    public function load($id)
+	{
+		$rowData = $this->fetchRow("SELECT * FROM {$this->getTableName()} WHERE {$this->getPrimaryKey()} = {$id}");
+		
+		if(!$rowData)
+		{
+			return false;
+		}
+		$row = $this->getRow();
+		$row->setData($rowData);
+		return $row;
+	}
 }
 
 ?>
