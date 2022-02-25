@@ -23,29 +23,33 @@
 			<th> Updated_At </th>
 			<th> Status </th>
 			<th> Action </th>
+			<th> Media </th>
 		</tr>
 		<?php if($products): ?>
 		
-			<?php foreach ($products as $row): ?>		
+			<?php foreach ($products as $product): ?>		
 				<tr>
-		    		<td><?php echo $row["productId"] ?></td>
-		    		<td><?php echo $row["name"] ?></td>
-		    		<td><?php echo $row['price'] ?></td>
-		    		<td><?php echo $row["quantity"] ?></td>
-		    		<td><?php echo $row["createdAt"] ?></td>
-		    		<td><?php echo $row["updatedAt"] ?></td>
+		    		<td><?php echo $product->productId ?></td>
+		    		<td><?php echo $product->name ?></td>
+		    		<td><?php echo $product->price ?></td>
+		    		<td><?php echo $product->quantity ?></td>
+		    		<td><?php echo $product->createdAt ?></td>
+		    		<td><?php echo $product->updatedAt ?></td>
 		    		<td>
-			    		<?php if ($row['status'] == 1):
+			    		<?php if ($product->status == 1):
 			    			echo ' Active ';
 			    		else:
 			    			echo ' InActive ';
 			    		endif; ?>
 		    		</td>
 		    		<td>
-		    			<a href="<?php echo$controllerCoreAction->getUrl('delete','product',['id' =>  $row['productId']],true) ?>">Delete</a> 
-		    			<a href="<?php echo$controllerCoreAction->getUrl('edit','product',['id' =>  $row['productId']],true) ?>">Update</a>
+		    			<a href="<?php echo$controllerCoreAction->getUrl('delete','product',['id' =>  $product->productId],true) ?>">Delete</a> 
+		    			<a href="<?php echo$controllerCoreAction->getUrl('edit','product',['id' =>  $product->productId],true) ?>">Update</a>
 		    		</td>
-		    	</tr
+		    		<td>
+		    			<a href="<?php echo$controllerCoreAction->getUrl('edit','product_Media',['id' =>  $product->productId],true) ?>">Media</a>
+		    		</td>
+		    	</tr>
 		  	<?php endforeach; ?>
 		<?php else: ?>
 			<tr><td colspan='8'>No Record Available</td></tr>

@@ -27,26 +27,26 @@
 				<th> Action </th>
 			</tr>
 			<?php if($admins):
-				foreach ($admins as $row): ?>
+				foreach ($admins as $admin): ?>
 					<tr>
-			      		<td><?php echo $row["adminId"] ?></td>
-			    		<td><?php echo $row["firstName"] ?></td>
-			    		<td><?php echo $row["lastName"] ?></td>
-			    		<td><?php echo $row["email"] ?></td>
-			    		<td><?php echo $row["password"] ?></td>
+			      		<td><?php echo $admin->adminId ?></td>
+			    		<td><?php echo $admin->firstName ?></td>
+			    		<td><?php echo $admin->lastName ?></td>
+			    		<td><?php echo $admin->email ?></td>
+			    		<td><?php echo $admin->password ?></td>
 			    		
 			    		<td>
-				    		<?php if ($row['status'] == 1):
+				    		<?php if ($admin->status == 1):
 				    			echo 'Active';
 				    		else:
 				    			echo 'InActive';
 				    		endif; ?>
 			    		</td>
-			    		<td><?php echo $row["createdAt"] ?></td>
-			    		<td><?php echo $row["updatedAt"] ?></td>
+			    		<td><?php echo $admin->createdAt ?></td>
+			    		<td><?php echo $admin->updatedAt ?></td>
 			    		<td>
-			    			<a href="<?php echo$controllerCoreAction->getUrl('delete','admin',['id' =>  $row['adminId']],true) ?>">Delete</a> 
-			    			<a href="<?php echo$controllerCoreAction->getUrl('edit','admin',['id' =>  $row['adminId']],true) ?>">Update</a>
+			    			<a href="<?php echo$controllerCoreAction->getUrl('delete','admin',['id' =>  $admin->adminId],true) ?>">Delete</a> 
+			    			<a href="<?php echo$controllerCoreAction->getUrl('edit','admin',['id' =>  $admin->adminId],true) ?>">Update</a>
 			    		</td>
 			   		</tr>
 			 	<?php endforeach;?>

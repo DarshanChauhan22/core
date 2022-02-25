@@ -24,7 +24,7 @@ class Controller_Product extends Controller_Core_Action{
 			if(!$id){
 				throw new Exception("Id not valid.");
 			}
-			$productModel = Ccc::getModel('Product_Resource');
+			$productModel = Ccc::getModel('Product')->load($id);
 			$product = $productModel->fetchRow("SELECT * FROM product WHERE productId = {$id} ");
 			if(!$product){
 				throw new Exception("unable to load product.");
@@ -43,9 +43,9 @@ class Controller_Product extends Controller_Core_Action{
 	{
 		//$customerTable = Ccc::getModel('Product_Resource');
 		try {
-			$productModel = Ccc::getModel('Product_Resource');
-
-       		$product = $productModel->getRow();
+			//$productModel = Ccc::getModel('Product_Resource');
+			$product = Ccc::getModel('Product');
+       		//$product = $productModel->getRow();
 			$row =  $this->getRequest()->getRequest('product');
 			
 			if (!isset($row)) 
@@ -65,7 +65,8 @@ class Controller_Product extends Controller_Core_Action{
         	}
         	else
         	{
-        		$product = $productModel->load($row['productId']);
+        		$product->load($row['productId']);
+        		$product->productId = $row["productId"];
                 $product->name = $row['name'];
                 $product->price =  $row['price'];
                 $product->quantity =  $row['quantity'];

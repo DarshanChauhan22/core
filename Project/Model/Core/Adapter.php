@@ -126,5 +126,5 @@ $adapter->setConfig([
 		'host' => 'localhost',
 		'username' => 'root',
 		'password' => '',
-		'dbname' => 'ccc'
+		'dbname' => 'cc'
 	]);

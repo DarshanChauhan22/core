@@ -1,8 +1,10 @@
 <?php require_once('Model\Core\Adapter.php'); 
 	Ccc::loadClass('Controller_Core_Front');
+	Ccc::loadClass('Controller_Core_Action');
 	Ccc::loadClass('Model_Core_Request');
    date_default_timezone_set("Asia/Kolkata");
    $date = date('Y-m-d H:i:s');
+   $controllerCoreAction = new Controller_Core_Action();
  ?>
 <!DOCTYPE html>
 <html>
@@ -13,11 +15,12 @@
 
 </head>
 <body>
-	<div class='index'>
-		<a href="index.php?c=category&a=grid"><button type="button" class="cancel">Category</button></a>
-		<a href="index.php?c=product&a=grid"><button type="button" class="cancel">Product</button></a>
-		<a href="index.php?c=customer&a=grid"><button type="button" class="cancel">Customer</button></a>
-		<a href="index.php?c=admin&a=grid"><button type="button" class="cancel">Admin</button></a>
+	<div>
+		<a href="<?php echo $controllerCoreAction->getUrl('grid','category',null,true) ?>"><button type="button" class="cancel">Category</button></a>
+		<a href="<?php echo $controllerCoreAction->getUrl('grid','product',null,true) ?>"><button type="button" class="cancel">Product</button></a>
+		<a href="<?php echo $controllerCoreAction->getUrl('grid','customer',null,true) ?>"><button type="button" class="cancel">Customer</button></a>
+		<a href="<?php echo $controllerCoreAction->getUrl('grid','admin',null,true) ?>"><button type="button" class="cancel">Admin</button></a>
+		<a href="<?php echo $controllerCoreAction->getUrl('grid','config',null,true) ?>"><button type="button" class="cancel">Config</button></a><a href="<?php echo $controllerCoreAction->getUrl('grid','config',null,true) ?>"><button type="button" class="cancel">Config</button></a>
 	</div>
 </body>
 </html>

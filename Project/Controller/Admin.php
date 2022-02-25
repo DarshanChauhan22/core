@@ -29,8 +29,8 @@ class Controller_Admin extends Controller_Core_Action{
 			if(!$id){
 				throw new Exception("Id not valid.");
 			}
-			$adminModel = Ccc::getModel('Admin_Resource');
-			$admin = $adminModel->fetchRow("SELECT * FROM admin WHERE adminId = {$id} ");
+			$admin = Ccc::getModel('Admin')->load($id);
+			//$admin = $adminModel->fetchRow("SELECT * FROM admin WHERE adminId = {$id} ");
 			if(!$admin){
 				throw new Exception("unable to load admin.");
 			}
@@ -49,9 +49,10 @@ class Controller_Admin extends Controller_Core_Action{
 		//$adminTable = Ccc::getModel('Admin_Resource');
 		try
 		{
-			$adminModel = Ccc::getModel('Admin_Resource');
+			//$id = (int) $this->getRequest()->getRequest('admimId');
+			$admin = Ccc::getModel('Admin');
 
-       		$admin = $adminModel->getRow();
+       		//$admin = $adminModel->getRow();
 			$row = $this->getRequest()->getRequest('admin');
 
 			if (!isset($row)) {
@@ -66,12 +67,14 @@ class Controller_Admin extends Controller_Core_Action{
                 $admin->email =  $row['email'];
                 $admin->password =  $row['password'];
                 $admin->status =  $row['status'];
+                $admin->createdAt =  $date;
                 $admin->save();
         	}
         	else
         	{
 
-                $admin = $adminModel->load($row['adminId']);
+                $admin->load($row['adminId']);
+                $admin->adminId = $row["adminId"];
                 $admin->firstName = $row['firstName'];
                 $admin->lastName =  $row['lastName'];
                 $admin->email =  $row['email'];

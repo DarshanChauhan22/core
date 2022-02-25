@@ -29,13 +29,13 @@
 				<?php if($categories): ?>
 					<?php foreach ($categories as $row):?>
 						<tr>
-				    		<td><?php echo $row["categoryId"] ?></td>
+				    		<td><?php echo $row->categoryId ?></td>
 				    			
-				    		<td><?php echo $categoriepath[$row['categoryId']];?>	
-				    		<td><?php echo $row["createdAt"] ?></td>
-				    		<td><?php echo $row["updatedAt"] ?></td>
+				    		<td><?php echo $categoriepath[$row->categoryId];?>	
+				    		<td><?php echo $row->createdAt ?></td>
+				    		<td><?php echo $row->updatedAt ?></td>
 				    		<td>
-					    		<?php if ($row["status"] == 1): 
+					    		<?php if ($row->status == 1): 
 					    			echo ' Active ';
 					    		else:
 					    			echo ' InActive ';
@@ -43,8 +43,8 @@
 				    		</td>
 
 				    		<td>
-				    			<a href="<?php echo$controllerCoreAction->getUrl('delete','category',['id' =>  $row['categoryId']],true) ?>">Delete</a> 
-				    			<a href="<?php echo$controllerCoreAction->getUrl('edit','category',['id' =>  $row['categoryId']],true) ?>">Update</a>
+				    			<a href="<?php echo$controllerCoreAction->getUrl('delete','category',['id' =>  $row->categoryId],true) ?>">Delete</a> 
+				    			<a href="<?php echo$controllerCoreAction->getUrl('edit','category',['id' =>  $row->categoryId],true) ?>">Update</a>
 				    		</td>
 				   		</tr>
 				  	<?php endforeach; ?>

@@ -30,24 +30,24 @@
 			foreach ($customers as $customer): ?>
 				 
 				<tr>
-		      		<td><?php echo $customer["customerId"] ?></td>
-		    		<td><?php echo $customer["firstName"] ?></td>
-		    		<td><?php echo $customer["lastName"] ?></td>
-		    		<td><?php echo $customer["email"] ?></td>
-		    		<td><?php echo $customer["mobile"] ?></td>
+		      		<td><?php echo $customer->customerId ?></td>
+		    		<td><?php echo $customer->firstName ?></td>
+		    		<td><?php echo $customer->lastName ?></td>
+		    		<td><?php echo $customer->email ?></td>
+		    		<td><?php echo $customer->mobile ?></td>
 		    		<td>
-			    		<?php if ($customer['status'] == 1):
+			    		<?php if ($customer->status == 1):
 			    			echo 'Active';
 			    		else:
 			    			echo 'InActive';
 			    		endif; ?>
 		    		</td>
-		    		<td> <?php echo $customer['address'] ?> </td>
-		    		<td><?php echo $customer["createdAt"] ?></td>
-		    		<td><?php echo $customer["updatedAt"] ?></td>
+		    		<td> <?php echo $customer->address ?> </td>
+		    		<td><?php echo $customer->createdAt ?></td>
+		    		<td><?php echo $customer->updatedAt ?></td>
 		    		<td>
-		    			<a href="<?php echo $controllerCoreAction->getUrl('delete','customer',['id' =>  $customer['customerId']],true) ?>">Delete</a> 
-		    			<a href="<?php echo $controllerCoreAction->getUrl('edit','customer',['id' =>  $customer['customerId']],true) ?>">Update</a>
+		    			<a href="<?php echo $controllerCoreAction->getUrl('delete','customer',['id' =>  $customer->customerId],true) ?>">Delete</a> 
+		    			<a href="<?php echo $controllerCoreAction->getUrl('edit','customer',['id' =>  $customer->customerId],true) ?>">Update</a>
 		    		</td>
 		   		</tr>
 		 	<?php endforeach;?>

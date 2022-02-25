@@ -38,9 +38,9 @@ class Controller_Customer extends Controller_Core_Action
             if(!$id){
                 throw new Exception("Id not valid.");
             }
-            $customerModel = Ccc::getModel('Customer_Resource');
+            $customer = Ccc::getModel('Customer')->load($id);
 
-            $customer = $customerModel->fetchRow("select c.*,a.* from customer c join address a on a.customerId = c.customerId WHERE c.customerId = {$id} ");
+            $customer = $customer->fetchRow("select c.*,a.* from customer c join address a on a.customerId = c.customerId WHERE c.customerId = {$id} ");
             
             if(!$customer){
                 throw new Exception("unable to load customer.");
@@ -57,14 +57,14 @@ class Controller_Customer extends Controller_Core_Action
     {
         global $date;
         $row = $this->getRequest()->getRequest('customer');
-        $customerTable = Ccc::getModel('Customer_Resource'); 
+       // $customerTable = Ccc::getModel('Customer_Resource'); 
         try 
         {
 
-        $customerModel = Ccc::getModel('Customer_Resource');
+        $customer = Ccc::getModel('Customer');
     
 
-        $customer = $customerModel->getRow();
+        //$customer = $customerModel->getRow();
 
         date_default_timezone_set("Asia/Kolkata");
         $row = $this->getRequest()->getRequest('customer');
@@ -83,7 +83,8 @@ class Controller_Customer extends Controller_Core_Action
         }
         else{
 
-                $customer = $customerModel->load($row['customerId']);
+                $customer->load($row['customerId']);
+                $customer->customerId = $row["customerId"];
                 $customer->firstName = $row['firstName'];
                 $customer->lastName =  $row['lastName'];
                 $customer->email =  $row['email'];
@@ -197,12 +198,12 @@ class Controller_Customer extends Controller_Core_Action
     }*/
 
         //$addressTable = Ccc::getModel('Customer_Address');
-        $addressModel = Ccc::getModel('Customer_Address_Resource'); 
+        $address = Ccc::getModel('Customer_Address'); 
         try 
         {
         $row = $this->getRequest()->getRequest('address');
        
-        $address = $addressModel->getRow();
+        //$address = $addressModel->getRow();
 
         if (!isset($row)) {
             throw new Exception("Invalid Request.", 1);
@@ -218,7 +219,7 @@ class Controller_Customer extends Controller_Core_Action
         if (array_key_exists("shipping", $row) && $row["shipping"] == 1) {
             $shipping = 1;
         }
-        $addressData = $addressModel->fetchRow(
+        $addressData = $address->fetchRow(
             "SELECT * FROM address WHERE customerId = $customerId"
         );
 
@@ -238,7 +239,8 @@ class Controller_Customer extends Controller_Core_Action
 
         }
         else{
-                $address = $addressModel->load($row['addressId']);
+                $address->load($row['addressId']);
+                 $address->addressId = $row["addressId"];
                 $address->customerId = $customerId;
                 $address->address =  $row['address'];
                 $address->city =  $row['city'];

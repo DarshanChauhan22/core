@@ -16,14 +16,14 @@ class Controller_Category extends Controller_Core_Action {
 
 	public function editAction()
 	{
-		$categoryModel = Ccc::getModel('category_Resource');      
 	    $pid=(int) $this->getRequest()->getRequest('id');
+		$category = Ccc::getModel('category')->load($pid);      
 	    $query = "SELECT 
 	                  * 
 	    FROM Category WHERE categoryId=".$pid;
-	    $row = $categoryModel-> fetchRow($query);
+	    $row = $category->fetchRow($query);
 		
-	    $categoryPathPair = $categoryModel->fetchAll('SELECT categoryId,categoryPath FROM Category');
+	    $categoryPathPair = $category->fetchAll('SELECT categoryId,categoryPath FROM Category');
 	    Ccc::getBlock('Category_Edit')->addData('category',$row)->toHtml();	
 	   
 	}
@@ -32,9 +32,9 @@ class Controller_Category extends Controller_Core_Action {
 	{
 		try 
 		{	//$categoryModel = Ccc::getModel('Category_Resource');
-		$categoryModel = Ccc::getModel('Category_Resource');
+		$category = Ccc::getModel('Category');
 
-       		$category = $categoryModel->getRow();
+       		//$category = $category->getRow();
 			$row = $this->getRequest()->getRequest('category');
 			
 			if (!isset($row)) 
@@ -52,7 +52,7 @@ class Controller_Category extends Controller_Core_Action {
 					throw new Exception("Invalid Request.", 1);
 				}
 				
-				$category = $categoryModel->load($row['id']);
+				$category->load($row['id']);
                 $category->name = $row['name'];
                 $category->parentId =  $row['parentId'];
                 $category->status =  $row['status'];
@@ -83,7 +83,6 @@ class Controller_Category extends Controller_Core_Action {
 				}
 				else
 				{
-					
 				$category->name = $row['name'];
                 $category->status =  $row['status'];
                 $category->parentId =  $row['parentId'];
@@ -97,7 +96,7 @@ class Controller_Category extends Controller_Core_Action {
 					throw new Exception("System is unable to insert.", 1);			
 				}
 
-				$parent=$categoryModel->fetchRow("SELECT parentId FROM Category WHERE categoryId=".$insert);
+				$parent=$category->fetchRow("SELECT parentId FROM Category WHERE categoryId=".$insert);
 				$parent = array_shift($parent);
 				
 				if ($parent == NULL) 
@@ -106,13 +105,14 @@ class Controller_Category extends Controller_Core_Action {
 				}
 				else
 				{
-					$result=$categoryModel->fetchRow("SELECT * FROM Category WHERE categoryId= ".$parent);
+					$result=$category->fetchRow("SELECT * FROM Category WHERE categoryId= ".$parent);
 					
 					$path = $result['categoryPath'].'/'.$insert;
 
 				}
-
-				$category = $categoryModel->load($insert);
+				echo "1";
+				exit();
+				$category->load($insert);
                 $category->categoryPath = $path;
                 $category->status =  $row['status'];
                 $update=$category->save();
@@ -135,12 +135,12 @@ class Controller_Category extends Controller_Core_Action {
 	{
 		global $date;
 		//$categoryModel = new Model_Category(); 
-		$categoryModel = Ccc::getModel('Category_Resource');
-		$category=$categoryModel->fetchRow("SELECT * FROM Category WHERE categoryId= ".$categoryId);
-		$categoryPath=$categoryModel->fetchAll("SELECT * FROM Category WHERE categoryPath LIKE '".$category['categoryPath'].'/%'."' ORDER BY categoryPath");
+		$category = Ccc::getModel('Category');
+		$category=$category->fetchRow("SELECT * FROM Category WHERE categoryId= ".$categoryId);
+		$categoryPath=$category->fetchAll("SELECT * FROM Category WHERE categoryPath LIKE '".$category['categoryPath'].'/%'."' ORDER BY categoryPath");
 		if($parentId == 'NULL')
 		{	
-				$category = $categoryModel->load($categoryId);
+				$category->load($categoryId);
                 $category->parentId = null;
                 $category->categoryPath = $categoryId;
                 $update=$category->save();
@@ -150,10 +150,10 @@ class Controller_Category extends Controller_Core_Action {
 		}
 		else
 		{
-			$parent=$categoryModel->fetchRow("SELECT * FROM Category WHERE categoryId= ".$parentId);
+			$parent=$category->fetchRow("SELECT * FROM Category WHERE categoryId= ".$parentId);
 			$parent = $parent['categoryPath'].'/'.$categoryId;
 			
-				$category = $categoryModel->load($categoryId);
+				$category->load($categoryId);
                 $category->parentId = $parentId;
                 $category->categoryPath = $parent;
                 $update=$category->save();
@@ -170,10 +170,10 @@ class Controller_Category extends Controller_Core_Action {
 		}	
 		foreach ($categoryPath as $row) 
 		{
-			$parent=$categoryModel->fetchRow("SELECT * FROM Category WHERE categoryId= ".$row['parentId']);
+			$parent=$category->fetchRow("SELECT * FROM Category WHERE categoryId= ".$row['parentId']);
 			$newPath = $parent['categoryPath'].'/'.$row['categoryId'];
 
-				$category = $categoryModel->load($row['categoryId']);
+				$category = $category->load($row['categoryId']);
                 $category->categoryPath = $newPath;
                 $category->updatedAt = $date;
                 $update=$category->save();
