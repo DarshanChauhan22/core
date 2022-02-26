@@ -249,7 +249,6 @@ class Controller_Customer extends Controller_Core_Action
                 $address->postalCode =  $row['postalCode'];
                 $address->billing =  $row['billing'];
                 $address->shipping =  $row['shipping'];
-                $address->updatedAt =  $date;
                 $result = $address->save();
         
         }

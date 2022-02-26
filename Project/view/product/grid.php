@@ -24,6 +24,9 @@
 			<th> Status </th>
 			<th> Action </th>
 			<th> Media </th>
+			<th> Base </th>
+			<th> Thumb </th>
+			<th> Small </th>
 		</tr>
 		<?php if($products): ?>
 		
@@ -33,6 +36,7 @@
 		    		<td><?php echo $product->name ?></td>
 		    		<td><?php echo $product->price ?></td>
 		    		<td><?php echo $product->quantity ?></td>
+		    		
 		    		<td><?php echo $product->createdAt ?></td>
 		    		<td><?php echo $product->updatedAt ?></td>
 		    		<td>
@@ -47,8 +51,11 @@
 		    			<a href="<?php echo$controllerCoreAction->getUrl('edit','product',['id' =>  $product->productId],true) ?>">Update</a>
 		    		</td>
 		    		<td>
-		    			<a href="<?php echo$controllerCoreAction->getUrl('edit','product_Media',['id' =>  $product->productId],true) ?>">Media</a>
+		    			<a href="<?php echo$controllerCoreAction->getUrl('grid','product_Media',['id' =>  $product->productId],true) ?>">Media</a>
 		    		</td>
+		    		<td><?php echo $product->baseImage ?></td>
+		    		<td><?php echo $product->thumbImage ?></td>
+		    		<td><?php echo $product->smallImage ?></td>
 		    	</tr>
 		  	<?php endforeach; ?>
 		<?php else: ?>

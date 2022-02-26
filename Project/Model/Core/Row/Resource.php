@@ -106,6 +106,7 @@ class Model_Core_Row_Resource
 
     public function fetchAll($queryFetchAll)
     {
+
         global $adapter;
         $tableName = $this->getTableName();
         $result = $adapter->fetchAll($queryFetchAll);

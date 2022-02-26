@@ -10,14 +10,14 @@
       <table border="1" width="100%" cellspacing="4">
         <tr>
           <td width="10%"> Name</td>
-          <td><input type="text" name="category[name]" value="<?php echo $category['name'] ?>"></td>
+          <td><input type="text" name="category[name]" value="<?php echo $category->name; ?>"></td>
         </tr>
-        <input type="hidden" name="category[id]" value="<?php echo $category['categoryId'] ?>">
+        <input type="hidden" name="category[id]" value="<?php echo $category->categoryId; ?>">
         <tr>
           <td width="10%">Status</td>
           <td>
-            <select name="category[status]" value="<?php echo $category['status'];?>">
-              <?php if ($category['status' ] == 1):?>
+            <select name="category[status]" value="<?php echo $category->status;?>">
+              <?php if ($category->status == 1):?>
                   <option value='1'>Active</option>
                   <option value='0'>InActive</option>
               <?php else: ?>
@@ -31,7 +31,7 @@
       <td width="10%">Parent Category</td>
       <td>
         <select name="category[parentId]">
-          <option value=<?php echo $category['parentId'] ?>><?php echo $categoriepath[$category['categoryId']]?></option>
+          <option value=<?php echo $category->parentId ?>><?php echo $categoriepath[$category->categoryId]?></option>
           <option value="NULL">Root</option>
             <?php foreach ($categoriepath as $key=>$value):?>
                 <option value=<?php echo $key?>><?php echo $value; ?></option>
