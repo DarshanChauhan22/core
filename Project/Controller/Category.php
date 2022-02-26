@@ -11,7 +11,10 @@ class Controller_Category extends Controller_Core_Action {
 
 	public function addAction()
 	{
-		Ccc::getBlock('Category_Add')->toHtml();
+		$category = Ccc::getModel('category');
+		Ccc::getBlock('Category_Edit')->addData('category',$category)->toHtml();	
+	   
+		//Ccc::getBlock('Category_Add')->toHtml();
 	}
 
 	public function editAction()
@@ -46,11 +49,12 @@ class Controller_Category extends Controller_Core_Action {
 			{
 				throw new Exception("Invalid Request.", 1);				
 			}
-			global $date;
+			date_default_timezone_set("Asia/Kolkata");
+			$date = date("Y-m-d H:i:s");
 			
 			$path = '';
 			
-			if (array_key_exists('id', $row)) 
+			if (array_key_exists('id', $row) && $row['id'] != null) 
 			{
 				if(!(int)$row['id'])
 				{
@@ -146,7 +150,8 @@ class Controller_Category extends Controller_Core_Action {
 	
 	public function updatePathIntoCategory($categoryId,$parentId)
 	{
-		global $date;
+		date_default_timezone_set("Asia/Kolkata");
+		$date = date("Y-m-d H:i:s");
 		$row = $this->getRequest()->getRequest('category');
 		
 		//$category = new Model_Category(); 
@@ -275,13 +280,13 @@ class Controller_Category extends Controller_Core_Action {
 	}
 	public function taskAction()
 	{	
-		global $adapter;
+		$adapter = $this->getAdapter();
 		$result=$adapter->fetchOne('SELECT categoryPath FROM Category where categoryId = 149');
 	}
 
 	public function getCategoryToPath()
     {		
-    	global $adapter;
+    	$adapter = $this->getAdapter();
     	$categories=[];
         $categoryName=$adapter->fetchPair('SELECT categoryId,name FROM category');
         if (!$this->getRequest()->getRequest('CategoryId')) 

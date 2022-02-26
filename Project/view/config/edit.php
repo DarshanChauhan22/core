@@ -1,4 +1,4 @@
-<?php $config = $this->getConfig();  ?>
+<?php $config = $this->getConfig();?>
 <?php $controllerCoreAction = new Controller_Core_Action(); ?>
 
 

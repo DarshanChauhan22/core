@@ -22,11 +22,13 @@
 			<th> Created_At </th>
 			<th> Updated_At </th>
 			<th> Status </th>
-			<th> Action </th>
-			<th> Media </th>
 			<th> Base </th>
 			<th> Thumb </th>
 			<th> Small </th>
+			<th> Media </th>
+			<th> Update </th>
+			<th> Delete </th>
+			
 		</tr>
 		<?php if($products): ?>
 		
@@ -46,16 +48,19 @@
 			    			echo ' InActive ';
 			    		endif; ?>
 		    		</td>
-		    		<td>
-		    			<a href="<?php echo$controllerCoreAction->getUrl('delete','product',['id' =>  $product->productId],true) ?>">Delete</a> 
-		    			<a href="<?php echo$controllerCoreAction->getUrl('edit','product',['id' =>  $product->productId],true) ?>">Update</a>
-		    		</td>
-		    		<td>
-		    			<a href="<?php echo$controllerCoreAction->getUrl('grid','product_Media',['id' =>  $product->productId],true) ?>">Media</a>
-		    		</td>
 		    		<td><?php echo $product->baseImage ?></td>
 		    		<td><?php echo $product->thumbImage ?></td>
 		    		<td><?php echo $product->smallImage ?></td>
+		    		<td>
+		    			<a href="<?php echo$controllerCoreAction->getUrl('grid','product_Media',['id' =>  $product->productId],true) ?>">Media</a>
+		    		</td>
+		    		<td>
+		    			<a href="<?php echo$controllerCoreAction->getUrl('edit','product',['id' =>  $product->productId],true) ?>">Update</a>
+		    		</td>
+		    		<td>
+		    			<a href="<?php echo$controllerCoreAction->getUrl('delete','product',['id' =>  $product->productId],true) ?>">Delete</a> 
+		    		</td>
+		    		
 		    	</tr>
 		  	<?php endforeach; ?>
 		<?php else: ?>

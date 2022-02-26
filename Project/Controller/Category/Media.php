@@ -1,35 +1,36 @@
 <?php 
 Ccc::loadClass('Controller_Core_Action');
-Ccc::loadClass('Model_Product_Media');
+Ccc::loadClass('Model_Category_Media');
 Ccc::loadClass('Model_Core_Request');
 
-class Controller_Product_Media extends Controller_Core_Action{
+class Controller_Category_Media extends Controller_Core_Action{
 	
 	public function gridAction()
 	{
-		Ccc::getBlock('Product_Media_grid')->toHtml();
+		Ccc::getBlock('Category_Media_grid')->toHtml();
 	}
 
 	public function saveAction()
    {
-      $adapter = $this->getAdapter();;
+      $adapter = $this->getAdapter();
       try 
       {
-        //$productMedia = Ccc::getModel('Product_Media');
+        //$categoryMedia = Ccc::getModel('category_Media');
 
-          $productId = $this->getRequest()->getRequest('id');
+          $request =$this->getRequest();
+          $categoryId = $request->getRequest('id');
 
-          $media = Ccc::getModel('Product_Media');
+          $media = Ccc::getModel('Category_Media');
 
-          if(!$this->getRequest()->isPost()){
+          if(!$request->isPost()){
             throw new Exception("Invalid Request" , 1);
           }
 
-          $rows = $this->getRequest()->getPost();
+          $rows = $request->getPost();
          echo "<pre>";
-          /*print_r($rows);
-         exit;
-           */
+         /* print_r($rows);
+         exit;*/
+           
             $media = $rows['media'];
             $removeArr = $rows['media']['remove'];
            /* print_r($removeArr);
@@ -49,19 +50,19 @@ class Controller_Product_Media extends Controller_Core_Action{
                 $removeIdsImplode = implode(",",$removeIds);
                 //echo $removeIdsImplode;
 
-                $query="DELETE FROM `product_media` WHERE imageId IN($removeIdsImplode)";
+                $query="DELETE FROM `category_media` WHERE imageId IN($removeIdsImplode)";
                 $result = $adapter->delete($query);
                 //print_r($result);
                     
             }
 
             
-            $query = "SELECT imageId,productId FROM `product_media` WHERE productId = $productId";
+            $query = "SELECT imageId,categoryId FROM `category_media` WHERE categoryId = $categoryId";
             $result = $adapter->fetchPair($query);
             $ids = array_keys($result);
             $implodeIds = implode(",",$ids);
             
-            $query = "UPDATE `product_media` SET status = 0, thumb = 0, base = 0, small = 0 , gallery = 0 WHERE imageId IN ($implodeIds)";
+            $query = "UPDATE `category_media` SET status = 0, thumb = 0, base = 0, small = 0 , gallery = 0 WHERE imageId IN ($implodeIds)";
            
             $result = $adapter->update($query);
 
@@ -76,11 +77,11 @@ class Controller_Product_Media extends Controller_Core_Action{
                 //print_r($removeIds);
                 $statusIdsImplode = implode(",",$statusIds);
                 //echo $removeIdsImplode;
-                /*$query = "UPDATE `product_media` SET status = CASE WHEN status = 1 THEN 0 END";
+                /*$query = "UPDATE `category_media` SET status = CASE WHEN status = 1 THEN 0 END";
                 $result = $adapter->update($query);
                 print_r($)
                 if($result){}*/
-                $query="UPDATE `product_media` SET `status`= 1 WHERE imageId IN($statusIdsImplode)";
+                $query="UPDATE `category_media` SET `status`= 1 WHERE imageId IN($statusIdsImplode)";
                 $result = $adapter->update($query);
                  
                 //print_r($result);
@@ -97,7 +98,7 @@ class Controller_Product_Media extends Controller_Core_Action{
                 }
                 print_r($galleryIds);
                 $galleryIdsImplode = implode(",",$galleryIds);
-                $query="UPDATE `product_media` SET `gallery`= 1 WHERE imageId IN($galleryIdsImplode)";
+                $query="UPDATE `category_media` SET `gallery`= 1 WHERE imageId IN($galleryIdsImplode)";
                
          
                 $result = $adapter->update($query);
@@ -110,7 +111,7 @@ class Controller_Product_Media extends Controller_Core_Action{
              $base = $rows['media']['base'];
             if(array_key_exists('base',$media))
             {
-                $query="UPDATE `product_media` SET `base`= 1 WHERE imageId = {$base}";
+                $query="UPDATE `category_media` SET `base`= 1 WHERE imageId = {$base}";
                 $result = $adapter->update($query);
                  
                 //print_r($result);
@@ -119,7 +120,7 @@ class Controller_Product_Media extends Controller_Core_Action{
             $thumb = $rows['media']['thumb'];
             if(array_key_exists('thumb',$media))
             {
-                $query="UPDATE `product_media` SET `thumb`= 1 WHERE imageId = {$thumb}";
+                $query="UPDATE `category_media` SET `thumb`= 1 WHERE imageId = {$thumb}";
                 $result = $adapter->update($query);
                  
                 //print_r($result);
@@ -128,13 +129,13 @@ class Controller_Product_Media extends Controller_Core_Action{
             $small = $rows['media']['small'];
             if(array_key_exists('small',$media))
             {
-                $query="UPDATE `product_media` SET `small`= 1 WHERE imageId = {$small}";
+                $query="UPDATE `category_media` SET `small`= 1 WHERE imageId = {$small}";
                 $result = $adapter->update($query);
                  
                 //print_r($result);
             }
 
-          $this->redirect($this->getUrl('grid','product_media',['id'=> $productId]));
+          $this->redirect($this->getUrl('grid','category_media',['id'=> $categoryId]));
 
       } catch (Exception $e) 
       {
@@ -145,7 +146,7 @@ class Controller_Product_Media extends Controller_Core_Action{
        public function addAction()
        {
 
-       		$productId = $this->getRequest()->getRequest('id');
+       		$categoryId = $_GET['id'];
 
       //$mediaTable = Ccc::getModel('Media_Resource');
       $imageName1 = $_FILES['image']['name'];
@@ -154,28 +155,28 @@ class Controller_Product_Media extends Controller_Core_Action{
       $imageName = date("mjYhis")."-".$imageName;
       $imageAddress = implode("", $imageAddress1);
       
-     // $media = Ccc::getModel('Product_Media');
+     // $media = Ccc::getModel('category_Media');
          
             //$media = $mediaModel->getRow();
 
-       //  $row = $this->getRequest()->getRequest('product_media');
+       //  $row = $this->getRequest()->getRequest('category_media');
          
-      if(move_uploaded_file($imageAddress , 'C:\xampp\htdocs\core\core\Project\Media\Product/'. $imageName))
+      if(move_uploaded_file($imageAddress , 'C:\xampp\htdocs\core\core\Project\Media\Category/'. $imageName))
          {
             $adapter = $this->getAdapter();
-            $query =  "INSERT INTO `product_media`( `productId`, `image`, `base`, `thumb`, `small`, `gallery`, `status`) VALUES ($productId,'$imageName',0,0,0,0,0)";
+            $query =  "INSERT INTO `category_media`( `categoryId`, `image`, `base`, `thumb`, `small`, `gallery`, `status`) VALUES ($categoryId,'$imageName',0,0,0,0,0)";
           
             $result = $adapter->insert($query);
            
 
-           //header('location :index.php?c=product&a=grid');
-           $this->redirect($this->getUrl('grid','product_media',['id'=> $productId]));
-           // $this->redirect("index.php?c=product&a=grid");
-           // $this->redirect($this->getUrl('grid','product_media',['id' =>  $productId],true));
+           //header('location :index.php?c=category&a=grid');
+           $this->redirect($this->getUrl('grid','category_media',['id'=> $categoryId]));
+           // $this->redirect("index.php?c=category&a=grid");
+           // $this->redirect($this->getUrl('grid','category_media',['id' =>  $categoryId],true));
          }
          else
          {
-            //$this->redirect($this->getUrl('grid','product_media',['id' =>  $productId],true));
+            //$this->redirect($this->getUrl('grid','category_media',['id' =>  $categoryId],true));
          }  
 
        }
@@ -186,10 +187,10 @@ class Controller_Product_Media extends Controller_Core_Action{
 ?>
 
 
-<!-- SELECT p.*,b.imageId,t.imageId,s.imageId FROM product p 
-LEFT JOIN product_media b ON p.productId = b.productId AND (b.base = 1)
-LEFT JOIN product_media t ON p.productId = t.productId AND (t.thumb = 1)
-LEFT JOIN product_media s ON p.productId = s.productId AND (s.small = 1);
+<!-- SELECT p.*,b.imageId,t.imageId,s.imageId FROM category p 
+LEFT JOIN category_media b ON p.categoryId = b.categoryId AND (b.base = 1)
+LEFT JOIN category_media t ON p.categoryId = t.categoryId AND (t.thumb = 1)
+LEFT JOIN category_media s ON p.categoryId = s.categoryId AND (s.small = 1);
 
 
  -->

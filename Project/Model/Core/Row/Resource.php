@@ -51,12 +51,18 @@ class Model_Core_Row_Resource
         return $this;
     }
 
+    public function getAdapter()
+    {
+        global $adapter;
+        return $adapter;
+    }
+
     public function insert(array $queryInsert)
     {
         if(!$queryInsert){
             return false;
         }
-        global $adapter;
+        $adapter = $this->getAdapter();
         $key = '`'.implode("`,`", array_keys($queryInsert)).'`';
         $value = '\''.implode("','", array_values($queryInsert)).'\'';
 
@@ -67,7 +73,7 @@ class Model_Core_Row_Resource
 
     public function delete(array $queryDelete)
     {
-		global $adapter;
+		$adapter = $this->getAdapter();
         $tableName = $this->getTableName();
         $key = key($queryDelete);
         $value = $queryDelete[$key];
@@ -78,7 +84,7 @@ class Model_Core_Row_Resource
 
     public function update(array $queryUpdate, array $queryId)
     {
-       global $adapter;
+        $adapter = $this->getAdapter();
         $date = date("Y-m-d H:i:s");
         $set = [];
         $tableName = $this->getTableName();
@@ -98,7 +104,7 @@ class Model_Core_Row_Resource
 
     public function fetchRow($queryFetchRow)
     {
-        global $adapter;
+         $adapter = $this->getAdapter();
         $tableName = $this->getTableName();
         $result = $adapter->fetchRow($queryFetchRow);
         return $result;
@@ -107,7 +113,7 @@ class Model_Core_Row_Resource
     public function fetchAll($queryFetchAll)
     {
 
-        global $adapter;
+         $adapter = $this->getAdapter();
         $tableName = $this->getTableName();
         $result = $adapter->fetchAll($queryFetchAll);
         return $result;

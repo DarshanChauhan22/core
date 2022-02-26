@@ -7,12 +7,15 @@ class Controller_Config extends Controller_Core_Action{
 	
 	public function gridAction()
 	{
-		Ccc::getBlock('Config_grid')->toHtml();	
+		Ccc::getBlock('Config_grid')->toHtml();
+			
 	}
 
 	public function addAction()
 	{
-		Ccc::getBlock('Config_Add')->toHtml();
+		$config = Ccc::getModel('Config');
+		Ccc::getBlock('Config_Edit')->addData('config',$config)->toHtml();
+		//Ccc::getBlock('Config_Edit')->toHtml();
 	}
 
 	public function editAction()
@@ -39,7 +42,8 @@ class Controller_Config extends Controller_Core_Action{
 	
 	public function saveAction()
 	{
-		global $date;
+		date_default_timezone_set("Asia/Kolkata");
+		$date = date("Y-m-d H:i:s");
 		//$configTable = Ccc::getModel('Config_Resource');
 		try
 		{
@@ -47,13 +51,14 @@ class Controller_Config extends Controller_Core_Action{
 
        		//$config = $configModel->getRow();
 			$row = $this->getRequest()->getRequest('config');
-
+			print_r($row);
 			if (!isset($row)) {
 				throw new Exception("Invalid Request.", 1);				
 			}			
 
+			
 
-			 if(!array_key_exists('configId',$row))
+			 if(array_key_exists('configId',$row) && $row['configId'] == null)
        		 {
                 $config->name = $row['name'];
                 $config->code =  $row['code'];

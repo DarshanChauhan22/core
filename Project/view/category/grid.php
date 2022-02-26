@@ -24,7 +24,12 @@
 					<th> Created At </th>
 					<th> Updated At </th>
 					<th> Status </th>
-					<th> Action </th>
+					<th> Base </th>
+					<th> Thumb </th>
+					<th> Small </th>
+					<th> Media </th>
+					<th> Updatet </th>
+					<th> Delete </th>
 				</tr>
 				<?php if($categories): ?>
 					<?php foreach ($categories as $row):?>
@@ -41,11 +46,19 @@
 					    			echo ' InActive ';
 					    		endif;?>
 				    		</td>
-
+				    		<td><?php echo $row->baseImage ?></td>
+				    		<td><?php echo $row->thumbImage ?></td>
+				    		<td><?php echo $row->smallImage ?></td>
 				    		<td>
-				    			<a href="<?php echo$controllerCoreAction->getUrl('delete','category',['id' =>  $row->categoryId],true) ?>">Delete</a> 
+		    					<a href="<?php echo$controllerCoreAction->getUrl('grid','category_Media',['id' =>  $row->categoryId],true) ?>">Media</a>
+		    				</td>
+				    		<td>
 				    			<a href="<?php echo$controllerCoreAction->getUrl('edit','category',['id' =>  $row->categoryId],true) ?>">Update</a>
 				    		</td>
+				    		<td>
+				    			<a href="<?php echo$controllerCoreAction->getUrl('delete','category',['id' =>  $row->categoryId],true) ?>">Delete</a> 
+				    		</td>
+
 				   		</tr>
 				  	<?php endforeach; ?>
 				<?php else: ?>

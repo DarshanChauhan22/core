@@ -29,13 +29,15 @@ class Model_Core_View{
 
 	public function getData($key=null)
 	{
+		
+
 		if(!$key)
 		{
 			return $this->data;
 		}
 		if(!array_key_exists($key, $this->data))
 		{
-			return false;
+			return $this;
 		}	
 		return $this->data[$key];
 	}

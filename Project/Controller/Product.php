@@ -12,7 +12,9 @@ class Controller_Product extends Controller_Core_Action{
 
 	public function addAction()
 	{
-		Ccc::getBlock('Product_Add')->toHtml();
+		$product = Ccc::getModel('Product');
+		Ccc::getBlock('Product_Edit')->addData('product',$product)->toHtml();
+		//Ccc::getBlock('Product_Add')->toHtml();
 	}
 
 	public function editAction()
@@ -53,9 +55,10 @@ class Controller_Product extends Controller_Core_Action{
 				throw new Exception("Invalid Request.", 1);				
 			}
 			$productId = $row["productId"];
-			global $date;
+			date_default_timezone_set("Asia/Kolkata");
+			$date = date("Y-m-d H:i:s");
 
-			 if(!array_key_exists('productId',$row))
+			 if(array_key_exists('productId',$row) && $row[productId] == null)
        		 {
                 $product->name = $row['name'];
                 $product->price =  $row['price'];

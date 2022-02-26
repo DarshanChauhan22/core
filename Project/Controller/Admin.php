@@ -13,12 +13,15 @@ class Controller_Admin extends Controller_Core_Action{
 	}
 	public function gridAction()
 	{
+
 		Ccc::getBlock('Admin_grid')->toHtml();	
 	}
 
 	public function addAction()
 	{
-		Ccc::getBlock('Admin_Add')->toHtml();
+		$admin = Ccc::getModel('Admin');
+		Ccc::getBlock('Admin_Edit')->addData('admin',$admin)->toHtml();	
+		//Ccc::getBlock('Admin_Add')->toHtml();
 	}
 
 	public function editAction()
@@ -45,7 +48,8 @@ class Controller_Admin extends Controller_Core_Action{
 	
 	public function saveAction()
 	{
-		global $date;
+		date_default_timezone_set("Asia/Kolkata");
+		$date = date("Y-m-d H:i:s");
 		//$adminTable = Ccc::getModel('Admin_Resource');
 		try
 		{
@@ -60,7 +64,7 @@ class Controller_Admin extends Controller_Core_Action{
 			}			
 
 
-			 if(!array_key_exists('adminId',$row))
+			 if(array_key_exists('adminId',$row) && $row['adminId'] == null)
        		 {
                 $admin->firstName = $row['firstName'];
                 $admin->lastName =  $row['lastName'];

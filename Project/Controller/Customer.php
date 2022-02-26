@@ -27,7 +27,9 @@ class Controller_Customer extends Controller_Core_Action
 
     public function addAction()
     {
-        Ccc::getBlock("Customer_Add")->toHtml();
+         $customer = Ccc::getModel('Customer');
+         Ccc::getBlock('Customer_Edit')->addData('customer',$customer)->toHtml(); 
+        //Ccc::getBlock("Customer_Add")->toHtml();
     }
 
     public function editAction()
@@ -55,7 +57,8 @@ class Controller_Customer extends Controller_Core_Action
     }
     protected function saveCustomer()
     {
-        global $date;
+        date_default_timezone_set("Asia/Kolkata");
+        $date = date("Y-m-d H:i:s");
         $row = $this->getRequest()->getRequest('customer');
        // $customerTable = Ccc::getModel('Customer_Resource'); 
         try 
@@ -70,7 +73,7 @@ class Controller_Customer extends Controller_Core_Action
         $row = $this->getRequest()->getRequest('customer');
         $date = date('Y-m-d H:i:s');
         //$customer = $customerModel->load($row['id']);
-        if(!array_key_exists('customerId',$row))
+        if(array_key_exists('customerId',$row) && $row['customerId'] == null)
         {
                 $customer->firstName = $row['firstName'];
                 $customer->lastName =  $row['lastName'];
@@ -110,7 +113,8 @@ class Controller_Customer extends Controller_Core_Action
             throw new Exception("Invalid Request.", 1);
         }
 
-        global $date;
+        date_default_timezone_set("Asia/Kolkata");
+        $date = date("Y-m-d H:i:s");
         $row = $this->getRequest()->getRequest('customer');
 
         if (array_key_exists("customerId", $row)) {
@@ -151,7 +155,8 @@ class Controller_Customer extends Controller_Core_Action
 
     protected function saveAddress($customerId)
     {
-        /*global $date;
+        /*date_default_timezone_set("Asia/Kolkata");
+        $date = date("Y-m-d H:i:s");
         $row = $this->getRequest()->getRequest('address');
         $addressModel = Ccc::getModel('Customer_Address'); 
         try 
@@ -208,7 +213,8 @@ class Controller_Customer extends Controller_Core_Action
         if (!isset($row)) {
             throw new Exception("Invalid Request.", 1);
         }
-        global $date;
+        date_default_timezone_set("Asia/Kolkata");
+        $date = date("Y-m-d H:i:s");
         //$addressId = $row["addressId"];
         $billing = 2;
         $shipping = 2;
