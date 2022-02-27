@@ -34,11 +34,7 @@
 			    		
 			    		
 			    		<td>
-				    		<?php if ($config->status == 1):
-				    			echo 'Active';
-				    		else:
-				    			echo 'InActive';
-				    		endif; ?>
+				    		<?php echo $config->getStatus($config->status); ?>
 			    		</td>
 			    		<td><?php echo $config->createdAt; ?></td>
 			    		

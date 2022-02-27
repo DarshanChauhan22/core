@@ -289,8 +289,9 @@ class Controller_Category extends Controller_Core_Action {
     	$adapter = $this->getAdapter();
     	$categories=[];
         $categoryName=$adapter->fetchPair('SELECT categoryId,name FROM category');
-        if (!$this->getRequest()->getRequest('CategoryId')) 
+        if (!$this->getRequest()->getRequest('id')) 
         {
+
             $query = "SELECT categoryId, categoryPath FROM category ORDER BY categoryPath"; 
         }
         else 

@@ -187,11 +187,3 @@ class Controller_Category_Media extends Controller_Core_Action{
 ?>
 
 
-<!-- SELECT p.*,b.imageId,t.imageId,s.imageId FROM category p 
-LEFT JOIN category_media b ON p.categoryId = b.categoryId AND (b.base = 1)
-LEFT JOIN category_media t ON p.categoryId = t.categoryId AND (t.thumb = 1)
-LEFT JOIN category_media s ON p.categoryId = s.categoryId AND (s.small = 1);
-
-
- -->
- -->

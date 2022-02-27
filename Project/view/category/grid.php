@@ -40,12 +40,8 @@
 				    		<td><?php echo $row->createdAt ?></td>
 				    		<td><?php echo $row->updatedAt ?></td>
 				    		<td>
-					    		<?php if ($row->status == 1): 
-					    			echo ' Active ';
-					    		else:
-					    			echo ' InActive ';
-					    		endif;?>
-				    		</td>
+				    		<?php echo $row->getStatus($row->status); ?>
+			    		</td>
 				    		<td><?php echo $row->baseImage ?></td>
 				    		<td><?php echo $row->thumbImage ?></td>
 				    		<td><?php echo $row->smallImage ?></td>

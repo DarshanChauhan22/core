@@ -36,11 +36,8 @@
 			    		<td><?php echo $admin->password ?></td>
 			    		
 			    		<td>
-				    		<?php if ($admin->status == 1):
-				    			echo 'Active';
-				    		else:
-				    			echo 'InActive';
-				    		endif; ?>
+				    		<?php echo $admin->getStatus($admin->status); ?>
+			    		</td>
 			    		</td>
 			    		<td><?php echo $admin->createdAt ?></td>
 			    		<td><?php echo $admin->updatedAt ?></td>

@@ -1,6 +1,5 @@
-<?php $category = $this->getCategory();
- ?>
-<?php $categoriepath = $this->getCategoriePath(); ?>
+<?php $category = $this->getCategory(); ?>
+<?php $categoryPath = $this->getCategoriePath(); ?>
 <?php $controllerCoreAction = new Controller_Core_Action(); ?>
 <html>
 <head>  
@@ -18,13 +17,13 @@
           <td width="10%">Status</td>
           <td>
             <select name="category[status]" value="<?php echo $category->status;?>">
-              <?php if ($category->status == 1):?>
-                  <option value='1'>Active</option>
-                  <option value='0'>InActive</option>
-              <?php else: ?>
-                  <option value='0'>InActive</option>
-                  <option value='1'>Active</option>
-              <?php endif;?>
+              <?php if($category->status == 2): ?>
+              <option value='2'>InActive</option>
+              <option value='1'>Active</option>
+          <?php else: ?>
+              <option value='1'>Active</option>
+              <option value='2'>InActive</option>
+          <?php endif;?>
             </select>
           </td>
         </tr>
@@ -32,14 +31,22 @@
       <td width="10%">Parent Category</td>
       <td>
         <select name="category[parentId]">
-          <?php if($category->categoryId != null):?>
-          <option value=<?php echo $category->parentId ?>><?php echo $categoriepath[$category->categoryId]?></option>
-        <?php endif; ?>
           <option value="NULL">Root</option>
-            <?php foreach ($categoriepath as $key=>$value):?>
-                <option value=<?php echo $key?>><?php echo $value; ?></option>
-            <?php endforeach;?>
+            <?php foreach ($categoryPath as $key=>$value){?>
+                <option value="<?php echo $key?>"
+                <?php if ($category->parentId == $key) {
+                echo "selected";
+              } ?>><?php echo $value; ?>
+
+
+                </option>
+                <?php
+             } 
+            
+          ?>
+            
         </select>
+
       </td>
     </tr>
     <tr>

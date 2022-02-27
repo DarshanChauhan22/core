@@ -36,12 +36,8 @@
 		    		<td><?php echo $customer->email ?></td>
 		    		<td><?php echo $customer->mobile ?></td>
 		    		<td>
-			    		<?php if ($customer->status == 1):
-			    			echo 'Active';
-			    		else:
-			    			echo 'InActive';
-			    		endif; ?>
-		    		</td>
+				   		<?php echo $customer->getStatus($customer->status); ?>
+			    	</td>
 		    		<td> <?php echo $customer->address ?> </td>
 		    		<td><?php echo $customer->createdAt ?></td>
 		    		<td><?php echo $customer->updatedAt ?></td>

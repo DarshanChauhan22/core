@@ -24,13 +24,13 @@
           <td width="10%">Status</td>
           <td>
             <select name="product[status]">
-              <?php if  ($product->status == 1):?>
-                  <option value='1'>Active</option>
-                  <option value='2'>InActive</option>
-              <?php else: ?>
-                  <option value='2'>InActive</option>
-                  <option value='1'>Active</option>
-              <?php endif;?>
+              <?php if($product->status == 2): ?>
+              <option value='2'>InActive</option>
+              <option value='1'>Active</option>
+          <?php else: ?>
+              <option value='1'>Active</option>
+              <option value='2'>InActive</option>
+          <?php endif;?>
             </select>
           </td>
         </tr>

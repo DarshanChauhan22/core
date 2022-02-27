@@ -185,12 +185,3 @@ class Controller_Product_Media extends Controller_Core_Action{
 
 ?>
 
-
-<!-- SELECT p.*,b.imageId,t.imageId,s.imageId FROM product p 
-LEFT JOIN product_media b ON p.productId = b.productId AND (b.base = 1)
-LEFT JOIN product_media t ON p.productId = t.productId AND (t.thumb = 1)
-LEFT JOIN product_media s ON p.productId = s.productId AND (s.small = 1);
-
-
- -->
- -->

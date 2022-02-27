@@ -26,13 +26,12 @@
       <td width="10%">Status</td>
       <td>
         <select name="config[status]">
-
-          <?php if ($config->status == 1):?>
+          <?php if($config->status == 2): ?>
+              <option value='2'>InActive</option>
+              <option value='1'>Active</option>
+          <?php else: ?>
               <option value='1'>Active</option>
               <option value='2'>InActive</option>
-          <?php else: ?>
-              <option value='2'>InActive</option>
-                    <option value='1'>Active</option>
           <?php endif;?>
         </select>
       </td>
@@ -49,3 +48,9 @@
 </form>
 </body>
   </html>
+
+
+
+
+
+  

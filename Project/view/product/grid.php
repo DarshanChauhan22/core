@@ -42,12 +42,8 @@
 		    		<td><?php echo $product->createdAt ?></td>
 		    		<td><?php echo $product->updatedAt ?></td>
 		    		<td>
-			    		<?php if ($product->status == 1):
-			    			echo ' Active ';
-			    		else:
-			    			echo ' InActive ';
-			    		endif; ?>
-		    		</td>
+				    		<?php echo $product->getStatus($product->status); ?>
+			    		</td>
 		    		<td><?php echo $product->baseImage ?></td>
 		    		<td><?php echo $product->thumbImage ?></td>
 		    		<td><?php echo $product->smallImage ?></td>
