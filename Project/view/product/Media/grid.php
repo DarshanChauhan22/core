@@ -50,8 +50,8 @@ $id= $_GET['id'];?>
 	<br>
 	<br>
 				<form align="center" action="<?php echo $controllerCoreAction->getUrl('add','product_media',['id' =>  $id],true) ?>" method="POST" enctype="multipart/form-data">
-				<input type="file" name="image[]">
-				<input type="submit" name="submit" value="Submit">
+				<input type="file" name="image[]" value="Chouse Image" accept="image/*">
+				<input type="submit" name="submit" value="Upload">
 
 
 

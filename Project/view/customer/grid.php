@@ -24,7 +24,8 @@
 			<th> Address </th>
 			<th> Create Date </th>
 			<th> Update Date </th>
-			<th> Action </th>
+			<th> Update </th>
+			<th> Delete </th>
 		</tr>
 		<?php if($customers):
 			foreach ($customers as $customer): ?>
@@ -42,8 +43,10 @@
 		    		<td><?php echo $customer->createdAt ?></td>
 		    		<td><?php echo $customer->updatedAt ?></td>
 		    		<td>
-		    			<a href="<?php echo $controllerCoreAction->getUrl('delete','customer',['id' =>  $customer->customerId],true) ?>">Delete</a> 
 		    			<a href="<?php echo $controllerCoreAction->getUrl('edit','customer',['id' =>  $customer->customerId],true) ?>">Update</a>
+		    		</td>
+		    		<td>
+		    			<a href="<?php echo $controllerCoreAction->getUrl('delete','customer',['id' =>  $customer->customerId],true) ?>">Delete</a> 
 		    		</td>
 		   		</tr>
 		 	<?php endforeach;?>

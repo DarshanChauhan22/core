@@ -95,7 +95,7 @@ class Model_Core_Row
         }
         $tableName = $this->getTable()->getTableName();
         $query = "SELECT * FROM $tableName WHERE $column = $id";
-        
+
         return $this->fetchRow($query);
         
     }

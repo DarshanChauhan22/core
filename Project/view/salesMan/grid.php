@@ -24,7 +24,8 @@
 				<th> Status </th>
 				<th> Create Date </th>
 				<th> Update Date </th>
-				<th> Action </th>
+				<th> Update </th>
+				<th> Delete </th>
 			</tr>
 			<?php if($salesMans):
 				foreach ($salesMans as $salesMan): ?>
@@ -42,8 +43,10 @@
 			    		<td><?php echo $salesMan->createdAt ?></td>
 			    		<td><?php echo $salesMan->updatedAt ?></td>
 			    		<td>
-			    			<a href="<?php echo$controllerCoreAction->getUrl('delete','salesMan',['id' =>  $salesMan->salesManId],true) ?>">Delete</a> 
 			    			<a href="<?php echo$controllerCoreAction->getUrl('edit','salesMan',['id' =>  $salesMan->salesManId],true) ?>">Update</a>
+			    		</td>
+			    		<td>
+			    			<a href="<?php echo$controllerCoreAction->getUrl('delete','salesMan',['id' =>  $salesMan->salesManId],true) ?>">Delete</a> 
 			    		</td>
 			   		</tr>
 			 	<?php endforeach;?>

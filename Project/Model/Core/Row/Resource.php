@@ -67,6 +67,7 @@ class Model_Core_Row_Resource
         $value = '\''.implode("','", array_values($queryInsert)).'\'';
 
         $sqlResult = "INSERT INTO `{$this->getTableName()}` ({$key}) VALUES ({$value});";
+
         $result = $adapter->insert($sqlResult);
         return $result;
     }
@@ -84,6 +85,7 @@ class Model_Core_Row_Resource
 
     public function update(array $queryUpdate, array $queryId)
     {
+        var_dump($queryUpdate);
         $adapter = $this->getAdapter();
         $date = date("Y-m-d H:i:s");
         $set = [];
@@ -98,7 +100,9 @@ class Model_Core_Row_Resource
         
         $sql1 = implode(",", $set);
         $update = "UPDATE $tableName SET $sql1 WHERE $key = $value;";
+
         $result = $adapter->update($update);
+        var_dump($update);
         return $result;
     }
 

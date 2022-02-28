@@ -22,7 +22,8 @@
 				<th> Value </th>
 				<th> Status </th>
 				<th> Create Date </th>
-				<th> Action </th>
+				<th> Update </th>
+				<th> Edit </th>
 			</tr>
 			<?php if($configs):
 				foreach ($configs as $config): ?>
@@ -39,8 +40,10 @@
 			    		<td><?php echo $config->createdAt; ?></td>
 			    		
 			    		<td>
-			    			<a href="<?php echo$controllerCoreAction->getUrl('delete','config',['id' =>  $config->configId],true) ?>">Delete</a> 
 			    			<a href="<?php echo$controllerCoreAction->getUrl('edit','config',['id' =>  $config->configId],true) ?>">Update</a>
+			    		</td>
+			    		<td>
+			    			<a href="<?php echo$controllerCoreAction->getUrl('delete','config',['id' =>  $config->configId],true) ?>">Delete</a> 
 			    		</td>
 			   		</tr>
 			 	<?php endforeach;?>

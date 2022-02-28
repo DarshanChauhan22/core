@@ -1,19 +1,19 @@
 <?php
 class Model_Core_View{
 
-	public $temlate = null;
+	public $templet = null;
 	public $data = null;
 
 
-	public function setTemplate($temlate)
+	public function setTemplate($templet)
 	{
-		$this->temlate = $temlate;
+		$this->templet = $templet;
 		return $this;
 	}
 
 	public function getTemplate()
 	{
-		return $this->temlate;
+		return $this->templet;
 	}
 
 	public function toHtml()
