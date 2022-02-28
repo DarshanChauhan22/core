@@ -20,7 +20,9 @@
 		<a href="<?php echo $controllerCoreAction->getUrl('grid','product',null,true) ?>"><button type="button" class="cancel">Product</button></a>
 		<a href="<?php echo $controllerCoreAction->getUrl('grid','customer',null,true) ?>"><button type="button" class="cancel">Customer</button></a>
 		<a href="<?php echo $controllerCoreAction->getUrl('grid','admin',null,true) ?>"><button type="button" class="cancel">Admin</button></a>
-		<a href="<?php echo $controllerCoreAction->getUrl('grid','config',null,true) ?>"><button type="button" class="cancel">Config</button></a><a href="<?php echo $controllerCoreAction->getUrl('grid','config',null,true) ?>"></a>
+		<a href="<?php echo $controllerCoreAction->getUrl('grid','config',null,true) ?>"><button type="button" class="cancel">Config</button></a>
+		<a href="<?php echo $controllerCoreAction->getUrl('grid','salesMan',null,true) ?>"><button type="button" class="cancel">Sales Man</button></a>
+		<a href="<?php echo $controllerCoreAction->getUrl('grid','config',null,true) ?>"></a>
 	</div>
 </body>
 </html>

@@ -1,12 +1,12 @@
 <?php
-Ccc::loadClass('Model_Core_View');
+Ccc::loadClass('Block_Core_Layout');
 Ccc::loadClass('Model_Core_Request');
 
 
 class Controller_Core_Action{
 	
 	
-	public $view = null;
+	protected $layout = null;
 
 	public function getAdapter()
     {
@@ -20,18 +20,23 @@ class Controller_Core_Action{
 		exit();			
 	}
 
-	public function setView($view)
+	public function setLayout($layout)
 	{
-		$this->view = $view;
+		$this->layout = $layout;
 		return $this;
 	}
 
-	public function getView()
+	public function getLayout()
 	{
-		if(!$this->view){
-			$this->setView(new Model_Core_View);
+		if(!$this->layout){
+			$this->setLayout(new Block_Core_Layout);
 		}
-		return $this->view;
+		return $this->layout;
+	}
+
+	function randerLayout()
+	{		
+		return $this->getLayout()->toHtml();	
 	}
 
 	public function getRequest()
@@ -78,6 +83,15 @@ class Controller_Core_Action{
     	}
     	$url = 'index.php?'.http_build_query($tmp);
     	return $url;
-}
+	}
+
+	public function getBaseUrl($subUrl = null)
+    {
+        $url = "C:/xampp/htdocs/core/core/Project";
+        if($subUrl){
+            $url = $url."/".$subUrl;
+        }
+        return $url;
+    }
 }
 ?>

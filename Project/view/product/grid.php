@@ -43,10 +43,25 @@
 		    		<td><?php echo $product->updatedAt ?></td>
 		    		<td>
 				    		<?php echo $product->getStatus($product->status); ?>
-			    		</td>
-		    		<td><?php echo $product->baseImage ?></td>
-		    		<td><?php echo $product->thumbImage ?></td>
-		    		<td><?php echo $product->smallImage ?></td>
+			    	</td>
+
+		    		<td>
+		    			<?php if(!$product->baseImage): echo "No Image"; ?>
+		    			<?php else:?><img src="<?php echo 'Media/product/' . $product->baseImage; ?>" width="100px" height="100px">
+		    		<?php endif;?>
+		    		</td>
+		    		<td>
+		    			<?php if(!$product->thumbImage): echo "No Image"; ?>
+		    			<?php else:?>
+		    			<img src="<?php echo 'Media/product/' . $product->thumbImage; ?>" width="100px" height="100px" alt="image">
+		    			<?php endif;?>
+		    		</td>
+		    		<td>
+		    			<?php if(!$product->smallImage): echo "No Image"; ?>
+		    			<?php else:?>
+		    			<img src="<?php echo 'Media/product/' . $product->smallImage; ?>" width="100px" height="100px" alt="image">
+		    			<?php endif;?>
+		    		</td>
 		    		<td>
 		    			<a href="<?php echo$controllerCoreAction->getUrl('grid','product_Media',['id' =>  $product->productId],true) ?>">Media</a>
 		    		</td>

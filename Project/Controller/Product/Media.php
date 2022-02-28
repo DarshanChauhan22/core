@@ -21,7 +21,8 @@ class Controller_Product_Media extends Controller_Core_Action{
 
           $media = Ccc::getModel('Product_Media');
 
-          if(!$this->getRequest()->isPost()){
+          if(!$this->getRequest()->isPost())
+          {
             throw new Exception("Invalid Request" , 1);
           }
 
@@ -49,9 +50,20 @@ class Controller_Product_Media extends Controller_Core_Action{
                 $removeIdsImplode = implode(",",$removeIds);
                 //echo $removeIdsImplode;
 
+                $query1 = "SELECT imageId , image FROM `product_media` WHERE imageId IN($removeIdsImplode) ";
+                $result1 = $adapter->fetchPair($query1);
+                
                 $query="DELETE FROM `product_media` WHERE imageId IN($removeIdsImplode)";
                 $result = $adapter->delete($query);
                 //print_r($result);
+
+                foreach($result1 as $key => $value){
+               if($result)
+               {
+                
+                  unlink($this->getBaseUrl('Media/Product/') . $value);
+               }
+            }
                     
             }
 
@@ -145,7 +157,9 @@ class Controller_Product_Media extends Controller_Core_Action{
        public function addAction()
        {
 
-       		$productId = $this->getRequest()->getRequest('id');
+        try {
+
+            $productId = $this->getRequest()->getRequest('id');
 
       //$mediaTable = Ccc::getModel('Media_Resource');
       $imageName1 = $_FILES['image']['name'];
@@ -153,14 +167,8 @@ class Controller_Product_Media extends Controller_Core_Action{
       $imageName = implode("", $imageName1);
       $imageName = date("mjYhis")."-".$imageName;
       $imageAddress = implode("", $imageAddress1);
-      
-     // $media = Ccc::getModel('Product_Media');
-         
-            //$media = $mediaModel->getRow();
-
-       //  $row = $this->getRequest()->getRequest('product_media');
-         
-      if(move_uploaded_file($imageAddress , 'C:\xampp\htdocs\core\core\Project\Media\Product/'. $imageName))
+    
+      if(move_uploaded_file($imageAddress , $this->getBaseUrl('Media/product/') . $imageName))
          {
             $adapter = $this->getAdapter();
             $query =  "INSERT INTO `product_media`( `productId`, `image`, `base`, `thumb`, `small`, `gallery`, `status`) VALUES ($productId,'$imageName',0,0,0,0,0)";
@@ -175,8 +183,14 @@ class Controller_Product_Media extends Controller_Core_Action{
          }
          else
          {
-            //$this->redirect($this->getUrl('grid','product_media',['id' =>  $productId],true));
-         }  
+            $this->redirect($this->getUrl('grid','product_media',['id' =>  $productId],true));
+         } 
+            
+        } catch (Exception $e) 
+        {
+            echo $e->getMessage();    
+        }
+       		 
 
        }
        

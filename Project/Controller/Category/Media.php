@@ -50,10 +50,20 @@ class Controller_Category_Media extends Controller_Core_Action{
                 $removeIdsImplode = implode(",",$removeIds);
                 //echo $removeIdsImplode;
 
+                $query1 = "SELECT imageId , image FROM `category_media` WHERE imageId IN($removeIdsImplode) ";
+                $result1 = $adapter->fetchPair($query1);
+
                 $query="DELETE FROM `category_media` WHERE imageId IN($removeIdsImplode)";
                 $result = $adapter->delete($query);
                 //print_r($result);
-                    
+
+                foreach($result1 as $key => $value){
+               if($result)
+               {
+                
+                  unlink($this->getBaseUrl('Media/Category/') . $value);
+               }
+                  }  
             }
 
             
@@ -145,8 +155,9 @@ class Controller_Category_Media extends Controller_Core_Action{
 
        public function addAction()
        {
-
-       		$categoryId = $_GET['id'];
+            try 
+            {
+                $categoryId = $_GET['id'];
 
       //$mediaTable = Ccc::getModel('Media_Resource');
       $imageName1 = $_FILES['image']['name'];
@@ -161,7 +172,7 @@ class Controller_Category_Media extends Controller_Core_Action{
 
        //  $row = $this->getRequest()->getRequest('category_media');
          
-      if(move_uploaded_file($imageAddress , 'C:\xampp\htdocs\core\core\Project\Media\Category/'. $imageName))
+      if(move_uploaded_file($imageAddress , $this->getBaseUrl('Media/Category/') . $imageName))
          {
             $adapter = $this->getAdapter();
             $query =  "INSERT INTO `category_media`( `categoryId`, `image`, `base`, `thumb`, `small`, `gallery`, `status`) VALUES ($categoryId,'$imageName',0,0,0,0,0)";
@@ -176,9 +187,14 @@ class Controller_Category_Media extends Controller_Core_Action{
          }
          else
          {
-            //$this->redirect($this->getUrl('grid','category_media',['id' =>  $categoryId],true));
+            $this->redirect($this->getUrl('grid','category_media',['id' =>  $categoryId],true));
          }  
-
+    
+            } catch (Exception $e) 
+            {
+                 echo $e->getMessage();   
+            }
+       		
        }
        
 }

@@ -17,7 +17,7 @@
 
 		<div id='info'>
 			<table border=1 width=100%>
-				<tr>
+				<tr width=100px>
 					<th> Id </th>
 				
 					<th> Category Name </th>
@@ -42,9 +42,24 @@
 				    		<td>
 				    		<?php echo $row->getStatus($row->status); ?>
 			    		</td>
-				    		<td><?php echo $row->baseImage ?></td>
-				    		<td><?php echo $row->thumbImage ?></td>
-				    		<td><?php echo $row->smallImage ?></td>
+				    		<td>
+				    			<?php if(!$row->baseImage): echo "No Image"; ?>
+		    					<?php else:?>
+				    			<img src="<?php echo 'Media/category/' . $row->baseImage; ?>" width="100px" height="100px" alt="image">
+				    			<?php endif;?>
+				    		</td>
+		    				<td>
+		    					<?php if(!$row->thumbImage): echo "No Image"; ?>
+		    					<?php else:?>
+		    					<img src="<?php echo 'Media/category/' . $row->thumbImage; ?>" width="100px" height="100px" alt="image">
+		    					<?php endif;?>
+		    				</td>
+		    				<td>
+		    					<?php if(!$row->smallImage): echo "No Image"; ?>
+		    					<?php else:?>
+		    					<img src="<?php echo 'Media/category/' . $row->smallImage; ?>" width="100px" height="100px" alt="image">
+		    					<?php endif;?>
+		    				</td>
 				    		<td>
 		    					<a href="<?php echo$controllerCoreAction->getUrl('grid','category_Media',['id' =>  $row->categoryId],true) ?>">Media</a>
 		    				</td>

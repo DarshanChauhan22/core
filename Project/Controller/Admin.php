@@ -13,8 +13,8 @@ class Controller_Admin extends Controller_Core_Action{
 	}
 	public function gridAction()
 	{
-
-		Ccc::getBlock('Admin_grid')->toHtml();	
+		$this->randerLayout();
+		//Ccc::getBlock('Admin_grid')->toHtml();	
 	}
 
 	public function addAction()
