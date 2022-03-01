@@ -7,14 +7,22 @@ class Controller_Config extends Controller_Core_Action{
 	
 	public function gridAction()
 	{
-		Ccc::getBlock('Config_grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+        $configGrid = Ccc::getBlock("Config_Grid");
+        $content->addChild($configGrid);
+        $this->renderLayout();
+		//Ccc::getBlock('Config_grid')->toHtml();
 			
 	}
 
 	public function addAction()
 	{
 		$config = Ccc::getModel('Config');
-		Ccc::getBlock('Config_Edit')->addData('config',$config)->toHtml();
+		$content = $this->getLayout()->getContent();
+        $configAdd = Ccc::getBlock("Config_Edit")->addData("config", $config);
+        $content->addChild($configAdd);
+        $this->renderLayout();	
+		//Ccc::getBlock('Config_Edit')->addData('config',$config)->toHtml();
 		//Ccc::getBlock('Config_Edit')->toHtml();
 	}
 
@@ -31,8 +39,12 @@ class Controller_Config extends Controller_Core_Action{
 			if(!$config){
 				throw new Exception("unable to load config.");
 			}
-			Ccc::getBlock('Config_Edit')->addData('config',$config)->toHtml();	
-				
+			//Ccc::getBlock('Config_Edit')->addData('config',$config)->toHtml();	
+			
+			$content = $this->getLayout()->getContent();
+            $configEdit = Ccc::getBlock("Config_Edit")->addData("config", $config);
+            $content->addChild($configEdit);
+            $this->renderLayout();	
 		} 
 		catch (Exception $e) 
 		{
@@ -89,10 +101,10 @@ class Controller_Config extends Controller_Core_Action{
 
 	public function deleteAction()
 	{
-		$configTable = Ccc::getModel('Config_Resource');
+			$getId = $this->getRequest()->getRequest('id'); 
+		$configTable = Ccc::getModel('Config')->load($getId);
 		try 
 		{	
-			$getId = $this->getRequest()->getRequest('id'); 
 			if (!isset($getId)) 
 			{
 				throw new Exception("Invalid Request.", 1);

@@ -1,1 +1,3 @@
-<h2>content</h2>
+<?php foreach ($this->getChildren() as $key => $child): ?>
+<?php $child->toHtml(); ?>
+<?php endforeach; ?>

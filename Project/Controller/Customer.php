@@ -6,7 +6,11 @@ class Controller_Customer extends Controller_Core_Action
 {
     public function gridAction()
     {
-        Ccc::getBlock("Customer_Grid")->toHtml();
+        $content = $this->getLayout()->getContent();
+        $customerGrid = Ccc::getBlock("Customer_Grid");
+        $content->addChild($customerGrid);
+        $this->renderLayout();
+       // Ccc::getBlock("Customer_Grid")->toHtml();
         /*$customerModel = Ccc::getModel('Customer');
         echo "<pre>";
         //print_r($customerModel);
@@ -28,7 +32,11 @@ class Controller_Customer extends Controller_Core_Action
     public function addAction()
     {
          $customer = Ccc::getModel('Customer');
-         Ccc::getBlock('Customer_Edit')->addData('customer',$customer)->toHtml(); 
+        $content = $this->getLayout()->getContent();
+        $customerAdd = Ccc::getBlock("Customer_Edit")->addData("customer", $customer);
+        $content->addChild($customerAdd);
+        $this->renderLayout();  
+         //Ccc::getBlock('Customer_Edit')->addData('customer',$customer)->toHtml(); 
         //Ccc::getBlock("Customer_Add")->toHtml();
     }
 
@@ -47,7 +55,11 @@ class Controller_Customer extends Controller_Core_Action
             if(!$customer){
                 throw new Exception("unable to load customer.");
             }
-         Ccc::getBlock('Customer_Edit')->addData('customer',$customer)->toHtml();  
+         //Ccc::getBlock('Customer_Edit')->addData('customer',$customer)->toHtml(); 
+         $content = $this->getLayout()->getContent();
+            $customerEdit = Ccc::getBlock("Customer_Edit")->addData("customer", $customer);
+            $content->addChild($customerEdit);
+            $this->renderLayout(); 
         
         } 
         catch (Exception $e) 
@@ -299,9 +311,12 @@ class Controller_Customer extends Controller_Core_Action
 
     public function deleteAction()
     {
-        $customerTable = Ccc::getModel('Customer_Resource'); 
-        try {
             $getId = $this->getRequest()->getRequest('id');
+        $customerTable = Ccc::getModel('Customer')->load($getId); 
+        try {
+
+
+            
             if (!isset($getId)) {
                 throw new Exception("Invalid Request.", 1);
             }
@@ -309,6 +324,7 @@ class Controller_Customer extends Controller_Core_Action
             if (!$delete) {
                 throw new Exception("System is unable to delete record.", 1);
             }
+
             $this->redirect($this->getUrl('grid','customer',null,true));
         } catch (Exception $e) {
             $this->redirect($this->getUrl('grid','customer',null,true));

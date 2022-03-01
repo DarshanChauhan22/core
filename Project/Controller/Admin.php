@@ -13,14 +13,22 @@ class Controller_Admin extends Controller_Core_Action{
 	}
 	public function gridAction()
 	{
-		$this->randerLayout();
+		$content = $this->getLayout()->getContent();
+        $adminGrid = Ccc::getBlock("Admin_Grid");
+        $content->addChild($adminGrid);
+        $this->renderLayout();
+		//$this->randerLayout();
 		//Ccc::getBlock('Admin_grid')->toHtml();	
 	}
 
 	public function addAction()
 	{
 		$admin = Ccc::getModel('Admin');
-		Ccc::getBlock('Admin_Edit')->addData('admin',$admin)->toHtml();	
+		$content = $this->getLayout()->getContent();
+        $adminAdd = Ccc::getBlock("Admin_Edit")->addData("admin", $admin);
+        $content->addChild($adminAdd);
+        $this->renderLayout();	
+		//Ccc::getBlock('Admin_Edit')->addData('admin',$admin)->toHtml();	
 		//Ccc::getBlock('Admin_Add')->toHtml();
 	}
 
@@ -37,8 +45,11 @@ class Controller_Admin extends Controller_Core_Action{
 			if(!$admin){
 				throw new Exception("unable to load admin.");
 			}
-			Ccc::getBlock('Admin_Edit')->addData('admin',$admin)->toHtml();	
-				
+			//Ccc::getBlock('Admin_Edit')->addData('admin',$admin)->toHtml();	
+			$content = $this->getLayout()->getContent();
+            $adminEdit = Ccc::getBlock("Admin_Edit")->addData("admin", $admin);
+            $content->addChild($adminEdit);
+            $this->renderLayout();	
 		} 
 		catch (Exception $e) 
 		{
@@ -140,10 +151,10 @@ class Controller_Admin extends Controller_Core_Action{
 
 	public function deleteAction()
 	{
-		$adminTable = Ccc::getModel('Admin_Resource');
+			$getId = $this->getRequest()->getRequest('id'); 
+		$adminTable = Ccc::getModel('Admin')->load($getId);
 		try 
 		{	
-			$getId = $this->getRequest()->getRequest('id'); 
 			if (!isset($getId)) 
 			{
 				throw new Exception("Invalid Request.", 1);

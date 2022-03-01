@@ -1,18 +1,26 @@
 <?php
 Ccc::loadClass('Controller_Core_Action');
-Ccc::loadClass('Model_Admin');
+Ccc::loadClass('Model_Category');
 Ccc::loadClass('Model_Core_Request');
 
 class Controller_Category extends Controller_Core_Action {
 	public function gridAction()
 	{
-		Ccc::getBlock('Category_grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+        $categoryGrid = Ccc::getBlock("Category_Grid");
+        $content->addChild($categoryGrid);
+        $this->renderLayout();
+		//Ccc::getBlock('Category_grid')->toHtml();
 	}
 
 	public function addAction()
 	{
 		$category = Ccc::getModel('category');
-		Ccc::getBlock('Category_Edit')->addData('category',$category)->toHtml();	
+		$content = $this->getLayout()->getContent();
+        $categoryAdd = Ccc::getBlock("Category_Edit")->addData("category", $category);
+        $content->addChild($categoryAdd);
+        $this->renderLayout();	
+		//Ccc::getBlock('Category_Edit')->addData('category',$category)->toHtml();	
 	   
 		//Ccc::getBlock('Category_Add')->toHtml();
 	}
@@ -28,8 +36,11 @@ class Controller_Category extends Controller_Core_Action {
 	    $row = $category-> fetchRow($query);
 		
 	    $categoryPathPair = $category->fetchAll('SELECT categoryId,categoryPath FROM Category');
-	    Ccc::getBlock('Category_Edit')->addData('category',$row)->toHtml();	
-	   
+	    //Ccc::getBlock('Category_Edit')->addData('category',$row)->toHtml();	
+	   $content = $this->getLayout()->getContent();
+            $categoryEdit = Ccc::getBlock("Category_Edit")->addData("category", $category);
+            $content->addChild($categoryEdit);
+            $this->renderLayout();	
 	}
 
 	public function saveAction()
@@ -251,10 +262,16 @@ class Controller_Category extends Controller_Core_Action {
 
 	public function deleteAction()
 	{
+		$adapter = $this->getAdapter();
 		try 
 		{
-			$category = Ccc::getModel('Category_Resource');
 			$id = $this->getRequest()->getRequest('id');
+			$category = Ccc::getModel('Category')->load($id);
+
+			$query1 = "SELECT imageId,image FROM category c LEFT JOIN category_media cm ON c.categoryId = cm.categoryId  WHERE c.categoryId = $id;";
+            $result1 = $adapter->fetchPair($query1);
+
+
 			if (!isset($id)) 
 			{
 				throw new Exception("Invalid Request.", 1);
@@ -265,8 +282,14 @@ class Controller_Category extends Controller_Core_Action {
 			if(!$delete)
 			{
 				throw new Exception("System is unable to  delete.", 1);
-				
 			}
+
+			foreach($result1 as $key => $value){
+            if($delete)
+            {
+              unlink($this->getBaseUrl('Media/Category/') . $value);               }
+            }
+
 			$this->redirect($this->getUrl('grid','category',null,true));		
 		} catch (Exception $e) {
 			$this->redirect($this->getUrl('grid','category',null,true));		

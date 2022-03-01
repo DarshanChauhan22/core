@@ -7,13 +7,21 @@ Ccc::loadClass('Model_Product');
 class Controller_Product extends Controller_Core_Action{
 	public function gridAction()
 	{
-		Ccc::getBlock('Product_grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+        $productGrid = Ccc::getBlock("Product_Grid");
+        $content->addChild($productGrid);
+        $this->renderLayout();
+		//Ccc::getBlock('Product_grid')->toHtml();
 	}
 
 	public function addAction()
 	{
 		$product = Ccc::getModel('Product');
-		Ccc::getBlock('Product_Edit')->addData('product',$product)->toHtml();
+		$content = $this->getLayout()->getContent();
+        $productAdd = Ccc::getBlock("Product_Edit")->addData("product", $product);
+        $content->addChild($productAdd);
+        $this->renderLayout();	
+		//Ccc::getBlock('Product_Edit')->addData('product',$product)->toHtml();
 		//Ccc::getBlock('Product_Add')->toHtml();
 	}
 
@@ -31,7 +39,11 @@ class Controller_Product extends Controller_Core_Action{
 			if(!$product){
 				throw new Exception("unable to load product.");
 			}
-			Ccc::getBlock('Product_Edit')->addData('product',$product)->toHtml();		
+			//Ccc::getBlock('Product_Edit')->addData('product',$product)->toHtml();	
+			$content = $this->getLayout()->getContent();
+            $productEdit = Ccc::getBlock("Product_Edit")->addData("product", $product);
+            $content->addChild($productEdit);
+            $this->renderLayout();		
 		} 
 		catch (Exception $e) 
 		{
@@ -119,10 +131,15 @@ class Controller_Product extends Controller_Core_Action{
 
 	public function deleteAction()
 	{
-		$customerTable = Ccc::getModel('Product_Resource');
+		$adapter = $this->getAdapter();
+			$getId = $this->getRequest()->getRequest('id');
+		$customerTable = Ccc::getModel('Product')->load($getId);
 		try 
 		{	
-			$getId = $this->getRequest()->getRequest('id');
+			$query1 = "SELECT imageId,image FROM product p LEFT JOIN product_media b ON p.productId = b.productId  WHERE p.productId = $getId;";
+
+			$result1 = $adapter->fetchPair($query1);
+			
 			if (!isset($getId)) 
 			{
 				throw new Exception("Invalid Request.", 1);
@@ -132,6 +149,15 @@ class Controller_Product extends Controller_Core_Action{
 			{
 				throw new Exception("System is unable to delete.", 1);							
 			}
+
+			foreach($result1 as $key => $value){
+               if($delete)
+               {
+              
+                  unlink($this->getBaseUrl('Media/Product/') . $value);
+               }
+            }
+
 			$this->redirect($this->getUrl('grid','product',null,true));
 		} catch (Exception $e) 
 		{

@@ -13,14 +13,22 @@ class Controller_Page extends Controller_Core_Action{
 	}
 	public function gridAction()
 	{
+		$content = $this->getLayout()->getContent();
+        $pageGrid = Ccc::getBlock("Page_Grid");
+        $content->addChild($pageGrid);
+        $this->renderLayout();
 		//$this->randerLayout();
-		Ccc::getBlock('Page_grid')->toHtml();	
+		//Ccc::getBlock('Page_grid')->toHtml();	
 	}
 
 	public function addAction()
 	{
 		$page = Ccc::getModel('Page');
-		Ccc::getBlock('Page_Edit')->addData('page',$page)->toHtml();	
+		$content = $this->getLayout()->getContent();
+        $pageAdd = Ccc::getBlock("Page_Edit")->addData("page", $page);
+        $content->addChild($pageAdd);
+        $this->renderLayout();	
+		//Ccc::getBlock('Page_Edit')->addData('page',$page)->toHtml();	
 		//Ccc::getBlock('Page_Add')->toHtml();
 	}
 
@@ -37,8 +45,11 @@ class Controller_Page extends Controller_Core_Action{
 			if(!$page){
 				throw new Exception("unable to load page.");
 			}
-			Ccc::getBlock('Page_Edit')->addData('page',$page)->toHtml();	
-				
+			//Ccc::getBlock('Page_Edit')->addData('page',$page)->toHtml();	
+			$content = $this->getLayout()->getContent();
+            $pageEdit = Ccc::getBlock("Page_Edit")->addData("page", $page);
+            $content->addChild($pageEdit);
+            $this->renderLayout();	
 		} 
 		catch (Exception $e) 
 		{
@@ -140,10 +151,10 @@ class Controller_Page extends Controller_Core_Action{
 
 	public function deleteAction()
 	{
-		$pageTable = Ccc::getModel('page_Resource');
+			$getId = $this->getRequest()->getRequest('id'); 
+		$pageTable = Ccc::getModel('Page')->load($getId);
 		try 
 		{	
-			$getId = $this->getRequest()->getRequest('id'); 
 			if (!isset($getId)) 
 			{
 				throw new Exception("Invalid Request.", 1);

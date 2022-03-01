@@ -1,12 +1,7 @@
 <?php $admins = $this->getAdmins(); ?>
 <?php $controllerCoreAction = new Controller_Core_Action(); ?>
 
-<html>
-<head>
-	<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0' />
-	
-</head>
-<body>
+
 	<div class='container' style="text-align: center; ">
 	<h1> Admin Details </h1> 
 	<form action="<?php echo $controllerCoreAction->getUrl('add','admin',null,true) ?>" method="POST">
@@ -55,5 +50,3 @@
 			<?php endif; ?>
 		</table>
 	</div>
-</body>
-</html>

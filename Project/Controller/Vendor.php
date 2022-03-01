@@ -7,7 +7,11 @@ class Controller_Vendor extends Controller_Core_Action
 { 
     public function gridAction()
     {
-        Ccc::getBlock("Vendor_Grid")->toHtml();
+        $content = $this->getLayout()->getContent();
+        $vendorGrid = Ccc::getBlock("Vendor_Grid");
+        $content->addChild($vendorGrid);
+        $this->renderLayout();
+        //Ccc::getBlock("Vendor_Grid")->toHtml();
         /*$vendorModel = Ccc::getModel('vendor');
         echo "<pre>";
         //print_r($vendorModel);
@@ -29,7 +33,11 @@ class Controller_Vendor extends Controller_Core_Action
     public function addAction()
     {
          $vendor = Ccc::getModel('Vendor');
-         Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->toHtml(); 
+         $content = $this->getLayout()->getContent();
+        $vendorAdd = Ccc::getBlock("Vendor_Edit")->addData("vendor", $vendor);
+        $content->addChild($vendorAdd);
+        $this->renderLayout();
+         //Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->toHtml(); 
         //Ccc::getBlock("vendor_Add")->toHtml();
     }
 
@@ -48,7 +56,11 @@ class Controller_Vendor extends Controller_Core_Action
             if(!$vendor){
                 throw new Exception("unable to load vendor.");
             }
-         Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->toHtml();  
+         //Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->toHtml();
+         $content = $this->getLayout()->getContent();
+            $vendorEdit = Ccc::getBlock("Vendor_Edit")->addData("vendor", $vendor);
+            $content->addChild($vendorEdit);
+            $this->renderLayout();    
         
         } 
         catch (Exception $e) 
@@ -300,9 +312,9 @@ class Controller_Vendor extends Controller_Core_Action
 
     public function deleteAction()
     {
-        $vendorTable = Ccc::getModel('Vendor_Resource'); 
-        try {
             $getId = $this->getRequest()->getRequest('id');
+        $vendorTable = Ccc::getModel('Vendor')->load($getId); 
+        try {
             if (!isset($getId)) {
                 throw new Exception("Invalid Request.", 1);
             }

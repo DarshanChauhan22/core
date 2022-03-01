@@ -1,11 +1,12 @@
 <?php
 Ccc::loadClass('Block_Core_Template');
-Ccc::loadClass('Block_Core_Layout_Header');
+/*Ccc::loadClass('Block_Core_Layout_Header');
 Ccc::loadClass('Block_Core_Layout_Content');
-Ccc::loadClass('Block_Core_Layout_Footer');
+Ccc::loadClass('Block_Core_Layout_Footer');*/
 
 class Block_Core_Layout extends Block_Core_Template
 {
+	
 	public function __construct()
 	{
 		$this->setTemplate('view/core/layout.php');
@@ -13,19 +14,36 @@ class Block_Core_Layout extends Block_Core_Template
 
 	public function getHeader()
 	{
-		return Ccc::getBlock('Core_Layout_Header');
+		$child = $this->getChild('header');
+		if(!$child)
+		{
+			$child = Ccc::getBlock('Core_Layout_Header');
+			$this->addChild($child , 'header');
+		}
+		return $child;
 	}
 
 	public function getContent()
 	{
-		return Ccc::getBlock('Core_Layout_Content');
+		$child = $this->getChild('content');
+		if(!$child)
+		{
+			$child = Ccc::getBlock('Core_Layout_Content');
+			$this->addChild($child , 'content');
+		}
+		return $child;
 	}
 
 	public function getFooter()
 	{
-		return Ccc::getBlock('Core_Layout_Footer');
+		$child = $this->getChild('footer');
+		if(!$child)
+		{
+			$child = Ccc::getBlock('Core_Layout_Footer');
+			$this->addChild($child , 'footer');
+		}
+		return $child;
 	}
-
 
 }
 

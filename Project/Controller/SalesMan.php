@@ -13,14 +13,22 @@ class Controller_SalesMan extends Controller_Core_Action{
 	}
 	public function gridAction()
 	{
+		$content = $this->getLayout()->getContent();
+        $salesManGrid = Ccc::getBlock("SalesMan_Grid");
+        $content->addChild($salesManGrid);
+        $this->renderLayout();
 		//$this->randerLayout();
-		Ccc::getBlock('SalesMan_grid')->toHtml();	
+		//Ccc::getBlock('SalesMan_grid')->toHtml();	
 	}
 
 	public function addAction()
 	{
 		$salesMan = Ccc::getModel('SalesMan');
-		Ccc::getBlock('SalesMan_Edit')->addData('salesMan',$salesMan)->toHtml();	
+		$content = $this->getLayout()->getContent();
+        $salesManAdd = Ccc::getBlock("SalesMan_Edit")->addData("salesMan", $salesMan);
+        $content->addChild($salesManAdd);
+        $this->renderLayout();	
+		//Ccc::getBlock('SalesMan_Edit')->addData('salesMan',$salesMan)->toHtml();	
 		//Ccc::getBlock('SalesMan_Add')->toHtml();
 	}
 
@@ -37,8 +45,12 @@ class Controller_SalesMan extends Controller_Core_Action{
 			if(!$salesMan){
 				throw new Exception("unable to load salesMan.");
 			}
-			Ccc::getBlock('SalesMan_Edit')->addData('salesMan',$salesMan)->toHtml();	
+			//Ccc::getBlock('SalesMan_Edit')->addData('salesMan',$salesMan)->toHtml();	
 				
+				$content = $this->getLayout()->getContent();
+            $salesManEdit = Ccc::getBlock("SalesMan_Edit")->addData("salesMan", $salesMan);
+            $content->addChild($salesManEdit);
+            $this->renderLayout();	
 		} 
 		catch (Exception $e) 
 		{
@@ -144,10 +156,10 @@ class Controller_SalesMan extends Controller_Core_Action{
 
 	public function deleteAction()
 	{
-		$salesManTable = Ccc::getModel('SalesMan_Resource');
+			$getId = $this->getRequest()->getRequest('id'); 
+		$salesManTable = Ccc::getModel('SalesMan')->load($getId);
 		try 
 		{	
-			$getId = $this->getRequest()->getRequest('id'); 
 			if (!isset($getId)) 
 			{
 				throw new Exception("Invalid Request.", 1);

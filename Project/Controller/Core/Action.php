@@ -34,7 +34,7 @@ class Controller_Core_Action{
 		return $this->layout;
 	}
 
-	function randerLayout()
+	public function renderLayout()
 	{		
 		return $this->getLayout()->toHtml();	
 	}
