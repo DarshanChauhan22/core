@@ -17,8 +17,6 @@ class Controller_SalesMan extends Controller_Core_Action{
         $salesManGrid = Ccc::getBlock("SalesMan_Grid");
         $content->addChild($salesManGrid);
         $this->renderLayout();
-		//$this->randerLayout();
-		//Ccc::getBlock('SalesMan_grid')->toHtml();	
 	}
 
 	public function addAction()
@@ -28,26 +26,29 @@ class Controller_SalesMan extends Controller_Core_Action{
         $salesManAdd = Ccc::getBlock("SalesMan_Edit")->addData("salesMan", $salesMan);
         $content->addChild($salesManAdd);
         $this->renderLayout();	
-		//Ccc::getBlock('SalesMan_Edit')->addData('salesMan',$salesMan)->toHtml();	
-		//Ccc::getBlock('SalesMan_Add')->toHtml();
 	}
 
 	public function editAction()
 	{	
 		try 
 		{
+			$message = Ccc::getModel('Core_Message');
 			$id = (int) $this->getRequest()->getRequest('id');
-			if(!$id){
-				throw new Exception("Id not valid.");
+			if(!$id)
+			{
+				$message->addMessage('Id not valid.',Model_Core_Message::ERROR);
+				$this->redirect($this->getUrl('grid',null,null,true));
+				//throw new Exception("Id not valid.");
 			}
 			$salesMan = Ccc::getModel('SalesMan')->load($id);
-			//$salesMan = $salesManModel->fetchRow("SELECT * FROM salesMan WHERE salesManId = {$id} ");
-			if(!$salesMan){
-				throw new Exception("unable to load salesMan.");
+			if(!$salesMan)
+			{
+				$message->addMessage('Unable To Load Admin.',Model_Core_Message::ERROR);
+				$this->redirect($this->getUrl('grid',null,null,true));
+				//throw new Exception("unable to load salesMan.");
 			}
-			//Ccc::getBlock('SalesMan_Edit')->addData('salesMan',$salesMan)->toHtml();	
 				
-				$content = $this->getLayout()->getContent();
+			$content = $this->getLayout()->getContent();
             $salesManEdit = Ccc::getBlock("SalesMan_Edit")->addData("salesMan", $salesMan);
             $content->addChild($salesManEdit);
             $this->renderLayout();	
@@ -60,20 +61,19 @@ class Controller_SalesMan extends Controller_Core_Action{
 	
 	public function saveAction()
 	{
+		$message = Ccc::getModel('Core_Message');
 		date_default_timezone_set("Asia/Kolkata");
 		$date = date("Y-m-d H:i:s");
-		//$salesManTable = Ccc::getModel('SalesMan_Resource');
 		try
 		{
-			//$id = (int) $this->getRequest()->getRequest('admimId');
 			$salesMan = Ccc::getModel('SalesMan');
 
-       		//$salesMan = $salesManModel->getRow();
 			$row = $this->getRequest()->getRequest('salesMan');
-			/*print_r($row);
-			exit();*/
-			if (!isset($row)) {
-				throw new Exception("Invalid Request.", 1);				
+			if (!isset($row)) 
+			{
+				$message->addMessage('Invalid Request.',Model_Core_Message::ERROR);
+				$this->redirect($this->getUrl('grid',null,null,true));
+				//throw new Exception("Invalid Request.", 1);				
 			}			
 
 
@@ -86,9 +86,14 @@ class Controller_SalesMan extends Controller_Core_Action{
                 $salesMan->status =  $row['status'];
                 $salesMan->createdAt =  $date;
                 $salesMan->updatedAt =  null;
-                $salesMan->save();
-                /*var_dump($salesMan);
-                exit();*/
+                $result = $salesMan->save();
+
+                if(!$result)
+                {
+                	$message->addMessage('Insert Unsuccessfully.',Model_Core_Message::ERROR);
+                	$this->redirect($this->getUrl('grid',null,null,true));
+                }
+					$message->addMessage('Insert Successfully.');
         	}
         	else
         	{
@@ -101,51 +106,16 @@ class Controller_SalesMan extends Controller_Core_Action{
                 $salesMan->mobile =  $row['mobile'];
                 $salesMan->status =  $row['status'];
                 $salesMan->updatedAt =  $date;
-                $salesMan->save();
+                $result = $salesMan->save();
+
+                if(!$result)
+                {
+				$message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
+				$this->redirect($this->getUrl('grid',null,null,true));
+                }
+				$message->addMessage('Update Successfully.');
        			}
 
-
-			/*if (array_key_exists('salesManId', $row)) {
-				if(!(int)$row['salesManId']){
-					throw new Exception("Invalid Request.", 1);
-				}
-				$salesManId = $row["salesManId"];
-
-				$query = [
-                    "firstName" => $row['firstName'],
-                    "lastName" => $row['lastName'],
-                    "email" => $row['email'],
-                    "mobile" => $row['mobile'],
-                    "status" =>$row['status'],
-                    "updatedAt" => $date];
-				
-				$update=$salesManTable->update($query,['salesManId' => $salesManId]);
-
-				$query = [
-                    "firstName" => $row['firstName'],
-                    "lastName" => $row['lastName'],
-                    "email" => $row['email'],
-                    "mobile" => $row['mobile'],
-                    "mobile=" => $row['mobile'],
-                    "status" =>$row['status'],
-                    "updatedAt" => $date];
-
-				$update = $salesManTable->update($query , ['salesManId' => $salesManId]);
-
-				if(!$update){ 
-					throw new Exception("System is unable to update.", 1);
-				}
-				
-			}
-			else{
-				
-				$salesManId = $salesManTable->insert($row);
-				if(!$salesManId)
-				{	
-						throw new Exception("System is unable to insert.", 1);
-				}
-				
-			}*/
 			$this->redirect($this->getUrl('grid','salesMan',null,true));
 		} 
 		catch (Exception $e) 
@@ -156,33 +126,33 @@ class Controller_SalesMan extends Controller_Core_Action{
 
 	public function deleteAction()
 	{
-			$getId = $this->getRequest()->getRequest('id'); 
-		$salesManTable = Ccc::getModel('SalesMan')->load($getId);
 		try 
 		{	
+			$message = Ccc::getModel('Core_Message');
+			$getId = $this->getRequest()->getRequest('id'); 
+			$salesManTable = Ccc::getModel('SalesMan')->load($getId);
 			if (!isset($getId)) 
 			{
-				throw new Exception("Invalid Request.", 1);
+				$message->addMessage('Invalid Request.',Model_Core_Message::ERROR);
+				$this->redirect($this->getUrl('grid',null,null,true));
+				//throw new Exception("Invalid Request.", 1);
 			}
 			$delete = $salesManTable->delete(['salesManId' => $getId]);
 			if(!$delete)
 			{
-				throw new Exception("System is unable to delete record.", 1);
+				$message->addMessage('System is unable to delete record.',Model_Core_Message::ERROR);			
+				$this->redirect($this->getUrl('grid',null,null,true));
+				//throw new Exception("System is unable to delete record.", 1);
 										
 			}
-			$rd = $this->getUrl('grid','salesMan');
-			echo $rd;
-			
+			$message->addMessage('Delete Successfully.');			
 			$this->redirect($this->getUrl('grid','salesMan',null,true));	
 				
-		} catch (Exception $e) {
+		} catch (Exception $e) 
+		{
+			echo $e->getMessage();
 			$this->redirect($this->getUrl('grid','salesMan',null,true));	
 		}
-	}
-	
-	public function errorAction()
-	{
-		echo "errorAction";
 	}
 }
 ?>

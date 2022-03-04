@@ -6,7 +6,23 @@ Ccc::loadClass('Model_Core_Request');
 class Controller_Core_Action{
 	
 	
+	protected $message = null;
 	protected $layout = null;
+
+	public function setMessage($message)
+	{
+		$this->message = $message;
+		return $this;
+	}
+
+	public function getMessage()
+	{
+		if(!$this->message)
+		{
+			$this->setmessage(new Block_Core_Message);
+		}
+		return $this->message;
+	}
 
 	public function getAdapter()
     {

@@ -34,14 +34,4 @@ class Model_SalesMan extends Model_Core_Row
 }
 
 
-/*Ccc::loadClass('Model_Core_Table');
-class Model_SalesMan extends Model_Core_Table
-{
-	public function __construct()
-	{
-		$this->setTableName('SalesMan')->setPrimaryKey('SalesManId');
-		$this->setRowClassName('SalesMan_Row');
-	}
-}*/
-
 ?>

@@ -30,14 +30,9 @@
       <td width="10%">Status</td>
       <td>
         <select name="vendor[status]">
-
-         <?php if($vendor->status == 2): ?>
-              <option value='2'>InActive</option>
-              <option value='1'>Active</option>
-          <?php else: ?>
-              <option value='1'>Active</option>
-              <option value='2'>InActive</option>
-          <?php endif;?>
+            <?php foreach ($vendor->getStatus() as $key => $value): ?>
+              <option <?php if($vendor->status == $key): ?> selected <?php endif; ?> value="<?php echo $key; ?>"> <?php echo $value; ?></option>
+            <?php endforeach; ?>
         </select>
       </td>
     </tr>
@@ -70,7 +65,7 @@
       <input type="hidden" name="vendor[vendorId]" value="<?php echo $vendor->vendorId ?>">
       <input type="hidden" name="address[vendorAddressId]" value="<?php echo $vendor->vendorAddressId ?>">
       <td>
-        <button type="submit" name="submit" class="Registerbtn">Update </button>
+        <button type="submit" name="submit" class="Registerbtn">Save</button>
         <a href="<?php echo $controllerCoreAction->getUrl('grid','vendor',null,true) ?>"><button type="button" class="cancelbtn">Cancel</button></a>
       </td>
     </tr>    

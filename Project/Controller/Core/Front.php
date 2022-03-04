@@ -31,20 +31,9 @@ class Controller_Core_Front{
 	}
 
 
-
-	/*
-		$actionName = $this->getRequest()->getActionName();
-		$controllerName = $this->getRequest()->getControllerName();
-		//$controllerPath = 'Controller/'.$controllerName.'.php';
-		$controllerName = 'Controller_'.$controllerName;
-		$controllerClassName =$this->parepareClassName($controllerName);
-		Ccc::loadClass($controllerClassName);
-		$controller = new $controllerClassName();
-		$controller->$actionName();*/
-
 	public function parepareClassName($name)
 	{
-		// code...
+		
 		$name = ucwords($name,'_');
 		return $name;
 	}

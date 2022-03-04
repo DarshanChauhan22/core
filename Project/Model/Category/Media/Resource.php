@@ -9,11 +9,3 @@ class Model_Category_Media_Resource extends Model_Core_Row_Resource
 		parent::__construct();
 	}
 }
-
-/*class Model_Product_Row extends Model_Core_Table_Row
-{
-	public function __construct()
-	{
-		$this->setTableClassName('Product');
-	}
-}*/
