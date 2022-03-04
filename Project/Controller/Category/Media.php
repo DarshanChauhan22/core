@@ -11,7 +11,6 @@ class Controller_Category_Media extends Controller_Core_Action{
         $mediaGrid = Ccc::getBlock("Category_Media_grid");
         $content->addChild($mediaGrid);
         $this->renderLayout();
-		//Ccc::getBlock('Category_Media_grid')->toHtml();
 	}
 
 	public function saveAction()
@@ -19,28 +18,32 @@ class Controller_Category_Media extends Controller_Core_Action{
       $adapter = $this->getAdapter();
       try 
       {
-        //$categoryMedia = Ccc::getModel('category_Media');
+        $message = Ccc::getModel('Core_Message');
 
           $request =$this->getRequest();
           $categoryId = $request->getRequest('id');
 
           $media = Ccc::getModel('Category_Media');
 
-          if(!$request->isPost()){
-            throw new Exception("Invalid Request" , 1);
+          if(!$request->isPost())
+          {
+                        $message->addMessage('Invalid Request.',Model_Core_Message::ERROR);
+                $this->redirect($this->getUrl('grid',null,null,true));    
+            //throw new Exception("Invalid Request" , 1);
           }
 
           $rows = $request->getPost();
-         echo "<pre>";
-         /* print_r($rows);
-         exit;*/
+         
+             if(!$rows)
+            {
+                $message->addMessage('Id not valid.',Model_Core_Message::ERROR);
+                $this->redirect($this->getUrl('grid',null,null,true));
+                //throw new Exception("Id not valid.");
+            }
+
            
             $media = $rows['media'];
             $removeArr = $rows['media']['remove'];
-           /* print_r($removeArr);
-            print_r($remove);
-            */
-        
 
             if(array_key_exists('remove',$media))
             {
@@ -50,17 +53,19 @@ class Controller_Category_Media extends Controller_Core_Action{
                 {
                    array_push($removeIds ,$value);
                 }
-                //print_r($removeIds);
                 $removeIdsImplode = implode(",",$removeIds);
-                //echo $removeIdsImplode;
 
                 $query1 = "SELECT imageId , image FROM `category_media` WHERE imageId IN($removeIdsImplode) ";
                 $result1 = $adapter->fetchPair($query1);
 
                 $query="DELETE FROM `category_media` WHERE imageId IN($removeIdsImplode)";
                 $result = $adapter->delete($query);
-                //print_r($result);
-
+                if(!$result)
+                {
+                    $message->addMessage('System is unable to delete record.',Model_Core_Message::ERROR);           
+                    $this->redirect($this->getUrl('grid',null,null,true));
+                }
+                $message->addMessage('Delete Successfully.');   
                 foreach($result1 as $key => $value){
                if($result)
                {
@@ -73,12 +78,26 @@ class Controller_Category_Media extends Controller_Core_Action{
             
             $query = "SELECT imageId,categoryId FROM `category_media` WHERE categoryId = $categoryId";
             $result = $adapter->fetchPair($query);
+
+            if(!$result)
+            {
+                 $message->addMessage('System is unable to fetch Pairs.',Model_Core_Message::ERROR);           
+                 $this->redirect($this->getUrl('grid',null,null,true));
+            }
+
             $ids = array_keys($result);
             $implodeIds = implode(",",$ids);
             
             $query = "UPDATE `category_media` SET status = 0, thumb = 0, base = 0, small = 0 , gallery = 0 WHERE imageId IN ($implodeIds)";
            
             $result = $adapter->update($query);
+
+            if(!$result)
+                {
+                $message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
+                $this->redirect($this->getUrl('grid',null,null,true));
+                }
+                $message->addMessage('Update Successfully.');
 
             $status = $rows['media']['status'];
             if(array_key_exists('status',$media))
@@ -88,17 +107,18 @@ class Controller_Category_Media extends Controller_Core_Action{
                 {
                    array_push($statusIds ,$value);
                 }
-                //print_r($removeIds);
                 $statusIdsImplode = implode(",",$statusIds);
-                //echo $removeIdsImplode;
-                /*$query = "UPDATE `category_media` SET status = CASE WHEN status = 1 THEN 0 END";
-                $result = $adapter->update($query);
-                print_r($)
-                if($result){}*/
+                
                 $query="UPDATE `category_media` SET `status`= 1 WHERE imageId IN($statusIdsImplode)";
                 $result = $adapter->update($query);
+
+                if(!$result)
+                {
+                $message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
+                $this->redirect($this->getUrl('grid',null,null,true));
+                }
+                $message->addMessage('Update Successfully.');
                  
-                //print_r($result);
             }
 
 
@@ -116,8 +136,14 @@ class Controller_Category_Media extends Controller_Core_Action{
                
          
                 $result = $adapter->update($query);
+
+                if(!$result)
+                {
+                $message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
+                $this->redirect($this->getUrl('grid',null,null,true));
+                }
+                $message->addMessage('Update Successfully.');
                  
-                //print_r($result);
             }
 
 
@@ -127,8 +153,14 @@ class Controller_Category_Media extends Controller_Core_Action{
             {
                 $query="UPDATE `category_media` SET `base`= 1 WHERE imageId = {$base}";
                 $result = $adapter->update($query);
+
+                if(!$result)
+                {
+                $message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
+                $this->redirect($this->getUrl('grid',null,null,true));
+                }
+                $message->addMessage('Update Successfully.');
                  
-                //print_r($result);
             }
 
             $thumb = $rows['media']['thumb'];
@@ -137,6 +169,12 @@ class Controller_Category_Media extends Controller_Core_Action{
                 $query="UPDATE `category_media` SET `thumb`= 1 WHERE imageId = {$thumb}";
                 $result = $adapter->update($query);
                  
+                 if(!$result)
+                {
+                $message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
+                $this->redirect($this->getUrl('grid',null,null,true));
+                }
+                $message->addMessage('Update Successfully.');
                 //print_r($result);
             }
 
@@ -146,7 +184,12 @@ class Controller_Category_Media extends Controller_Core_Action{
                 $query="UPDATE `category_media` SET `small`= 1 WHERE imageId = {$small}";
                 $result = $adapter->update($query);
                  
-                //print_r($result);
+                 if(!$result)
+                {
+                $message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
+                $this->redirect($this->getUrl('grid',null,null,true));
+                }
+                $message->addMessage('Update Successfully.');
             }
 
           $this->redirect($this->getUrl('grid','category_media',['id'=> $categoryId]));
@@ -161,20 +204,14 @@ class Controller_Category_Media extends Controller_Core_Action{
        {
             try 
             {
-                $categoryId = $_GET['id'];
+               $message = Ccc::getModel('Core_Message');
+               $categoryId = $_GET['id'];
 
-      //$mediaTable = Ccc::getModel('Media_Resource');
-      $imageName1 = $_FILES['image']['name'];
-      $imageAddress1 = $_FILES['image']['tmp_name'];
-      $imageName = implode("", $imageName1);
-      $imageName = date("mjYhis")."-".$imageName;
-      $imageAddress = implode("", $imageAddress1);
-      
-     // $media = Ccc::getModel('category_Media');
-         
-            //$media = $mediaModel->getRow();
-
-       //  $row = $this->getRequest()->getRequest('category_media');
+              $imageName1 = $_FILES['image']['name'];
+              $imageAddress1 = $_FILES['image']['tmp_name'];
+              $imageName = implode("", $imageName1);
+              $imageName = date("mjYhis")."-".$imageName;
+              $imageAddress = implode("", $imageAddress1);
          
       if(move_uploaded_file($imageAddress , $this->getBaseUrl('Media/Category/') . $imageName))
          {
@@ -183,11 +220,14 @@ class Controller_Category_Media extends Controller_Core_Action{
           
             $result = $adapter->insert($query);
            
+            if(!$result)
+                {
+                    $message->addMessage('Insert Unsuccessfully.',Model_Core_Message::ERROR);
+                    $this->redirect($this->getUrl('grid',null,null,true));
+                }
+                    $message->addMessage('Insert Successfully.');
 
-           //header('location :index.php?c=category&a=grid');
            $this->redirect($this->getUrl('grid','category_media',['id'=> $categoryId]));
-           // $this->redirect("index.php?c=category&a=grid");
-           // $this->redirect($this->getUrl('grid','category_media',['id' =>  $categoryId],true));
          }
          else
          {

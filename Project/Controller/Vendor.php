@@ -11,52 +11,41 @@ class Controller_Vendor extends Controller_Core_Action
         $vendorGrid = Ccc::getBlock("Vendor_Grid");
         $content->addChild($vendorGrid);
         $this->renderLayout();
-        //Ccc::getBlock("Vendor_Grid")->toHtml();
-        /*$vendorModel = Ccc::getModel('vendor');
-        echo "<pre>";
-        //print_r($vendorModel);
-        $vendor = $vendorModel->getRow();
-        print_r($vendor);
-        $vendor->vendorId = '146';
-        $vendor->firstName = 'dc';
-        $vendor->lastName = 'dc';
-        $vendor->mobile = '900000';
-        $vendor->status = '1';
-        //$vendor = $vendorModel->load(146);
-        $vendor->lastName = 'dc';
-        unset($vendor->lastName);
-        //print_r($vendor);
-        print_r($vendor);
-        $vendor->save();*/
     }
 
     public function addAction()
     {
-         $vendor = Ccc::getModel('Vendor');
-         $content = $this->getLayout()->getContent();
+        $vendor = Ccc::getModel('Vendor');
+        $content = $this->getLayout()->getContent();
         $vendorAdd = Ccc::getBlock("Vendor_Edit")->addData("vendor", $vendor);
         $content->addChild($vendorAdd);
         $this->renderLayout();
-         //Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->toHtml(); 
-        //Ccc::getBlock("vendor_Add")->toHtml();
+
     }
 
     public function editAction()
     {
          try 
         {
+            $message = Ccc::getModel('Core_Message');
             $id = (int) $this->getRequest()->getRequest('id');
-            if(!$id){
-                throw new Exception("Id not valid.");
+            if(!$id)
+            {
+                $message->addMessage('Id not valid.',Model_Core_Message::ERROR);
+                $this->redirect($this->getUrl('grid',null,null,true));
+                //throw new Exception("Id not valid.");
             }
             $vendor = Ccc::getModel('Vendor')->load($id);
 
             $vendor = $vendor->fetchRow("select c.*,a.* from vendor c join vendor_address a on a.vendorId = c.vendorId WHERE c.vendorId = {$id} ");
             
-            if(!$vendor){
-                throw new Exception("unable to load vendor.");
+            if(!$vendor)
+            {
+                $message->addMessage('Unable To Load Admin.',Model_Core_Message::ERROR);
+                $this->redirect($this->getUrl('grid',null,null,true));
+
+                //throw new Exception("unable to load vendor.");
             }
-         //Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->toHtml();
          $content = $this->getLayout()->getContent();
             $vendorEdit = Ccc::getBlock("Vendor_Edit")->addData("vendor", $vendor);
             $content->addChild($vendorEdit);
@@ -70,22 +59,22 @@ class Controller_Vendor extends Controller_Core_Action
     }
     protected function saveVendor()
     {
-        date_default_timezone_set("Asia/Kolkata");
-        $date = date("Y-m-d H:i:s");
-        $row = $this->getRequest()->getRequest('vendor');
-       // $vendorTable = Ccc::getModel('vendor_Resource'); 
+
         try 
         {
+            $message = Ccc::getModel('Core_Message');
+            date_default_timezone_set("Asia/Kolkata");
+            $date = date("Y-m-d H:i:s");
+            $row = $this->getRequest()->getRequest('vendor');
+            $vendor = Ccc::getModel('Vendor');
+            
+            if (!isset($row)) 
+            {
+                $message->addMessage('Invalid Request.',Model_Core_Message::ERROR);
+                $this->redirect($this->getUrl('grid',null,null,true));
+                //throw new Exception("Invalid Request.", 1);               
+            }   
 
-        $vendor = Ccc::getModel('Vendor');
-    
-
-        //$vendor = $vendorModel->getRow();
-
-        date_default_timezone_set("Asia/Kolkata");
-        $row = $this->getRequest()->getRequest('vendor');
-        $date = date('Y-m-d H:i:s');
-        //$vendor = $vendorModel->load($row['id']);
         if(array_key_exists('vendorId',$row) && $row['vendorId'] == null)
         {
                 $vendor->firstName = $row['firstName'];
@@ -97,6 +86,13 @@ class Controller_Vendor extends Controller_Core_Action
                 $vendor->updatedAt =  null;
                 $result = $vendor->save();
                 return $result;
+
+                 if(!$result)
+                {
+                    $message->addMessage('Insert Unsuccessfully.',Model_Core_Message::ERROR);
+                    $this->redirect($this->getUrl('grid',null,null,true));
+                }
+                    $message->addMessage('Insert Successfully.');
 
         }
         else{
@@ -111,9 +107,18 @@ class Controller_Vendor extends Controller_Core_Action
                 $vendor->updatedAt =  $date;
                 $vendor->save();
                 return $row['vendorId'];
+
+
+                if(!$result)
+                {
+                $message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
+                $this->redirect($this->getUrl('grid',null,null,true));
+                }
+                $message->addMessage('Update Successfully.');
         }
             } catch (Exception $e) 
         {
+            echo $e->getMessage();
             $this->redirect($this->getUrl('grid','vendor',null,true));    
         }
     }
@@ -121,125 +126,24 @@ class Controller_Vendor extends Controller_Core_Action
 
 
 
-       /* $row = $this->getRequest()->getRequest('vendor');
-       
-        if (!isset($row)) {
-            throw new Exception("Invalid Request.", 1);
-        }
-
-        date_default_timezone_set("Asia/Kolkata");
-        $date = date("Y-m-d H:i:s");
-        $row = $this->getRequest()->getRequest('vendor');
-
-        if (array_key_exists("vendorId", $row)) {
-
-            if (!(int) $row["vendorId"]) {
-
-                throw new Exception("Invalid Request.", 1);
-            }
-
-            $vendorId = $row["vendorId"];
-            $query =  [
-                    "firstName" => $row['firstName'],
-                    "lastName" => $row['lastName'],
-                    "email" => $row['email'],
-                    "mobile" => $row['mobile'],
-                    "status" =>$row['status'],
-                    "updatedAt" => $date];
-
-            $update = $vendorTable->update($query,['vendorId' => $vendorId]);
-            if (!$update) {
-                throw new Exception("System is unable to update.", 1);
-            }
-        } else {
-           
-            $vendorId = $vendorTable->insert($row);
-            if (!$vendorId) {
-                throw new Exception("System is unable to insert.", 1);
-            }
-        }    
-        } catch (Exception $e) 
-        {
-            $this->redirect($this->getUrl('grid','vendor',null,true));    
-        }
-        
-
-        return $vendorId;*/
-                
-
+      
     protected function saveAddress($vendorId)
     {
-        /*date_default_timezone_set("Asia/Kolkata");
-        $date = date("Y-m-d H:i:s");
-        $row = $this->getRequest()->getRequest('address');
-        $addressModel = Ccc::getModel('vendor_Address'); 
-        try 
-        {
-        $address = $addressModel->getRow();
-        date_default_timezone_set("Asia/Kolkata");
-        $row = $this->getRequest()->getRequest('address');
-        print_r($row);
-        exit();
-        $date = date('Y-m-d H:i:s');
-        //$address = $addressModel->load($row['id']);
-        if(!array_key_exists('addressId',$row))
-        {
-                $address->vendorId = $row['vendorId'];
-                $address->address =  $row['address'];
-                $address->city =  $row['city'];
-                $address->state =  $row['state'];
-                $address->country =  $row['country'];
-                $address->postalCode =  $row['postalCode'];
-                $address->billing =  $row['billing'];
-                $address->shipping =  $row['shipping'];
-                $result = $address->save();
-                return $result;
-
-        }
-        else{
-
-                $address->vendorId = $row['vendorId'];
-                $address->address =  $row['address'];
-                $address->city =  $row['city'];
-                $address->state =  $row['state'];
-                $address->country =  $row['country'];
-                $address->postalCode =  $row['postalCode'];
-                $address->billing =  $row['billing'];
-                $address->shipping =  $row['shipping'];
-                $address->save();
-                return $row['vendorId'];
         
-        }
-            } catch (Exception $e) 
-        {
-            $this->redirect($this->getUrl('grid','vendor',null,true));    
-        }
-    }*/
-
-        //$addressTable = Ccc::getModel('Vendor_Address');
         $address = Ccc::getModel('Vendor_Address'); 
         try 
         {
+            $message = Ccc::getModel('Core_Message');
         $row = $this->getRequest()->getRequest('address');
-      /* print_r($row);
-       exit();*/
-        //$address = $addressModel->getRow();
 
-        if (!isset($row)) {
-            throw new Exception("Invalid Request.", 1);
+        if (!isset($row)) 
+        {
+            $message->addMessage('Invalid Request.',Model_Core_Message::ERROR);
+            $this->redirect($this->getUrl('grid',null,null,true));
+            //throw new Exception("Invalid Request.", 1);
         }
         date_default_timezone_set("Asia/Kolkata");
         $date = date("Y-m-d H:i:s");
-        //$addressId = $row["addressId"];
-       /* $billing = 2;
-        $shipping = 2;
-
-        if (array_key_exists("billing", $row) && $row["billing"] == 1) {
-            $billing = 1;
-        }
-        if (array_key_exists("shipping", $row) && $row["shipping"] == 1) {
-            $shipping = 1;
-        }*/
         $addressData = $address->fetchRow(
             "SELECT * FROM vendor_address WHERE vendorId = $vendorId"
         );
@@ -255,6 +159,12 @@ class Controller_Vendor extends Controller_Core_Action
                 $address->postalCode =  $row['postalCode'];
                 $result = $address->save();
                 
+                if(!$result)
+                {
+                    $message->addMessage('Insert Unsuccessfully.',Model_Core_Message::ERROR);
+                    $this->redirect($this->getUrl('grid',null,null,true));
+                }
+                    $message->addMessage('Insert Successfully.');
 
         }
         else{
@@ -267,33 +177,21 @@ class Controller_Vendor extends Controller_Core_Action
                $address->state =  $row['state'];
                $address->country =  $row['country'];
                $address->postalCode =  $row['postalCode'];
-                $result = $address->save();
+               $result = $address->save();
+
+                if(!$result)
+                {
+                $message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
+                $this->redirect($this->getUrl('grid',null,null,true));
+                }
+                $message->addMessage('Update Successfully.');
                 
             
         }
-        if (!$result) {
-                throw new Exception("System is unable to insert", 1);
-            }
-        /*if ($addressData) {
-
-                $query = ['vendorId' => $vendorId , 'address' => $row["address"] , 'city' => $row["city"] ,'state' => $row["state"] , 'country' => $row["country"] , 'postalCode' => $row["postalCode"] , 'billing' => $billing,'shipping' =>  $shipping ,"updatedAt" => $date];
-
-
-            $update = $addressTable->update($query,['addressId' => $addressId]);
-
-            if (!$update) {
-                throw new Exception("System is unable to update.", 1);
-            }
-        } else {
-
-                $query = ['vendorId' => $vendorId , 'address' => $row["address"] , 'city' => $row["city"] ,'state' => $row["state"] , 'country' => $row["country"] , 'postalCode' => $row["postalCode"] , 'billing' => $billing,'shipping' =>  $shipping ];
-                
-            $result = $addressTable->insert($query);
-            if (!$result) {
-                throw new Exception("System is unable to insert", 1);
-            }
-        } */   
-        } catch (Exception $e) {
+           
+        } catch (Exception $e) 
+        {
+            echo $e->getMessage();
             $this->redirect($this->getUrl('grid','vendor',null,true));
         }
        
@@ -312,24 +210,30 @@ class Controller_Vendor extends Controller_Core_Action
 
     public function deleteAction()
     {
-            $getId = $this->getRequest()->getRequest('id');
+        $message = Ccc::getModel('Core_Message');
+        $getId = $this->getRequest()->getRequest('id');
         $vendorTable = Ccc::getModel('Vendor')->load($getId); 
         try {
-            if (!isset($getId)) {
-                throw new Exception("Invalid Request.", 1);
+            if (!isset($getId)) 
+            {
+                $message->addMessage('Invalid Request.',Model_Core_Message::ERROR);
+                $this->redirect($this->getUrl('grid',null,null,true));  
+                //throw new Exception("Invalid Request.", 1);
             }
             $delete = $vendorTable->delete(['vendorId' => $getId]);
-            if (!$delete) {
-                throw new Exception("System is unable to delete record.", 1);
+            if (!$delete) 
+            {
+                $message->addMessage('System is unable to delete record.',Model_Core_Message::ERROR);           
+                $this->redirect($this->getUrl('grid',null,null,true));
+                //throw new Exception("System is unable to delete record.", 1);
             }
+            $message->addMessage('Delete Successfully.');       
             $this->redirect($this->getUrl('grid','vendor',null,true));
-        } catch (Exception $e) {
+        } catch (Exception $e) 
+        {
+            echo $e->getMessage();
             $this->redirect($this->getUrl('grid','vendor',null,true));
         }
-    }
-    public function errorAction()
-    {
-        echo "error";
     }
 }
 ?>

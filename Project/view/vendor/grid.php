@@ -1,10 +1,6 @@
 <?php $vendors = $this->getVendors(); ?>
 <?php $controllerCoreAction = new Controller_Core_Action(); ?>
-<html>
-<head>
-	<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0' />
-	
-</head>
+
 <body>
 	<div class='container' style="text-align: center; ">
 	<h1> Vendor Details </h1> 
@@ -57,4 +53,3 @@
 	</table>
 	</div>
 </body>
-</html>

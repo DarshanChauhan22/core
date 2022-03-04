@@ -1,3 +1,5 @@
+<br>
+<center>
 <?php $controllerCoreAction = new Controller_Core_Action(); ?>
 
 <div>
@@ -10,3 +12,5 @@
 		<a href="<?php echo $controllerCoreAction->getUrl('grid','page',null,true) ?>"><button type="button" class="cancel">Page</button></a>
 		<a href="<?php echo $controllerCoreAction->getUrl('grid','vendor',null,true) ?>"><button type="button" class="cancel">Vendor</button></a>
 </div>
+</center>
+<br>

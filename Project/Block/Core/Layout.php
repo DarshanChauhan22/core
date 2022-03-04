@@ -1,8 +1,6 @@
 <?php
 Ccc::loadClass('Block_Core_Template');
-/*Ccc::loadClass('Block_Core_Layout_Header');
-Ccc::loadClass('Block_Core_Layout_Content');
-Ccc::loadClass('Block_Core_Layout_Footer');*/
+
 
 class Block_Core_Layout extends Block_Core_Template
 {

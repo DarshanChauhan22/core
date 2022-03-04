@@ -13,16 +13,6 @@ class Model_Core_Row_Resource
         
     }
 
-    /*public function getRowClassName()
-    {
-        return $this->rowClassName;
-    }
-
-    public function setRowClassName($rowClassName)
-    {
-        $this->rowClassName = $rowClassName;
-        return $this;
-    }*/
 
     public function getRow()
     {

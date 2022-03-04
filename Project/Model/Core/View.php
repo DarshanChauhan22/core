@@ -30,7 +30,6 @@ class Model_Core_View{
 	public function getData($key=null)
 	{
 		
-
 		if(!$key)
 		{
 			return $this->data;

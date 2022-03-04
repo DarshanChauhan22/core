@@ -17,27 +17,23 @@
           <td><input type="float" name="product[price]" value="<?php echo $product->price ?>"></td>
         </tr>
         <tr>
-          <td width="10%"> Price</td>
+          <td width="10%"> Quantity</td>
           <td><input type="number" name="product[quantity]" value="<?php echo $product->quantity ?>"></td>
         </tr>
         <tr>
           <td width="10%">Status</td>
           <td>
             <select name="product[status]">
-              <?php if($product->status == 2): ?>
-              <option value='2'>InActive</option>
-              <option value='1'>Active</option>
-          <?php else: ?>
-              <option value='1'>Active</option>
-              <option value='2'>InActive</option>
-          <?php endif;?>
+             <?php foreach ($product->getStatus() as $key => $value): ?>
+              <option <?php if($product->status == $key): ?> selected <?php endif; ?> value="<?php echo $key; ?>"> <?php echo $value; ?></option>
+            <?php endforeach; ?>
             </select>
           </td>
         </tr>
         <tr>
           <td width="25%">&nbsp;</td>
           <td>
-            <button type="submit" name="submit" class="Registerbtn">Save </button>
+            <button type="submit" name="submit" class="Registerbtn">Save</button>
             <a href="<?php echo $controllerCoreAction->getUrl('grid','product',null,true) ?>"><button type="button" class="cancelbtn">Cancel</button></a>
           </td>
         </tr>    

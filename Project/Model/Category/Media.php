@@ -9,14 +9,5 @@ class Model_Category_Media extends Model_Core_Row
 	}
 }
 
-/*Ccc::loadClass('Model_Core_Table');
-class Model_Product extends Model_Core_Table
-{
-	public function __construct()
-	{
-		$this->setTableName('product')->setPrimaryKey('productId');
-		$this->setRowClassName('Product_Row');
-	}
-}*/
 
 ?>
