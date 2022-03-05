@@ -4,32 +4,6 @@ Ccc::loadClass('Model_Core_Request');
 
 class Controller_Admin extends Controller_Core_Action{
 	
-	public function testAction()
-	{
-		/*echo "<pre>";
-		$m = Ccc::getModel('Core_Message');
-		//print_r($m);
-		$m->addMessage('dom');
-		$m->addMessage('paul',Model_Core_Message::ERROR);
-		//$m->unsetMessage();
-		$m->addMessage('tez',Model_Core_Message::WARNING);
-		$m->addMessage('roman',Model_Core_Message::WARNING);
-		$this->redirect($this->getUrl('testt'));
-		print_r($m->getMessages());*/
-		//exit;
-
-		/*$s = Ccc::getModel('Core_Session');
-		print_r($s->getId());
-		$s->destroy();
-		print_r($s->getId());
-		exit();*/
-        /*$adminTable = new Model_Admin(); 
-		$adminTable->setTableName('admin');
-		$adminTable->setPrimaryKey('adminId');*/
-		/*$message = Ccc::getModel('Core_Message');
-		$message->addMessage('Grid Show Successfully.');
-		$message->unsetMessage();*/
-	}
 
 	public function gridAction()
 	{
@@ -56,15 +30,12 @@ class Controller_Admin extends Controller_Core_Action{
 			$id = (int) $this->getRequest()->getRequest('id');
 			if(!$id)
 			{
-				$message->addMessage('Id not valid.',Model_Core_Message::ERROR);
-				$this->redirect($this->getUrl('grid',null,null,true));
-				//throw new Exception("Id not valid.");
+				throw new Exception("Id not valid.",1);
 			}
 			$admin = Ccc::getModel('Admin')->load($id);
 			if(!$admin)
 			{	
-				$message->addMessage('Unable To Load Admin.',Model_Core_Message::ERROR);
-				$this->redirect($this->getUrl('grid',null,null,true));
+				throw new Exception("Unable To Load Admin.",1);
 			}
 
 			$content = $this->getLayout()->getContent();
@@ -76,7 +47,8 @@ class Controller_Admin extends Controller_Core_Action{
 		} 
 		catch (Exception $e) 
 		{
-			echo $e->getMessage();
+			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
+			$this->redirect($this->getUrl('grid',null,null,true));
 		}
 	}
 	
@@ -92,9 +64,7 @@ class Controller_Admin extends Controller_Core_Action{
 
 			if (!isset($row)) 
 			{
-				$message->addMessage('Invalid Request.',Model_Core_Message::ERROR);
-				$this->redirect($this->getUrl('grid',null,null,true));
-				//throw new Exception("Invalid Request.", 1);				
+				throw new Exception("Invalid Request.", 1);				
 			}			
 
 
@@ -110,8 +80,7 @@ class Controller_Admin extends Controller_Core_Action{
 
                 if(!$result)
                 {
-                	$message->addMessage('Insert Unsuccessfully.',Model_Core_Message::ERROR);
-                	$this->redirect($this->getUrl('grid',null,null,true));
+                	throw new Exception("Insert Unsuccessfully.",1);
                 }
 					$message->addMessage('Insert Successfully.');
         	}
@@ -130,8 +99,7 @@ class Controller_Admin extends Controller_Core_Action{
 
                 if(!$result)
                 {
-				$message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
-				$this->redirect($this->getUrl('grid',null,null,true));
+                	throw new Exception("Update Unsuccessfully.",1);
                 }
 				$message->addMessage('Update Successfully.');
        		}
@@ -139,7 +107,7 @@ class Controller_Admin extends Controller_Core_Action{
 		} 
 		catch (Exception $e) 
 		{
-			echo $e->getMessage();
+			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
 			$this->redirect($this->getUrl('grid',null,null,true));
 		}
 	}
@@ -152,25 +120,20 @@ class Controller_Admin extends Controller_Core_Action{
 			$getId = $this->getRequest()->getRequest('id'); 
 			$adminTable = Ccc::getModel('Admin')->load($getId);	
 			if (!isset($getId)) 
-			{
-				$message->addMessage('Invalid Request.',Model_Core_Message::ERROR);
-				$this->redirect($this->getUrl('grid',null,null,true));	
-				//throw new Exception("Invalid Request.", 1);
+			{	
+				throw new Exception("Invalid Request.", 1);
 			}
 			$delete = $adminTable->delete(['adminId' => $getId]);
 			if(!$delete)
 			{
-				$message->addMessage('System is unable to delete record.',Model_Core_Message::ERROR);			
-				$this->redirect($this->getUrl('grid',null,null,true));
-				//throw new Exception("System is unable to delete record.", 1);
-										
+				throw new Exception("System is unable to delete record.", 1);						
 			}
 			$message->addMessage('Delete Successfully.');			
 			$this->redirect($this->getUrl('grid',null,null,true));			
 		} 
 		catch (Exception $e) 
 		{
-			echo $e->getMessage();
+			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
 			$this->redirect($this->getUrl('grid',null,null,true));	
 		}
 	}

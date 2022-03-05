@@ -36,16 +36,12 @@ class Controller_SalesMan extends Controller_Core_Action{
 			$id = (int) $this->getRequest()->getRequest('id');
 			if(!$id)
 			{
-				$message->addMessage('Id not valid.',Model_Core_Message::ERROR);
-				$this->redirect($this->getUrl('grid',null,null,true));
-				//throw new Exception("Id not valid.");
+				throw new Exception("Id not valid.");
 			}
 			$salesMan = Ccc::getModel('SalesMan')->load($id);
 			if(!$salesMan)
 			{
-				$message->addMessage('Unable To Load Admin.',Model_Core_Message::ERROR);
-				$this->redirect($this->getUrl('grid',null,null,true));
-				//throw new Exception("unable to load salesMan.");
+				throw new Exception("unable to load salesMan.");
 			}
 				
 			$content = $this->getLayout()->getContent();
@@ -55,7 +51,8 @@ class Controller_SalesMan extends Controller_Core_Action{
 		} 
 		catch (Exception $e) 
 		{
-			echo $e->getMessage();
+			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
+			$this->redirect($this->getUrl('grid',null,null,true));	;
 		}
 	}
 	
@@ -71,9 +68,7 @@ class Controller_SalesMan extends Controller_Core_Action{
 			$row = $this->getRequest()->getRequest('salesMan');
 			if (!isset($row)) 
 			{
-				$message->addMessage('Invalid Request.',Model_Core_Message::ERROR);
-				$this->redirect($this->getUrl('grid',null,null,true));
-				//throw new Exception("Invalid Request.", 1);				
+				throw new Exception("Invalid Request.", 1);				
 			}			
 
 
@@ -90,8 +85,7 @@ class Controller_SalesMan extends Controller_Core_Action{
 
                 if(!$result)
                 {
-                	$message->addMessage('Insert Unsuccessfully.',Model_Core_Message::ERROR);
-                	$this->redirect($this->getUrl('grid',null,null,true));
+                	throw new Exception("Insert Unsuccessfully.",1);
                 }
 					$message->addMessage('Insert Successfully.');
         	}
@@ -110,8 +104,7 @@ class Controller_SalesMan extends Controller_Core_Action{
 
                 if(!$result)
                 {
-				$message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
-				$this->redirect($this->getUrl('grid',null,null,true));
+					throw new Exception("Update Unsuccessfully.",1);
                 }
 				$message->addMessage('Update Successfully.');
        			}
@@ -120,7 +113,8 @@ class Controller_SalesMan extends Controller_Core_Action{
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect($this->getUrl('grid','salesMan',null,true));
+			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
+			$this->redirect($this->getUrl('grid',null,null,true));	
 		}
 	}
 
@@ -133,16 +127,12 @@ class Controller_SalesMan extends Controller_Core_Action{
 			$salesManTable = Ccc::getModel('SalesMan')->load($getId);
 			if (!isset($getId)) 
 			{
-				$message->addMessage('Invalid Request.',Model_Core_Message::ERROR);
-				$this->redirect($this->getUrl('grid',null,null,true));
-				//throw new Exception("Invalid Request.", 1);
+				throw new Exception("Invalid Request.", 1);
 			}
 			$delete = $salesManTable->delete(['salesManId' => $getId]);
 			if(!$delete)
 			{
-				$message->addMessage('System is unable to delete record.',Model_Core_Message::ERROR);			
-				$this->redirect($this->getUrl('grid',null,null,true));
-				//throw new Exception("System is unable to delete record.", 1);
+				throw new Exception("System is unable to delete record.", 1);
 										
 			}
 			$message->addMessage('Delete Successfully.');			
@@ -150,8 +140,8 @@ class Controller_SalesMan extends Controller_Core_Action{
 				
 		} catch (Exception $e) 
 		{
-			echo $e->getMessage();
-			$this->redirect($this->getUrl('grid','salesMan',null,true));	
+			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
+			$this->redirect($this->getUrl('grid',null,null,true));	
 		}
 	}
 }
