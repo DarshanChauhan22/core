@@ -26,18 +26,14 @@ class Controller_Product_Media extends Controller_Core_Action{
 
           if(!$this->getRequest()->isPost())
           {
-            $message->addMessage('Invalid Request.',Model_Core_Message::ERROR);
-                $this->redirect($this->getUrl('grid',null,null,true));
-            //throw new Exception("Invalid Request" , 1);
+            throw new Exception("Invalid Request" , 1);
           }
 
           $rows = $this->getRequest()->getPost();
          
          if(!$rows)
             {
-                $message->addMessage('Id not valid.',Model_Core_Message::ERROR);
-                $this->redirect($this->getUrl('grid',null,null,true));
-                //throw new Exception("Id not valid.");
+                throw new Exception("Id not valid.");
             }
 
             $media = $rows['media'];
@@ -60,8 +56,7 @@ class Controller_Product_Media extends Controller_Core_Action{
                 $result = $adapter->delete($query);
                 if(!$result)
                 {
-                    $message->addMessage('System is unable to delete record.',Model_Core_Message::ERROR);           
-                    $this->redirect($this->getUrl('grid',null,null,true));
+                    throw new Exception("System is unable to delete record.",1);
                 }
                 $message->addMessage('Delete Successfully.');   
                 foreach($result1 as $key => $value){
@@ -79,8 +74,7 @@ class Controller_Product_Media extends Controller_Core_Action{
 
             if(!$result)
             {
-                 $message->addMessage('System is unable to fetch Pairs.',Model_Core_Message::ERROR);           
-                 $this->redirect($this->getUrl('grid',null,null,true));
+                throw new Exception("System is unable to fetch Pairs.",1);
             }
             $ids = array_keys($result);
             $implodeIds = implode(",",$ids);
@@ -91,8 +85,7 @@ class Controller_Product_Media extends Controller_Core_Action{
 
             if(!$result)
                 {
-                $message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
-                $this->redirect($this->getUrl('grid',null,null,true));
+                throw new Exception("Update Unsuccessfully.",1);
                 }
                 $message->addMessage('Update Successfully.');
 
@@ -112,8 +105,7 @@ class Controller_Product_Media extends Controller_Core_Action{
                  
                  if(!$result)
                 {
-                $message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
-                $this->redirect($this->getUrl('grid',null,null,true));
+                    throw new Exception("Update Unsuccessfully.",1);
                 }
                 $message->addMessage('Update Successfully.');
             }
@@ -136,8 +128,7 @@ class Controller_Product_Media extends Controller_Core_Action{
                  
                  if(!$result)
                 {
-                $message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
-                $this->redirect($this->getUrl('grid',null,null,true));
+                    throw new Exception("Update Unsuccessfully.",1);
                 }
                 $message->addMessage('Update Successfully.');
             }
@@ -152,8 +143,7 @@ class Controller_Product_Media extends Controller_Core_Action{
                  
                  if(!$result)
                 {
-                $message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
-                $this->redirect($this->getUrl('grid',null,null,true));
+                    throw new Exception("Update Unsuccessfully.",1);
                 }
                 $message->addMessage('Update Successfully.');
             }
@@ -166,8 +156,7 @@ class Controller_Product_Media extends Controller_Core_Action{
                  
                  if(!$result)
                 {
-                $message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
-                $this->redirect($this->getUrl('grid',null,null,true));
+                    throw new Exception("Update Unsuccessfully.",1);
                 }
                 $message->addMessage('Update Successfully.');
             }
@@ -180,8 +169,7 @@ class Controller_Product_Media extends Controller_Core_Action{
                  
                  if(!$result)
                 {
-                $message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
-                $this->redirect($this->getUrl('grid',null,null,true));
+                    throw new Exception("Update Unsuccessfully.",1);
                 }
                 $message->addMessage('Update Successfully.');
             }
@@ -190,7 +178,8 @@ class Controller_Product_Media extends Controller_Core_Action{
 
       } catch (Exception $e) 
       {
-          echo $e->getMessage();
+          $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
+            $this->redirect($this->getUrl('grid',null,null,true));
       }
    }
 
@@ -216,8 +205,7 @@ class Controller_Product_Media extends Controller_Core_Action{
            
             if(!$result)
                 {
-                    $message->addMessage('Insert Unsuccessfully.',Model_Core_Message::ERROR);
-                    $this->redirect($this->getUrl('grid',null,null,true));
+                    throw new Exception("Insert Unsuccessfully.",1);
                 }
                     $message->addMessage('Insert Successfully.');
 
@@ -231,7 +219,8 @@ class Controller_Product_Media extends Controller_Core_Action{
         } 
         catch (Exception $e) 
         {
-            echo $e->getMessage();    
+           $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
+            $this->redirect($this->getUrl('grid',null,null,true));   
         }
        		 
 

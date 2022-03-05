@@ -29,9 +29,7 @@ class Controller_Customer extends Controller_Core_Action
             $id = (int) $this->getRequest()->getRequest('id');
             if(!$id)
             {
-                $message->addMessage('Id not valid.',Model_Core_Message::ERROR);
-                $this->redirect($this->getUrl('grid',null,null,true));
-                //throw new Exception("Id not valid.");
+                throw new Exception("Id not valid.");
             }
             $customer = Ccc::getModel('Customer')->load($id);
 
@@ -39,9 +37,7 @@ class Controller_Customer extends Controller_Core_Action
             
             if(!$customer)
             {
-                $message->addMessage('Unable To Load Customer.',Model_Core_Message::ERROR);
-                $this->redirect($this->getUrl('grid',null,null,true));
-                //throw new Exception("unable to load customer.");
+                throw new Exception("unable to load customer.");
             }
             $content = $this->getLayout()->getContent();
             $customerEdit = Ccc::getBlock("Customer_Edit")->addData("customer", $customer);
@@ -51,7 +47,8 @@ class Controller_Customer extends Controller_Core_Action
         } 
         catch (Exception $e) 
         {
-            echo $e->getMessage();
+            $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
+            $this->redirect($this->getUrl('grid',null,null,true));
         }
     }
     protected function saveCustomer()
@@ -68,9 +65,7 @@ class Controller_Customer extends Controller_Core_Action
     
         if (!isset($row)) 
             {
-                $message->addMessage('Invalid Request.',Model_Core_Message::ERROR);
-                $this->redirect($this->getUrl('grid'));
-                //throw new Exception("Invalid Request.", 1);               
+                throw new Exception("Invalid Request.", 1);               
             }           
 
         if(array_key_exists('customerId',$row) && $row['customerId'] == null)
@@ -85,8 +80,7 @@ class Controller_Customer extends Controller_Core_Action
 
                 if(!$result)
                 {
-                    $message->addMessage('Insert Unsuccessfully.',Model_Core_Message::ERROR);
-                    $this->redirect($this->getUrl('grid',null,null,true));
+                   throw new Exception("Insert Unsuccessfully.",1);
                 }
                     $message->addMessage('Insert Successfully.');
 
@@ -106,15 +100,15 @@ class Controller_Customer extends Controller_Core_Action
 
                 if(!$result)
                 {
-                $message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
-                $this->redirect($this->getUrl('grid',null,null,true));
+                throw new Exception("Update Unsuccessfully.",1);
                 }
                 $message->addMessage('Update Successfully.');
         
         }
             } catch (Exception $e) 
         {
-            $this->redirect($this->getUrl('grid','customer',null,true));    
+            $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
+            $this->redirect($this->getUrl('grid',null,null,true));  
         }
     }
 
@@ -132,9 +126,7 @@ class Controller_Customer extends Controller_Core_Action
 
         if (!isset($row)) 
         {
-            $message->addMessage('Invalid Request.',Model_Core_Message::ERROR);
-            $this->redirect($this->getUrl('grid'));
-            //throw new Exception("Invalid Request.", 1);
+            throw new Exception("Invalid Request.", 1);
         }
         date_default_timezone_set("Asia/Kolkata");
         $date = date("Y-m-d H:i:s");
@@ -166,8 +158,7 @@ class Controller_Customer extends Controller_Core_Action
                 
                  if(!$result)
                 {
-                    $message->addMessage('Insert Unsuccessfully.',Model_Core_Message::ERROR);
-                    $this->redirect($this->getUrl('grid',null,null,true));
+                    throw new Exception("Insert Unsuccessfully.",1);
                 }
                     $message->addMessage('Insert Successfully.');
 
@@ -187,8 +178,7 @@ class Controller_Customer extends Controller_Core_Action
 
                 if(!$result)
                 {
-                $message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
-                $this->redirect($this->getUrl('grid',null,null,true));
+                    throw new Exception("Update Unsuccessfully.",1);
                 }
                 $message->addMessage('Update Successfully.');
         
@@ -196,8 +186,8 @@ class Controller_Customer extends Controller_Core_Action
         
         } catch (Exception $e) 
         {
-            echo $e->getMessage();
-            $this->redirect($this->getUrl('grid','customer',null,true));
+            $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
+            $this->redirect($this->getUrl('grid',null,null,true));
         }
        
     }
@@ -221,20 +211,19 @@ class Controller_Customer extends Controller_Core_Action
             $customerTable = Ccc::getModel('Customer')->load($getId); 
             if (!isset($getId)) 
             {
-                $message->addMessage('Invalid Request.');
-                //throw new Exception("Invalid Request.", 1);
+                throw new Exception("Invalid Request.", 1);
             }
             $delete = $customerTable->delete(['customerId' => $getId]);
             if (!$delete) 
             {
-                $message->addMessage('System is unable to delete record.',Model_Core_Message::ERROR);           
-                $this->redirect($this->getUrl('grid')); 
-                //throw new Exception("System is unable to delete record.", 1);
+                throw new Exception("System is unable to delete record.", 1);
             }
             $message->addMessage('Delete Successfully.');           
             $this->redirect($this->getUrl('grid',null,null,true));      
-        } catch (Exception $e) {
-            $this->redirect($this->getUrl('grid','customer',null,true));
+        } catch (Exception $e) 
+        {
+            $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
+            $this->redirect($this->getUrl('grid',null,null,true));
         }
     }
 }
