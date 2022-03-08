@@ -1,4 +1,8 @@
+
 <?php $product = $this->getProduct(); ?>
+<?php $categoryPath = $this->getCategoryWithPath(); //print_r($categoryPath); exit();?>
+<?php $categories = $this->getCategories(); //print_r($categories); exit();?>
+<?php $categoryProductPair = $this->getCategoryProductPair(); //print_r($categoryProductPair); exit();?>
 <?php $controllerCoreAction = new Controller_Core_Action(); ?>
 <html>
 <head>
@@ -21,6 +25,40 @@
           <td><input type="number" name="product[quantity]" value="<?php echo $product->quantity ?>"></td>
         </tr>
         <tr>
+          <td width="10%"> Sku</td>
+          <td><input type="text" name="product[sku]" value="<?php echo $product->sku ?>"></td>
+        </tr>
+
+        <tr>
+        <td width="10%">Categories</td>
+        <td>
+          <table border='1'>
+            <tr>
+              <th>Check Box</th>
+              <th>Category Id</th>
+              <th>Category Name</th>
+            </tr>
+              
+        <?php foreach ($categories as $categoryProduct): ?>
+        <tr>
+          <td><input type="checkbox" name="product[category][]" value="<?php echo $categoryProduct->categoryId ?>"<?php if($categoryProductPair):
+            if(in_array($categoryProduct->categoryId, $categoryProductPair)): ?>
+              checked
+            <?php endif; ?>
+            <?php endif; ?>></td>
+            <td><?php echo $categoryProduct->categoryId ?></td>
+            <td>
+            <?php $result = $categoryPath; 
+                echo $result[$categoryProduct->categoryId];
+              ?>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+          </table>
+        </td>
+      </tr>
+
+        <tr>
           <td width="10%">Status</td>
           <td>
             <select name="product[status]">
@@ -38,6 +76,7 @@
           </td>
         </tr>    
       </div>  
+  </table>
     </form>
   </body>
 </html>

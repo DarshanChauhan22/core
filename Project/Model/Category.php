@@ -31,6 +31,9 @@ class Model_Category extends Model_Core_Row
 
 		return self::STATUS_DEFAULT;
 	}
+
+	
 }
+
 
 ?>
