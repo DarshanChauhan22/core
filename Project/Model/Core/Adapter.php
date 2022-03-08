@@ -127,5 +127,5 @@ $adapter->setConfig([
 		'host' => 'localhost',
 		'username' => 'root',
 		'password' => '',
-		'dbname' => 'cc'
+		'dbname' => 'project_darshan'
 	]);
