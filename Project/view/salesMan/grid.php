@@ -1,4 +1,4 @@
-<?php $salesMans = $this->getSalesMans(); ?>
+<?php $salesmans = $this->getsalesmans(); ?>
 <?php $controllerCoreAction = new Controller_Core_Action(); ?>
 
 <html>
@@ -8,8 +8,8 @@
 </head>
 <body>
 	<div class='container' style="text-align: center; ">
-	<h1> SalesMan Details </h1> 
-	<form action="<?php echo $controllerCoreAction->getUrl('add','salesMan',null,true) ?>" method="POST">
+	<h1> salesman Details </h1> 
+	<form action="<?php echo $controllerCoreAction->getUrl('add','salesman',null,true) ?>" method="POST">
 		<button type="submit" name="Add" class="Registerbtn"> Add New </button>
 	</form>
 
@@ -22,31 +22,37 @@
 				<th> Email </th>
 				<th> Mobile </th>
 				<th> Status </th>
+				<th> Percentage </th>
+				<th> Customer </th>
 				<th> Create Date </th>
 				<th> Update Date </th>
 				<th> Update </th>
 				<th> Delete </th>
 			</tr>
-			<?php if($salesMans):
-				foreach ($salesMans as $salesMan): ?>
+			<?php if($salesmans):
+				foreach ($salesmans as $salesman): ?>
 					<tr>
-			      		<td><?php echo $salesMan->salesManId ?></td>
-			    		<td><?php echo $salesMan->firstName ?></td>
-			    		<td><?php echo $salesMan->lastName ?></td>
-			    		<td><?php echo $salesMan->email ?></td>
-			    		<td><?php echo $salesMan->mobile ?></td>
+			      		<td><?php echo $salesman->salesmanId ?></td>
+			    		<td><?php echo $salesman->firstName ?></td>
+			    		<td><?php echo $salesman->lastName ?></td>
+			    		<td><?php echo $salesman->email ?></td>
+			    		<td><?php echo $salesman->mobile ?></td>
 			    		
 			    		<td>
-				    		<?php echo $salesMan->getStatus($salesMan->status); ?>
+				    		<?php echo $salesman->getStatus($salesman->status); ?>
 			    		</td>
 			    		</td>
-			    		<td><?php echo $salesMan->createdAt ?></td>
-			    		<td><?php echo $salesMan->updatedAt ?></td>
+			    		<td><?php echo $salesman->percentage ?></td>
 			    		<td>
-			    			<a href="<?php echo$controllerCoreAction->getUrl('edit','salesMan',['id' =>  $salesMan->salesManId],true) ?>">Update</a>
+			    			<a href="<?php echo$controllerCoreAction->getUrl('grid','salesman_customer',['id' =>  $salesman->salesmanId],true) ?>">Customer</a>
+			    		</td>
+			    		<td><?php echo $salesman->createdAt ?></td>
+			    		<td><?php echo $salesman->updatedAt ?></td>
+			    		<td>
+			    			<a href="<?php echo$controllerCoreAction->getUrl('edit','salesman',['id' =>  $salesman->salesmanId],true) ?>">Update</a>
 			    		</td>
 			    		<td>
-			    			<a href="<?php echo$controllerCoreAction->getUrl('delete','salesMan',['id' =>  $salesMan->salesManId],true) ?>">Delete</a> 
+			    			<a href="<?php echo$controllerCoreAction->getUrl('delete','salesman',['id' =>  $salesman->salesmanId],true) ?>">Delete</a> 
 			    		</td>
 			   		</tr>
 			 	<?php endforeach;?>

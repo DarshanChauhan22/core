@@ -40,6 +40,7 @@
 				   		<?php echo $customer->getStatus($customer->status); ?>
 			    	</td>
 		    		<td> <?php echo $customer->address ?> </td>
+		    		
 		    		<td><?php echo $customer->createdAt ?></td>
 		    		<td><?php echo $customer->updatedAt ?></td>
 		    		<td>

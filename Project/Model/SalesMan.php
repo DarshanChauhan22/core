@@ -1,6 +1,6 @@
 <?php
 Ccc::loadClass("Model_Core_Row");
-class Model_SalesMan extends Model_Core_Row
+class Model_salesman extends Model_Core_Row
 {
 	const STATUS_ENABLED = 1;
 	const STATUS_DISABLED = 2;
@@ -10,7 +10,7 @@ class Model_SalesMan extends Model_Core_Row
 
 	public function __construct()
 	{
-		$this->setResourceClassName('SalesMan_Resource');
+		$this->setResourceClassName('salesman_Resource');
 	}
 
 	public function getStatus($key = null)

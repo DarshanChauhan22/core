@@ -1,30 +1,30 @@
 <?php
 Ccc::loadClass('Controller_Core_Action');
-Ccc::loadClass('Model_SalesMan');
+Ccc::loadClass('Model_salesman');
 Ccc::loadClass('Model_Core_Request');
 
-class Controller_SalesMan extends Controller_Core_Action{
+class Controller_salesman extends Controller_Core_Action{
 	
 	public function testAction()
 	{
-		$salesManTable = new Model_SalesMan(); 
-		$salesManTable->setTableName('salesMan');
-		$salesManTable->setPrimaryKey('salesManId');
+		$salesmanTable = new Model_salesman(); 
+		$salesmanTable->setTableName('salesman');
+		$salesmanTable->setPrimaryKey('salesmanId');
 	}
 	public function gridAction()
 	{
 		$content = $this->getLayout()->getContent();
-        $salesManGrid = Ccc::getBlock("SalesMan_Grid");
-        $content->addChild($salesManGrid);
+        $salesmanGrid = Ccc::getBlock("salesman_Grid");
+        $content->addChild($salesmanGrid);
         $this->renderLayout();
 	}
 
 	public function addAction()
 	{
-		$salesMan = Ccc::getModel('SalesMan');
+		$salesman = Ccc::getModel('salesman');
 		$content = $this->getLayout()->getContent();
-        $salesManAdd = Ccc::getBlock("SalesMan_Edit")->addData("salesMan", $salesMan);
-        $content->addChild($salesManAdd);
+        $salesmanAdd = Ccc::getBlock("salesman_Edit")->addData("salesman", $salesman);
+        $content->addChild($salesmanAdd);
         $this->renderLayout();	
 	}
 
@@ -38,15 +38,15 @@ class Controller_SalesMan extends Controller_Core_Action{
 			{
 				throw new Exception("Id not valid.");
 			}
-			$salesMan = Ccc::getModel('SalesMan')->load($id);
-			if(!$salesMan)
+			$salesman = Ccc::getModel('salesman')->load($id);
+			if(!$salesman)
 			{
-				throw new Exception("unable to load salesMan.");
+				throw new Exception("unable to load salesman.");
 			}
 				
 			$content = $this->getLayout()->getContent();
-            $salesManEdit = Ccc::getBlock("SalesMan_Edit")->addData("salesMan", $salesMan);
-            $content->addChild($salesManEdit);
+            $salesmanEdit = Ccc::getBlock("salesman_Edit")->addData("salesman", $salesman);
+            $content->addChild($salesmanEdit);
             $this->renderLayout();	
 		} 
 		catch (Exception $e) 
@@ -63,25 +63,26 @@ class Controller_SalesMan extends Controller_Core_Action{
 		$date = date("Y-m-d H:i:s");
 		try
 		{
-			$salesMan = Ccc::getModel('SalesMan');
+			$salesman = Ccc::getModel('salesman');
 
-			$row = $this->getRequest()->getRequest('salesMan');
+			$row = $this->getRequest()->getRequest('salesman');
 			if (!isset($row)) 
 			{
 				throw new Exception("Invalid Request.", 1);				
 			}			
 
 
-			 if(array_key_exists('salesManId',$row) && $row['salesManId'] == null)
+			 if(array_key_exists('salesmanId',$row) && $row['salesmanId'] == null)
        		 {
-                $salesMan->firstName = $row['firstName'];
-                $salesMan->lastName =  $row['lastName'];
-                $salesMan->email =  $row['email'];
-                $salesMan->mobile =  $row['mobile'];
-                $salesMan->status =  $row['status'];
-                $salesMan->createdAt =  $date;
-                $salesMan->updatedAt =  null;
-                $result = $salesMan->save();
+                $salesman->firstName = $row['firstName'];
+                $salesman->lastName =  $row['lastName'];
+                $salesman->email =  $row['email'];
+                $salesman->mobile =  $row['mobile'];
+                $salesman->status =  $row['status'];
+                $salesman->percentage =  $row['percentage'];
+                $salesman->createdAt =  $date;
+                $salesman->updatedAt =  null;
+                $result = $salesman->save();
 
                 if(!$result)
                 {
@@ -92,15 +93,16 @@ class Controller_SalesMan extends Controller_Core_Action{
         	else
         	{
 
-                $salesMan->load($row['salesManId']);
-                $salesMan->salesManId = $row["salesManId"];
-                $salesMan->firstName = $row['firstName'];
-                $salesMan->lastName =  $row['lastName'];
-                $salesMan->email =  $row['email'];
-                $salesMan->mobile =  $row['mobile'];
-                $salesMan->status =  $row['status'];
-                $salesMan->updatedAt =  $date;
-                $result = $salesMan->save();
+                $salesman->load($row['salesmanId']);
+                $salesman->salesmanId = $row["salesmanId"];
+                $salesman->firstName = $row['firstName'];
+                $salesman->lastName =  $row['lastName'];
+                $salesman->email =  $row['email'];
+                $salesman->mobile =  $row['mobile'];
+                $salesman->status =  $row['status'];
+                $salesman->percentage =  $row['percentage'];
+                $salesman->updatedAt =  $date;
+                $result = $salesman->save();
 
                 if(!$result)
                 {
@@ -109,7 +111,7 @@ class Controller_SalesMan extends Controller_Core_Action{
 				$message->addMessage('Update Successfully.');
        			}
 
-			$this->redirect($this->getUrl('grid','salesMan',null,true));
+			$this->redirect($this->getUrl('grid','salesman',null,true));
 		} 
 		catch (Exception $e) 
 		{
@@ -124,19 +126,19 @@ class Controller_SalesMan extends Controller_Core_Action{
 		{	
 			$message = Ccc::getModel('Core_Message');
 			$getId = $this->getRequest()->getRequest('id'); 
-			$salesManTable = Ccc::getModel('SalesMan')->load($getId);
+			$salesmanTable = Ccc::getModel('salesman')->load($getId);
 			if (!isset($getId)) 
 			{
 				throw new Exception("Invalid Request.", 1);
 			}
-			$delete = $salesManTable->delete(['salesManId' => $getId]);
+			$delete = $salesmanTable->delete(['salesmanId' => $getId]);
 			if(!$delete)
 			{
 				throw new Exception("System is unable to delete record.", 1);
 										
 			}
 			$message->addMessage('Delete Successfully.');			
-			$this->redirect($this->getUrl('grid','salesMan',null,true));	
+			$this->redirect($this->getUrl('grid','salesman',null,true));	
 				
 		} catch (Exception $e) 
 		{
