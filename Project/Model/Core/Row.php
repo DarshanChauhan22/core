@@ -9,6 +9,12 @@ class Model_Core_Row
         
     }
 
+    public function getAdapter()
+    {
+        global $adapter;
+        return $adapter;
+    }
+
     public function getData()
     {
         return $this->data;

@@ -1,17 +1,17 @@
 <?php 
 
 Ccc::loadClass('Block_Core_Template');
-class Block_SalesMan_Grid extends Block_Core_Template{
+class Block_salesman_Grid extends Block_Core_Template{
 	public function __construct()
 	{
-		$this->setTemplate('view/salesMan/grid.php');
+		$this->setTemplate('view/salesman/grid.php');
 	}
 
-	public function getSalesMans()
+	public function getsalesmans()
 	{
-		$salesMan = Ccc::getModel('salesMan');
-		$salesMans = $salesMan->fetchAll("SELECT * FROM sales_man");
-		return $salesMans;
+		$salesman = Ccc::getModel('salesman');
+		$salesmans = $salesman->fetchAll("SELECT * FROM sales_man");
+		return $salesmans;
 	}
 }
 
