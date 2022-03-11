@@ -11,6 +11,7 @@
 		<a href="<?php echo $controllerCoreAction->getUrl('grid','salesman',null,true) ?>"><button type="button" class="cancel">Sales Man</button></a>
 		<a href="<?php echo $controllerCoreAction->getUrl('grid','page',null,true) ?>"><button type="button" class="cancel">Page</button></a>
 		<a href="<?php echo $controllerCoreAction->getUrl('grid','vendor',null,true) ?>"><button type="button" class="cancel">Vendor</button></a>
+		<a href="<?php echo $controllerCoreAction->getUrl('logout','Admin_Login',null,true) ?>"><button type="button" class="logout">Logout</button></a>
 </div>
 </center>
 <br>
