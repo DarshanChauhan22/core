@@ -24,7 +24,7 @@ class Controller_Category extends Controller_Core_Action {
 	public function editAction()
 	{
 		try {
-			$message = Ccc::getModel('Core_Message');
+			$message = $this->getMessage();
 	    $pid=(int) $this->getRequest()->getRequest('id');
 
 	    if(!$pid)
@@ -59,7 +59,7 @@ class Controller_Category extends Controller_Core_Action {
 	{
 		try 
 		{
-			$message = Ccc::getModel('Core_Message');
+			$message = $this->getMessage();
 			$category = Ccc::getModel('category');
 		
 			$row = $this->getRequest()->getRequest('category');
@@ -162,7 +162,7 @@ class Controller_Category extends Controller_Core_Action {
 	public function updatePathIntoCategory($categoryId,$parentId)
 	{
 		try {
-			$message = Ccc::getModel('Core_Message');
+			$message = $this->getMessage();
 			date_default_timezone_set("Asia/Kolkata");
 			$date = date("Y-m-d H:i:s");
 			$row = $this->getRequest()->getRequest('category');
@@ -252,7 +252,7 @@ class Controller_Category extends Controller_Core_Action {
 		$adapter = $this->getAdapter();
 		try 
 		{
-			$message = Ccc::getModel('Core_Message');
+			$message = $this->getMessage();
 			$id = $this->getRequest()->getRequest('id');
 			$category = Ccc::getModel('Category')->load($id);
 

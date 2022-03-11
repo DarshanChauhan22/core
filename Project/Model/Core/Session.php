@@ -96,6 +96,10 @@ class Model_Core_Session
 		{
 			return null;
 		}
+		if (!array_key_exists($this->getNamespace(), $_SESSION))
+		{
+			return null;
+		}
 		if (!array_key_exists($name, $_SESSION[$this->getNamespace()])) 
 		{
 			return null;
@@ -108,6 +112,10 @@ class Model_Core_Session
 		if(!$this->isStarted())
 		{
 			return $this;
+		}
+		if (!array_key_exists($this->getNamespace(), $_SESSION))
+		{
+			return null;
 		}
 		if(array_key_exists($key, $_SESSION[$this->getNamespace()]))
 		{

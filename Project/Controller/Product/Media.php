@@ -15,7 +15,7 @@ class Controller_Product_Media extends Controller_Core_Action{
 
 	public function saveAction()
    {
-      $message = Ccc::getModel('Core_Message');
+      $message = $this->getMessage();
       $adapter = $this->getAdapter();;
       try 
       {
@@ -187,7 +187,7 @@ class Controller_Product_Media extends Controller_Core_Action{
        {
 
         try {
-              $message = Ccc::getModel('Core_Message');
+              $message = $this->getMessage();
               $productId = $this->getRequest()->getRequest('id');
 
               $imageName1 = $_FILES['image']['name'];

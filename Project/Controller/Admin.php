@@ -9,7 +9,7 @@ class Controller_Admin extends Controller_Core_Action{
 		echo "<pre>";
 		//$adminSession = Ccc::getModel('Admin_Session');
 		//$coreSession = Ccc::getModel('Core_Session');
-		//$message1 = Ccc::getModel('Core_Message');
+		//$message1 = $this->getMessage();
 		//$message = $this->getMessage();
 		//print_r($message);
 		//print_r($message1);
@@ -142,7 +142,7 @@ class Controller_Admin extends Controller_Core_Action{
 	{
 		try 
 		{
-			$message = Ccc::getModel('Core_Message');
+			$message = $this->getMessage();
 			$getId = $this->getRequest()->getRequest('id'); 
 			$adminTable = Ccc::getModel('Admin')->load($getId);	
 			if (!isset($getId)) 
