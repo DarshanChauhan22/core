@@ -3,11 +3,48 @@ Ccc::loadClass('Block_Core_Layout');
 Ccc::loadClass('Model_Core_Request');
 
 
-class Controller_Core_Action{
-	
-	
+class Controller_Core_Action
+{
 	protected $message = null;
 	protected $layout = null;
+
+	public function __construct()
+	{
+		$this->authenticate();			
+	}
+
+	public function authenticate()
+	{
+		try 
+		{
+		$message = $this->getMessage();
+		$action = $this->getRequest()->getRequest('a');
+		$controller = ucwords($this->getRequest()->getRequest('c'),'_');
+
+		if($controller == 'Admin_Login' && ($action == 'login' || $action == 'loginPost'))
+		{
+			$login = Ccc::getModel('Admin_Login')->isLoggedIn();
+			if($login)
+			{
+				$message->addMessage('Alrady LoggedIn.');
+				$this->redirect($this->getUrl('grid','product',null,true));
+			}
+		}
+		else
+		{
+			$login = Ccc::getModel('Admin_Login')->isLoggedIn();
+			if(!$login)
+			{
+				throw new Exception("First Login.",1);
+			}
+		}	
+		} catch (Exception $e) 
+		{
+			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
+			$this->redirect($this->getUrl('login','Admin_Login',null,true));	
+		}
+		
+	}	
 
 	public function setMessage($message)
 	{
