@@ -2,9 +2,22 @@
 
 class Model_Core_Session
 {
+	protected $namespace = null;	
 	public function __construct()
 	{
+		$this->setNamespace('core');
 		$this->start();
+	}
+
+	public function setNamespace($namespace)
+	{		
+		$this->namespace = $namespace;
+		return $this;
+	}
+
+	public function getNamespace()
+	{
+		return $this->namespace;
 	}
 	public function isStarted()
 	{
@@ -50,7 +63,7 @@ class Model_Core_Session
 		return session_regenerate_id();
 	}
 
-	public function getData()
+	/*public function getData()
 	{
 		return $_SESSION;
 	}
@@ -65,7 +78,7 @@ class Model_Core_Session
 	{
 		$_SESSION = [];
 		return $this;
-	}
+	}*/
 
 	public function __set($name, $value)
 	{
@@ -73,7 +86,7 @@ class Model_Core_Session
 		{
 			$this->start();
 		}
-		$_SESSION[$name] = $value;
+		$_SESSION[$this->getNamespace()][$name] = $value;
 		return $this;
 	}
 
@@ -83,11 +96,11 @@ class Model_Core_Session
 		{
 			return null;
 		}
-		if (!array_key_exists($name, $_SESSION)) 
+		if (!array_key_exists($name, $_SESSION[$this->getNamespace()])) 
 		{
 			return null;
 		}
-		return $_SESSION[$name];	
+		return $_SESSION[$this->getNamespace()][$name];	
 	}
 
 	public function __unset($key)
@@ -96,9 +109,9 @@ class Model_Core_Session
 		{
 			return $this;
 		}
-		if(array_key_exists($key, $_SESSION))
+		if(array_key_exists($key, $_SESSION[$this->getNamespace()]))
 		{
-			unset($_SESSION[$key]);
+			unset($_SESSION[$this->getNamespace()][$key]);
 		}
 		return $this;
 	}

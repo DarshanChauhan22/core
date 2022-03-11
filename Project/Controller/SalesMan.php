@@ -32,7 +32,7 @@ class Controller_salesman extends Controller_Core_Action{
 	{	
 		try 
 		{
-			$message = Ccc::getModel('Core_Message');
+			$message = $this->getMessage();
 			$id = (int) $this->getRequest()->getRequest('id');
 			if(!$id)
 			{
@@ -58,7 +58,7 @@ class Controller_salesman extends Controller_Core_Action{
 	
 	public function saveAction()
 	{
-		$message = Ccc::getModel('Core_Message');
+		$message = $this->getMessage();
 		date_default_timezone_set("Asia/Kolkata");
 		$date = date("Y-m-d H:i:s");
 		try
@@ -124,7 +124,7 @@ class Controller_salesman extends Controller_Core_Action{
 	{
 		try 
 		{	
-			$message = Ccc::getModel('Core_Message');
+			$message = $this->getMessage();
 			$getId = $this->getRequest()->getRequest('id'); 
 			$salesmanTable = Ccc::getModel('salesman')->load($getId);
 			if (!isset($getId)) 

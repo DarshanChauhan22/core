@@ -32,7 +32,7 @@ class Controller_Page extends Controller_Core_Action{
 	{	
 		try 
 		{
-			$message = Ccc::getModel('Core_Message');
+			$message = $this->getMessage();
 			$id = (int) $this->getRequest()->getRequest('id');
 			if(!$id)
 			{
@@ -61,7 +61,7 @@ class Controller_Page extends Controller_Core_Action{
 		$date = date("Y-m-d H:i:s");
 		try
 		{
-			$message = Ccc::getModel('Core_Message');
+			$message = $this->getMessage();
 			$page = Ccc::getModel('Page');
 
 			$row = $this->getRequest()->getRequest('page');
@@ -121,7 +121,7 @@ class Controller_Page extends Controller_Core_Action{
 	{
 		try 
 		{	
-			$message = Ccc::getModel('Core_Message');
+			$message = $this->getMessage();
 			$getId = $this->getRequest()->getRequest('id'); 
 			$pageTable = Ccc::getModel('Page')->load($getId);
 			if (!isset($getId)) 
