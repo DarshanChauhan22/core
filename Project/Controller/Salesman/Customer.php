@@ -16,10 +16,10 @@ class Controller_salesman_Customer extends Controller_Core_Action
 
     {
         try {
-            $message = Ccc::getModel('Core_Message');
+            $message = $this->getMessage();
             date_default_timezone_set("Asia/Kolkata");
             $date = date("Y-m-d H:i:s");
-            $message = Ccc::getModel('Core_Message');
+            $message = $this->getMessage();
             $customer = Ccc::getModel('Customer');
             $row =  $this->getRequest()->getRequest('salesmanCustomer');
 

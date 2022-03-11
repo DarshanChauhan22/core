@@ -8,7 +8,10 @@ class Model_Core_Message
 	const WARNING = 'warning';
 	protected $session = null;
 
-
+	public function __construct()
+	{
+		
+	}
 	public function setSession($session)
 	{
 		$this->session = $session;

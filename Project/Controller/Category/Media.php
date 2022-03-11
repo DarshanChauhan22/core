@@ -18,7 +18,7 @@ class Controller_Category_Media extends Controller_Core_Action{
       $adapter = $this->getAdapter();
       try 
       {
-        $message = Ccc::getModel('Core_Message');
+        $message = $this->getMessage();
 
           $request =$this->getRequest();
           $categoryId = $request->getRequest('id');
@@ -194,7 +194,7 @@ class Controller_Category_Media extends Controller_Core_Action{
        {
             try 
             {
-               $message = Ccc::getModel('Core_Message');
+               $message = $this->getMessage();
                $categoryId = $_GET['id'];
 
               $imageName1 = $_FILES['image']['name'];
