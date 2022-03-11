@@ -4,6 +4,29 @@ Ccc::loadClass('Model_Core_Request');
 
 class Controller_Admin extends Controller_Core_Action{
 	
+	public function testAction()
+	{
+		echo "<pre>";
+		//$adminSession = Ccc::getModel('Admin_Session');
+		//$coreSession = Ccc::getModel('Core_Session');
+		//$message1 = Ccc::getModel('Core_Message');
+		//$message = $this->getMessage();
+		//print_r($message);
+		//print_r($message1);
+
+		//$adminMessage = Ccc::getModel('Admin_Message');
+		$adminMessage = $this->getMessage();
+		//print_r($adminMessage);
+
+		$adminMessage->addMessage("helloooo");
+		//$adminMessage->addMessage("heoo");
+
+		//print_r($adminSession);
+		//print_r($coreSession);
+		//print_r($adminMessage);
+		print_r($_SESSION);
+		die;
+	}
 
 	public function gridAction()
 	{
@@ -26,7 +49,10 @@ class Controller_Admin extends Controller_Core_Action{
 	{	
 		try 
 		{
-			$message = Ccc::getModel('Core_Message');
+			$message = $this->getMessage();
+			//print_r($message);
+			//print_r($message1);
+			//die;
 			$id = (int) $this->getRequest()->getRequest('id');
 			if(!$id)
 			{
@@ -56,7 +82,7 @@ class Controller_Admin extends Controller_Core_Action{
 	{
 		try
 		{
-			$message = Ccc::getModel('Core_Message');
+			$message = $this->getMessage();
 			date_default_timezone_set("Asia/Kolkata");
 			$date = date("Y-m-d H:i:s");
 			$admin = Ccc::getModel('Admin');

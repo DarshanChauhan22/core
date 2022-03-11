@@ -28,7 +28,7 @@ class Controller_Product extends Controller_Core_Action{
 
 		try 
 		{
-			$message = Ccc::getModel('Core_Message');
+			$message = $this->getMessage();
 			$id = (int) $this->getRequest()->getRequest('id');
 			if(!$id)
 			{
@@ -62,7 +62,7 @@ class Controller_Product extends Controller_Core_Action{
 	{
 		try {
 
-			$message = Ccc::getModel('Core_Message');
+			$message = $this->getMessage();
 			$product = Ccc::getModel('Product');
 			$row =  $this->getRequest()->getRequest('product');
 			
@@ -140,7 +140,7 @@ class Controller_Product extends Controller_Core_Action{
 	{
 		try 
 		{	
-			$message = Ccc::getModel('Core_Message');
+			$message = $this->getMessage();
 			$adapter = $this->getAdapter();
 			$getId = $this->getRequest()->getRequest('id');
 			$customerTable = Ccc::getModel('Product')->load($getId);
