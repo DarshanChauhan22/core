@@ -19,7 +19,7 @@ class Controller_Core_Action{
 	{
 		if(!$this->message)
 		{
-			$this->setmessage(new Block_Core_Message);
+			$this->setMessage(Ccc::getModel('Admin_Message'));
 		}
 		return $this->message;
 	}

@@ -27,7 +27,7 @@ class Controller_Vendor extends Controller_Core_Action
     {
          try 
         {
-            $message = Ccc::getModel('Core_Message');
+            $message = $this->getMessage();
             $id = (int) $this->getRequest()->getRequest('id');
             if(!$id)
             {
@@ -58,7 +58,7 @@ class Controller_Vendor extends Controller_Core_Action
 
         try 
         {
-            $message = Ccc::getModel('Core_Message');
+            $message = $this->getMessage();
             date_default_timezone_set("Asia/Kolkata");
             $date = date("Y-m-d H:i:s");
             $row = $this->getRequest()->getRequest('vendor');
@@ -125,7 +125,7 @@ class Controller_Vendor extends Controller_Core_Action
         $address = Ccc::getModel('Vendor_Address'); 
         try 
         {
-            $message = Ccc::getModel('Core_Message');
+            $message = $this->getMessage();
         $row = $this->getRequest()->getRequest('address');
 
         if (!isset($row)) 
@@ -198,7 +198,7 @@ class Controller_Vendor extends Controller_Core_Action
 
     public function deleteAction()
     {
-        $message = Ccc::getModel('Core_Message');
+        $message = $this->getMessage();
         $getId = $this->getRequest()->getRequest('id');
         $vendorTable = Ccc::getModel('Vendor')->load($getId); 
         try {

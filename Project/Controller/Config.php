@@ -7,6 +7,18 @@ class Controller_Config extends Controller_Core_Action{
 	
 	public function gridAction()
 	{
+		$adminMessage = $this->getMessage();
+		//print_r($adminMessage);
+
+		$adminMessage->addMessage("helloooo");
+		$adminMessage->addMessage("heoo");
+		$adminMessage->unsetMessage();
+
+		//print_r($adminSession);
+		//print_r($coreSession);
+		//print_r($adminMessage);
+		print_r($_SESSION);
+		die;
 		$content = $this->getLayout()->getContent();
         $configGrid = Ccc::getBlock("Config_Grid");
         $content->addChild($configGrid);
