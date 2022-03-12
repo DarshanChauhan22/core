@@ -82,11 +82,13 @@ class Controller_Page extends Controller_Core_Action{
                 $page->updatedAt =  null;
                 $result = $page->save();
 
-                if(!$result)
+                if($result)
                 {
-                	throw new Exception("Insert Unsuccessfully.",1);
+                	$message->addMessage('Insert Successfully.');
+					$this->redirect($this->getUrl('grid',null,null,false));
                 }
-					$message->addMessage('Insert Successfully.');
+                	throw new Exception("Insert Unsuccessfully.",1);
+					
         	}
         	else
         	{
@@ -106,14 +108,14 @@ class Controller_Page extends Controller_Core_Action{
 					throw new Exception("Update Unsuccessfully.",1);
                 }
 					$message->addMessage('Update Successfully.');
+			$this->redirect($this->getUrl('grid',null,['id' => null],false));
        			}
 
-			$this->redirect($this->getUrl('grid','page',null,true));
 		} 
 		catch (Exception $e) 
 		{
 			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect($this->getUrl('grid',null,null,true));	
+			$this->redirect($this->getUrl('grid',null,['id' => null],false));	
 		}
 	}
 
@@ -135,12 +137,12 @@ class Controller_Page extends Controller_Core_Action{
 										
 			}
 			$message->addMessage('Delete Successfully.');	
-			$this->redirect($this->getUrl('grid','page',null,true));	
+			$this->redirect($this->getUrl('grid',null,['id' => null],false));	
 				
 		} catch (Exception $e) 
 		{
 			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect($this->getUrl('grid',null,null,true));		
+			$this->redirect($this->getUrl('grid',null,['id' => null],false));		
 		}
 	}
 }
