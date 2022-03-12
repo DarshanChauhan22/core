@@ -1,9 +1,10 @@
-<?php
-Ccc::loadClass('Controller_Core_Action');
-Ccc::loadClass('Model_Category');
-Ccc::loadClass('Model_Core_Request');
+<?php Ccc::loadClass('Controller_Core_Action'); ?>
+<?php Ccc::loadClass('Model_Category'); ?>
+<?php Ccc::loadClass('Model_Core_Request'); ?>
 
-class Controller_Category extends Controller_Core_Action {
+<?php
+class Controller_Category extends Controller_Core_Action 
+{
 	public function gridAction()
 	{
 		$content = $this->getLayout()->getContent();
@@ -16,7 +17,7 @@ class Controller_Category extends Controller_Core_Action {
 	{
 		$category = Ccc::getModel('category');
 		$content = $this->getLayout()->getContent();
-        $categoryAdd = Ccc::getBlock("Category_Edit")->addData("category", $category);
+        $categoryAdd = Ccc::getBlock("Category_Edit")->setData(['category' => $category]);
         $content->addChild($categoryAdd);
         $this->renderLayout();	
 	}
@@ -28,26 +29,27 @@ class Controller_Category extends Controller_Core_Action {
 	    $pid=(int) $this->getRequest()->getRequest('id');
 
 	    if(!$pid)
-			{
-				throw new Exception("Id not valid.");
-			}
+		{
+			throw new Exception("Id not valid.");
+		}
 		$category = Ccc::getModel('category')->load($pid);;   
 
 		if(!$category)
-			{	
-				throw new Exception("unable to load admin.");
-			}   
-		    $query = "SELECT 
-		                  * 
-		    FROM Category WHERE categoryId=".$pid;
-		    $row = $category-> fetchRow($query);
-		
-	    	$categoryPathPair = $category->fetchAll('SELECT categoryId,categoryPath FROM Category');
-	   	    $content = $this->getLayout()->getContent();
-            $categoryEdit = Ccc::getBlock("Category_Edit")->addData("category", $category);
-            $content->addChild($categoryEdit);
-            $this->renderLayout();
-		} catch (Exception $e) 
+		{	
+			throw new Exception("unable to load admin.");
+		}   
+	    $query = "SELECT 
+	                  * 
+	    FROM Category WHERE categoryId=".$pid;
+	    $row = $category-> fetchRow($query);
+	
+    	$categoryPathPair = $category->fetchAll('SELECT categoryId,categoryPath FROM Category');
+   	    $content = $this->getLayout()->getContent();
+        $categoryEdit = Ccc::getBlock("Category_Edit")->setData(['category' => $category]);
+        $content->addChild($categoryEdit);
+        $this->renderLayout();
+		} 
+		catch (Exception $e) 
 		{
 			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
 			$this->redirect($this->getUrl('grid',null,null,true));		
@@ -66,9 +68,9 @@ class Controller_Category extends Controller_Core_Action {
 			$parentId = $row['parentId'];
 			
 			
-			if (!isset($row)) 
+			if (!$row) 
 			{
-				throw new Exception("Invalid Request.", 1);				
+				throw new Exception("Invalid Request.");				
 			}
 			date_default_timezone_set("Asia/Kolkata");
 			$date = date("Y-m-d H:i:s");
@@ -79,7 +81,7 @@ class Controller_Category extends Controller_Core_Action {
 			{
 				if(!(int)$row['id'])
 				{
-					throw new Exception("Invalid Request.", 1);
+					throw new Exception("Invalid Request.");
 				}
 				
 				$category = $category->load($row['id']);
@@ -91,7 +93,7 @@ class Controller_Category extends Controller_Core_Action {
 
 				if(!$update)
 				{
-					throw new Exception("System is unable to update.", 1);
+					throw new Exception("System is unable to update.");
 				}
 				
 				$result = $this->updatePathIntoCategory($row['id'],$parentId);
@@ -106,7 +108,6 @@ class Controller_Category extends Controller_Core_Action {
                 $category->status =  $row['status'];
                 $insert=$category->save();
 
-
 				}
 				else
 				{
@@ -119,7 +120,7 @@ class Controller_Category extends Controller_Core_Action {
 				}
 				if(!$insert)
 				{
-					throw new Exception("System is unable to insert.", 1);			
+					throw new Exception("System is unable to insert.");			
 				}
 
 				$parent=$category->fetchRow("SELECT parentId FROM Category WHERE categoryId=".$insert);
@@ -146,7 +147,7 @@ class Controller_Category extends Controller_Core_Action {
 				
 				if(!$update)
 				{
-					throw new Exception("System is unable to update.", 1);
+					throw new Exception("System is unable to update.");
 				}				
 			}
 			$message->addMessage('Insert Successfully.');
@@ -181,10 +182,10 @@ class Controller_Category extends Controller_Core_Action {
 			if($parentId == 'NULL')
 			{	
 				
-					$category = $category->load($categoryId);
-	                $category->parentId = null;
-	                $category->categoryPath = $categoryId;
-	                $update=$category->save();
+				$category = $category->load($categoryId);
+	            $category->parentId = null;
+	            $category->categoryPath = $categoryId;
+	            $update=$category->save();
 
 			}
 			else
@@ -206,7 +207,7 @@ class Controller_Category extends Controller_Core_Action {
 			}
 			if(!$update)
 			{
-				throw new Exception("System is unable to update.", 1);
+				throw new Exception("System is unable to update.");
 			}	
 
 			foreach ($categoryPath as $row) 
@@ -225,14 +226,14 @@ class Controller_Category extends Controller_Core_Action {
 
 				$newPath = $categoryPath.'/'.$categoryId;
 
-					$category = $category->load($categoryId);
-	                $category->categoryPath = $newPath;
-	                $category->updatedAt = $date;
-	                $update=$category->save();
+				$category = $category->load($categoryId);
+                $category->categoryPath = $newPath;
+                $category->updatedAt = $date;
+                $update=$category->save();
 				
 				if(!$update)
 				{
-					throw new Exception("System is unable to update.", 1);
+					throw new Exception("System is unable to update.");
 				}	
 
 			}
@@ -260,15 +261,15 @@ class Controller_Category extends Controller_Core_Action {
             $result1 = $adapter->fetchPair($query1);
 
 
-			if (!isset($id)) 
+			if (!$id) 
 			{
-				throw new Exception("Invalid Request.", 1);
+				throw new Exception("Invalid Request.");
 			}
 			
 			$delete = $category->delete(['categoryId' => $id]); 
 			if(!$delete)
 			{
-				throw new Exception("System is unable to  delete.", 1);
+				throw new Exception("System is unable to  delete.");
 			}
 
 			foreach($result1 as $key => $value){
@@ -333,4 +334,3 @@ class Controller_Category extends Controller_Core_Action {
     }	
 }
 
-?>

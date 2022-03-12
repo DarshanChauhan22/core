@@ -1,26 +1,26 @@
+<?php Ccc::loadClass('Controller_Core_Action'); ?>
+<?php Ccc::loadClass('Model_Core_Request'); ?>
+<?php Ccc::loadClass('Model_Product'); ?>
 <?php
-Ccc::loadClass('Controller_Core_Action');
-Ccc::loadClass('Model_Core_Request');
-Ccc::loadClass('Model_Product');
 
-
-class Controller_Product extends Controller_Core_Action{
+class Controller_Product extends Controller_Core_Action
+{
 	public function gridAction()
 	{
 		$content = $this->getLayout()->getContent();
-        $productGrid = Ccc::getBlock("Product_Grid");
-        $content->addChild($productGrid);
-        $this->renderLayout();
+      $productGrid = Ccc::getBlock("Product_Grid");
+      $content->addChild($productGrid);
+      $this->renderLayout();
 	}
 
 	public function addAction()
 	{
 		$product = Ccc::getModel('Product');
 		$content = $this->getLayout()->getContent();
-      $productAdd = Ccc::getBlock("Product_Edit")->addData("product", $product);
-      $productAdd->addData("categoryProductPair",[]);
-      $content->addChild($productAdd);
-      $this->renderLayout();	
+      	$productAdd = Ccc::getBlock("Product_Edit");
+      	$productAdd->setData(['product' => $product , 'categoryProductPair' => []]);
+      	$content->addChild($productAdd);
+      	$this->renderLayout();	
 	}
 
 	public function editAction()
@@ -39,15 +39,12 @@ class Controller_Product extends Controller_Core_Action{
 			{
 				throw new Exception("unable to load product.");
 			}
-				$content = $this->getLayout()->getContent();
-            $productEdit = Ccc::getBlock("Product_Edit");
-				$categoryPath = Ccc::getModel('Category');
-            $productEdit->addData("product", $product);
-            $productEdit->addData('categoryProductPair',$this->getAdapter()->fetchPair("SELECT entityId,categoryId FROM category_product WHERE productId = {$id}"));
-       
-            $productEdit->addData('categoryPath',$categoryPath);
-            $content->addChild($productEdit);
-            $this->renderLayout();		
+			$content = $this->getLayout()->getContent();
+         	$productEdit = Ccc::getBlock("Product_Edit");
+			$categoryPath = Ccc::getModel('Category');
+         	$productEdit->setData(['product' => $product , 'categoryProductPair' => $this->getAdapter()->fetchPair("SELECT entityId,categoryId FROM category_product WHERE productId = {$id}") , 'categoryPath'=> $categoryPath ] );
+         $content->addChild($productEdit);
+         $this->renderLayout();		
 		} 
 		catch (Exception $e) 
 		{
@@ -70,9 +67,9 @@ class Controller_Product extends Controller_Core_Action{
 
 			$categoryIds = $this->getRequest()->getPost('category');
 
-			if (!isset($row)) 
+			if (!$row) 
 			{
-				throw new Exception("Invalid Request.", 1);				
+				throw new Exception("Invalid Request.");				
 			}
 			$productId = $row["productId"];
 			date_default_timezone_set("Asia/Kolkata");
@@ -88,45 +85,38 @@ class Controller_Product extends Controller_Core_Action{
        		 		unset($row['category']);
        		 	}
                 $product->setData($row);
-           
                 $result = $product->save();
 
                 $product->saveCategories($categoryArray, $result);
                 if(!$result)
                 {
-                	throw new Exception("Error Processing Request", 1);
+                	throw new Exception("Error Processing Request");
                 	
                 }
        		 	
                 if(!$result)
                 {
-                	throw new Exception("Insert Unsuccessfully.",1);
+                	throw new Exception("Insert Unsuccessfully.");
                 }
 					$message->addMessage('Insert Successfully.');
         	}
         	else
         	{
-        			$product->load($row['productId']);
-        			$product->productId = $row["productId"];
-               $product->name = $row['name'];
-               $product->price =  $row['price'];
-               $product->quantity =  $row['quantity'];
-               $product->sku =  $row['sku'];
-               $product->status =  $row['status'];
-               $product->updatedAt =  $date;
-               $result = $product->save();
+        		$product->setData($row);
+	            $product->updatedAt =  $date;
+	            $result = $product->save();
 
-       		 		$categoryProduct = $row['category'];
-       		 		unset($row['category']);
-               	$product->saveCategories($categoryProduct);
+ 		 		$categoryProduct = $row['category'];
+ 		 		unset($row['category']);
+         	$product->saveCategories($categoryProduct);
 
 
              if(!$result)
              {
-						throw new Exception("Update Unsuccessfully.",1);
+						throw new Exception("Update Unsuccessfully.");
              }
 				$message->addMessage('Update Successfully.');
-       			}
+       	}
 
 			$this->redirect($this->getUrl('grid','product',null,true));
 			
@@ -148,22 +138,22 @@ class Controller_Product extends Controller_Core_Action{
 
 			$result1 = $adapter->fetchPair($query1);
 			
-			if (!isset($getId)) 
+			if (!$getId) 
 			{
-				throw new Exception("Invalid Request.", 1);
+				throw new Exception("Invalid Request.");
 			}
 			$delete = $customerTable->delete(['productId' => $getId]); 
 			if(!$delete)
 			{
-				throw new Exception("System is unable to delete.", 1);							
+				throw new Exception("System is unable to delete.");							
 			}
-			foreach($result1 as $key => $value){
-               if($delete)
-               {
-              
-                  unlink($this->getBaseUrl('Media/Product/') . $value);
-               }
-            }
+			foreach($result1 as $key => $value)
+			{
+		      if($delete)
+		      {
+		         unlink($this->getBaseUrl('Media/Product/') . $value);
+		      }
+      	}
 
 			$message->addMessage('Delete Successfully.');
 			$this->redirect($this->getUrl('grid','product',null,true));
@@ -175,4 +165,3 @@ class Controller_Product extends Controller_Core_Action{
 	}
 }
 
-?>

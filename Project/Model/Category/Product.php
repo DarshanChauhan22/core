@@ -1,6 +1,5 @@
+<?php Ccc::loadClass('Model_Core_Row'); ?>
 <?php
-Ccc::loadClass('Model_Core_Row');
-
 class Model_Category_Product extends Model_Core_Row
 {
 	public function __construct()

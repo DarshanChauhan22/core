@@ -1,15 +1,8 @@
 <?php $categories = $this->getCategories(); ?>
 <?php $categoriepath = $this->getCategoriePath(); ?>
 <?php $controllerCoreAction = new Controller_Core_Action(); ?>
-<html>
-<head>
-	<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0' />
+
 	
-  
-</style>
-</head>
-<body>
-	<div class = 'container'style="text-align: center; ">
 		<h1> Category Details </h1> 
 		<form action="<?php echo $controllerCoreAction->getUrl('add','category',null,true) ?>" method="POST">
 			<button type="submit" name="Add" class="Registerbtn"> Add New </button>
@@ -78,7 +71,4 @@
 					</tr>		
 				<?php endif; ?>
 			</table>
-		</div>	
-	</div>
-</body>
-</html>
+		

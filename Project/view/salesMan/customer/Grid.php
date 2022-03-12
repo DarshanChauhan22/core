@@ -1,6 +1,6 @@
 
-<?php $salesmanCustomers = $this->getsalesmanCustomers(); //print_r($salesmanCustomers); exit();?>
-<?php $salesmanCustomersNo = $this->getsalesmanCustomersNot(); //print_r($salesmanCustomersNo); exit();?>
+<?php $salesmanCustomers = $this->getsalesmanCustomers(); ?>
+<?php $salesmanCustomersNo = $this->getsalesmanCustomersNot(); ?>
 <?php $controllerCoreAction = new Controller_Core_Action();?>
 
 <form action="<?php echo $controllerCoreAction->getUrl('save',null,null,false)  ?>" method="POST"> 

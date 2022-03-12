@@ -1,11 +1,7 @@
 <?php $category = $this->getCategory(); ?>
 <?php $categoryPath = $this->getCategoriePath(); ?>
 <?php $controllerCoreAction = new Controller_Core_Action(); ?>
-<html>
-<head>  
- 
-</head>
-  <body>
+
     <form action="<?php echo $controllerCoreAction->getUrl('save','category',null,true) ?>" method="POST">
       <table border="1" width="100%" cellspacing="4">
         <tr>
@@ -54,5 +50,4 @@
         </tr>    
       </table>  
     </form>
-    </body>
-  </html>
+    

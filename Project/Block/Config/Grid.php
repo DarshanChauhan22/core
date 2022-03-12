@@ -1,7 +1,7 @@
-<?php 
-
-Ccc::loadClass('Block_Core_Template');
-class Block_Config_Grid extends Block_Core_Template{
+<?php Ccc::loadClass('Block_Core_Template'); ?>
+<?php
+class Block_Config_Grid extends Block_Core_Template
+{
 	public function __construct()
 	{
 		$this->setTemplate('view/config/grid.php');
@@ -15,4 +15,3 @@ class Block_Config_Grid extends Block_Core_Template{
 	}
 }
 
-?>

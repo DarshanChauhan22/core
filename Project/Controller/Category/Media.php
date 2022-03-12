@@ -1,7 +1,6 @@
-<?php 
-Ccc::loadClass('Controller_Core_Action');
-Ccc::loadClass('Model_Category_Media');
-Ccc::loadClass('Model_Core_Request');
+<?php Ccc::loadClass('Controller_Core_Action'); ?>
+<?php Ccc::loadClass('Model_Core_Request'); ?>
+<?php
 
 class Controller_Category_Media extends Controller_Core_Action{
 	
@@ -27,7 +26,7 @@ class Controller_Category_Media extends Controller_Core_Action{
 
           if(!$request->isPost())
           {
-               throw new Exception("Invalid Request" , 1);
+               throw new Exception("Invalid Request" );
           }
 
           $rows = $request->getPost();
@@ -58,7 +57,7 @@ class Controller_Category_Media extends Controller_Core_Action{
                 $result = $adapter->delete($query);
                 if(!$result)
                 {
-                    throw new Exception("Delete Unsuccessfully.",1);
+                    throw new Exception("Delete Unsuccessfully.");
                 }
                 $message->addMessage('Delete Successfully.');   
                 foreach($result1 as $key => $value){
@@ -88,7 +87,7 @@ class Controller_Category_Media extends Controller_Core_Action{
 
             if(!$result)
                 {
-                throw new Exception("Update Unsuccessfully.",1);
+                throw new Exception("Update Unsuccessfully.");
                 }
                 $message->addMessage('Update Successfully.');
 
@@ -107,7 +106,7 @@ class Controller_Category_Media extends Controller_Core_Action{
 
                 if(!$result)
                 {
-                    throw new Exception("Update Unsuccessfully.",1);
+                    throw new Exception("Update Unsuccessfully.");
                 }
                 $message->addMessage('Update Successfully.');
                  
@@ -131,7 +130,7 @@ class Controller_Category_Media extends Controller_Core_Action{
 
                 if(!$result)
                 {
-                    throw new Exception("Update Unsuccessfully.",1);
+                    throw new Exception("Update Unsuccessfully.");
                 }
                 $message->addMessage('Update Successfully.');
                  
@@ -162,7 +161,7 @@ class Controller_Category_Media extends Controller_Core_Action{
                  
                  if(!$result)
                 {
-                    throw new Exception("Update Unsuccessfully.",1);
+                    throw new Exception("Update Unsuccessfully.");
                 }
                 $message->addMessage('Update Successfully.');
                 //print_r($result);
@@ -176,7 +175,7 @@ class Controller_Category_Media extends Controller_Core_Action{
                  
                  if(!$result)
                 {
-                    throw new Exception("Update Unsuccessfully.",1);
+                    throw new Exception("Update Unsuccessfully.");
                 }
                 $message->addMessage('Update Successfully.');
             }
@@ -212,7 +211,7 @@ class Controller_Category_Media extends Controller_Core_Action{
            
             if(!$result)
                 {
-                    throw new Exception("Insert Unsuccessfully.",1);
+                    throw new Exception("Insert Unsuccessfully.");
                 }
                     $message->addMessage('Insert Successfully.');
 

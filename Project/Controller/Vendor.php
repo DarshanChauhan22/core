@@ -1,8 +1,6 @@
+<?php Ccc::loadClass("Controller_Core_Action"); ?>
+<?php Ccc::loadClass("Model_Core_Request"); ?>
 <?php
-   /* echo "<pre>";*/
-Ccc::loadClass("Controller_Core_Action");
-Ccc::loadClass("Model_Core_Request");
-
 class Controller_Vendor extends Controller_Core_Action
 { 
     public function gridAction()
@@ -17,7 +15,7 @@ class Controller_Vendor extends Controller_Core_Action
     {
         $vendor = Ccc::getModel('Vendor');
         $content = $this->getLayout()->getContent();
-        $vendorAdd = Ccc::getBlock("Vendor_Edit")->addData("vendor", $vendor);
+        $vendorAdd = Ccc::getBlock("Vendor_Edit")->setData(['vendor' => $vendor]);
         $content->addChild($vendorAdd);
         $this->renderLayout();
 
@@ -42,7 +40,7 @@ class Controller_Vendor extends Controller_Core_Action
                 throw new Exception("unable to load vendor.");
             }
          $content = $this->getLayout()->getContent();
-            $vendorEdit = Ccc::getBlock("Vendor_Edit")->addData("vendor", $vendor);
+            $vendorEdit = Ccc::getBlock("Vendor_Edit")->setData(['vendor' => $vendor]);
             $content->addChild($vendorEdit);
             $this->renderLayout();    
         
@@ -64,47 +62,47 @@ class Controller_Vendor extends Controller_Core_Action
             $row = $this->getRequest()->getRequest('vendor');
             $vendor = Ccc::getModel('Vendor');
             
-            if (!isset($row)) 
+            if (!$row) 
             {
-                throw new Exception("Invalid Request.", 1);               
+                throw new Exception("Invalid Request.");               
             }   
 
         if(array_key_exists('vendorId',$row) && $row['vendorId'] == null)
         {
-                $vendor->firstName = $row['firstName'];
-                $vendor->lastName =  $row['lastName'];
-                $vendor->email =  $row['email'];
-                $vendor->mobile =  $row['mobile'];
-                $vendor->status =  $row['status'];
-                $vendor->createdAt =  $date;
-                $vendor->updatedAt =  null;
-                $result = $vendor->save();
-                 if(!$result)
-                {
-                    throw new Exception("Insert Unsuccessfully.",1);
-                }
-                    $message->addMessage('Insert Successfully.');
-                return $result;
+            $vendor->firstName = $row['firstName'];
+            $vendor->lastName =  $row['lastName'];
+            $vendor->email =  $row['email'];
+            $vendor->mobile =  $row['mobile'];
+            $vendor->status =  $row['status'];
+            $vendor->createdAt =  $date;
+            $result = $vendor->save();
+             if(!$result)
+            {
+                throw new Exception("Insert Unsuccessfully.");
+            }
+                $message->addMessage('Insert Successfully.');
+            return $result;
 
 
         }
-        else{
-
-                $vendor->load($row['vendorId']);
-                $vendor->vendorId = $row["vendorId"];
-                $vendor->firstName = $row['firstName'];
-                $vendor->lastName =  $row['lastName'];
-                $vendor->email =  $row['email'];
-                $vendor->mobile =  $row['mobile'];
-                $vendor->status =  $row['status'];
-                $vendor->updatedAt =  $date;
-                $result = $vendor->save();
-                if(!$result)
-                {
-                    throw new Exception("Update Unsuccessfully.",1);
-                }
-                $message->addMessage('Update Successfully.');
-                return $row['vendorId'];
+        else
+        {
+            $vendor->setData($row);
+            /*$vendor->load($row['vendorId']);
+            $vendor->vendorId = $row["vendorId"];
+            $vendor->firstName = $row['firstName'];
+            $vendor->lastName =  $row['lastName'];
+            $vendor->email =  $row['email'];
+            $vendor->mobile =  $row['mobile'];
+            $vendor->status =  $row['status'];*/
+            $vendor->updatedAt =  $date;
+            $result = $vendor->save();
+            if(!$result)
+            {
+                throw new Exception("Update Unsuccessfully.");
+            }
+            $message->addMessage('Update Successfully.');
+            return $row['vendorId'];
 
 
         }
@@ -128,9 +126,9 @@ class Controller_Vendor extends Controller_Core_Action
             $message = $this->getMessage();
         $row = $this->getRequest()->getRequest('address');
 
-        if (!isset($row)) 
+        if (!$row) 
         {
-            throw new Exception("Invalid Request.", 1);
+            throw new Exception("Invalid Request.");
         }
         date_default_timezone_set("Asia/Kolkata");
         $date = date("Y-m-d H:i:s");
@@ -141,38 +139,31 @@ class Controller_Vendor extends Controller_Core_Action
          if(!$addressData)
         {
             
-                $address->vendorId = $vendorId;
-                $address->address =  $row['address'];
-                $address->city =  $row['city'];
-                $address->state =  $row['state'];
-                $address->country =  $row['country'];
-                $address->postalCode =  $row['postalCode'];
-                $result = $address->save();
-                
-                if(!$result)
-                {
-                    throw new Exception("Insert Unsuccessfully.",1);
-                }
-                    $message->addMessage('Insert Successfully.');
+            $address->vendorId = $vendorId;
+            $address->address =  $row['address'];
+            $address->city =  $row['city'];
+            $address->state =  $row['state'];
+            $address->country =  $row['country'];
+            $address->postalCode =  $row['postalCode'];
+            $result = $address->save();
+            
+            if(!$result)
+            {
+                throw new Exception("Insert Unsuccessfully.");
+            }
+                $message->addMessage('Insert Successfully.');
 
         }
-        else{
-            
-               $address->load($row['vendorAddressId']);
-               $address->vendorAddressId = $row["vendorAddressId"];
-               $address->vendorId = $vendorId;
-               $address->address =  $row['address'];
-               $address->city =  $row['city'];
-               $address->state =  $row['state'];
-               $address->country =  $row['country'];
-               $address->postalCode =  $row['postalCode'];
-               $result = $address->save();
+        else
+        {
+            $address->setData($row);
+            $result = $address->save();
 
-                if(!$result)
-                {
-                    throw new Exception("Update Unsuccessfully.",1);
-                }
-                $message->addMessage('Update Successfully.');
+            if(!$result)
+            {
+                throw new Exception("Update Unsuccessfully.");
+            }
+            $message->addMessage('Update Successfully.');
                 
             
         }
@@ -202,14 +193,14 @@ class Controller_Vendor extends Controller_Core_Action
         $getId = $this->getRequest()->getRequest('id');
         $vendorTable = Ccc::getModel('Vendor')->load($getId); 
         try {
-            if (!isset($getId)) 
+            if (!$getId) 
             {
-                throw new Exception("Invalid Request.", 1);
+                throw new Exception("Invalid Request.");
             }
             $delete = $vendorTable->delete(['vendorId' => $getId]);
             if (!$delete) 
             {
-                throw new Exception("System is unable to delete record.", 1);
+                throw new Exception("System is unable to delete record.");
             }
             $message->addMessage('Delete Successfully.');       
             $this->redirect($this->getUrl('grid','vendor',null,true));
@@ -220,4 +211,4 @@ class Controller_Vendor extends Controller_Core_Action
         }
     }
 }
-?>
+

@@ -1,5 +1,5 @@
+<?php Ccc::loadClass("Model_Core_Row"); ?>
 <?php
-Ccc::loadClass("Model_Core_Row");
 class Model_salesman extends Model_Core_Row
 {
 	const STATUS_ENABLED = 1;
@@ -33,5 +33,3 @@ class Model_salesman extends Model_Core_Row
 	}	
 }
 
-
-?>

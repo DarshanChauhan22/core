@@ -2,7 +2,7 @@
 <?php $controllerCoreAction = new Controller_Core_Action(); ?>
 
 
-	<div class='container' style="text-align: center; ">
+	
 	<h1> Admin Details </h1> 
 	<form action="<?php echo $controllerCoreAction->getUrl('add','admin',null,true) ?>" method="POST">
 		<button type="submit" name="Add" class="Registerbtn"> Add New </button>
@@ -49,4 +49,4 @@
 				<tr><td colspan='10'>No Record Available</td></tr>			
 			<?php endif; ?>
 		</table>
-	</div>
+	

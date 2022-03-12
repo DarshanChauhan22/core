@@ -1,11 +1,11 @@
-<?php require_once('Model\Core\Adapter.php'); 
-	Ccc::loadClass('Controller_Core_Front');
-	Ccc::loadClass('Controller_Core_Action');
-	Ccc::loadClass('Model_Core_Request');
-   date_default_timezone_set("Asia/Kolkata");
-   $date = date('Y-m-d H:i:s');
-   $controllerCoreAction = new Controller_Core_Action();
- ?>
+<?php require_once('Model\Core\Adapter.php'); ?>
+<?php Ccc::loadClass('Controller_Core_Front'); ?>
+<?php Ccc::loadClass('Controller_Core_Action'); ?>
+<?php Ccc::loadClass('Model_Core_Request'); ?>
+<?php date_default_timezone_set("Asia/Kolkata"); ?>
+<?php $date = date('Y-m-d H:i:s'); ?>
+<?php $controllerCoreAction = new Controller_Core_Action(); ?>
+ 
 
 <?php 
 
@@ -24,14 +24,48 @@ class Ccc
 		}
 		return self::$front;
 	}
+
+	public static function register($key , $value)	
+	{
+		$GLOBALS[$key] = $value;
+	}
+
+	public static function getRegistry($key)
+	{
+		if(array_key_exists($key , $GLOBALS))
+		{
+			return $GLOBALS[$key];
+		}
+		return null;
+	}
+
+	public static function unregister($key)
+	{
+		if(array_key_exists($key , $GLOBALS))
+		{
+			unset($GLOBALS[$key]);
+		}
+	}
+
+	public static function getConfig($key)
+	{
+
+		if(!($config = self::getRegistry('config')))
+		{
+			$config = self::loadFile('etc/config.php');
+			self::register('config' , $config);
+		}
+		if(array_key_exists($key,$config))
+		return $config[$key];
+	}
+
 	public static function setFront($front)
 	{
 		self::$front=$front;
-		//return self::$front;
 	}
 	public static function loadFile($path)
 	{
-		require_once(getcwd().'/'.$path);
+		return require_once(getcwd().'/'.$path);
 	}
 	public static function loadClass($className)
 	{
@@ -58,8 +92,5 @@ class Ccc
 		return new $className();
 	}
 }
-//$c = new Ccc();
-//$c->getFront()->init();
 Ccc::init();
 
-?>

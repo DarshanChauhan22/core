@@ -11,7 +11,7 @@ class Block_Page_Grid extends Block_Core_Template
 
 	public function getPages()
 	{
-		$page = Ccc::getFront()->getRequest()->getRequest('p',1);
+		$page = Ccc::getFront()->getRequest()->getRequest('p');
 		$perPageCount = Ccc::getFront()->getRequest()->getRequest('ppr',10);
 		$pager = Ccc::getModel('Core_Pager');
 		$this->setPager($pager);

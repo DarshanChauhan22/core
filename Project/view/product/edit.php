@@ -1,14 +1,9 @@
-
 <?php $product = $this->getProduct(); ?>
-<?php $categoryPath = $this->getCategoryWithPath(); //print_r($categoryPath); exit();?>
-<?php $categories = $this->getCategories(); //print_r($categories); exit();?>
-<?php $categoryProductPair = $this->getCategoryProductPair(); //print_r($categoryProductPair); exit();?>
+<?php $categoryPath = $this->getCategoryWithPath();?>
+<?php $categories = $this->getCategories(); ?>
+<?php $categoryProductPair = $this->getCategoryProductPair();?>
 <?php $controllerCoreAction = new Controller_Core_Action(); ?>
-<html>
-<head>
-  
-</head>
-  <body>
+
    <form action='<?php echo $controllerCoreAction->getUrl('save','product',null,true) ?>' method='post'>
     <table border="1" width="100%" cellspacing="4">
         <tr>
@@ -78,5 +73,4 @@
       </div>  
   </table>
     </form>
-  </body>
-</html>
+ 

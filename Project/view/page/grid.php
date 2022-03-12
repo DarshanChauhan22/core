@@ -27,9 +27,11 @@
 	<?php endforeach; ?>
 </select>
 
-
+<?php if($this->getPager()->getPrev() == null):?>
+<button name='Start' disabled ><a>Start</a></button>
+<?php else: ?>
 <button name='Start'><a href="<?php echo $controllerCoreAction->getUrl('grid','page',['p' => $this->getPager()->getStart()]) ?>">Start</a></button>
-
+<?php endif;?>
 
 <?php if($this->getPager()->getPrev() == null):?>
 <button name='Prev' disabled ><a>Previous</a></button>
@@ -45,8 +47,11 @@
 <button name='Next'><a href="<?php echo $controllerCoreAction->getUrl('grid','page',['p' => $this->getPager()->getNext()]) ?>">Next</a></button>
 <?php endif;?>
 
-
+<?php if($this->getPager()->getNext() == null):?>
+<button name='end' disabled ><a>End</a></button>
+<?php else: ?>
 <button name='End'><a href="<?php echo $controllerCoreAction->getUrl('grid','page',['p' => $this->getPager()->getEnd()]) ?>">End</a></button>
+<?php endif;?>
 
 	<h1> Page Details </h1> 
 	<form action="<?php echo $controllerCoreAction->getUrl('add','page',['p' => $this->getPager()->getEnd()],false) ?>" method="POST">

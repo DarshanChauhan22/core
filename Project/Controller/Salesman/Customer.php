@@ -1,6 +1,6 @@
+<?php Ccc::loadClass('Controller_Core_Action'); ?>
+<?php Ccc::loadClass('Model_Core_Request'); ?>
 <?php
-Ccc::loadClass('Controller_Core_Action');
-Ccc::loadClass('Model_Core_Request');
 
 class Controller_salesman_Customer extends Controller_Core_Action
 {
@@ -23,9 +23,9 @@ class Controller_salesman_Customer extends Controller_Core_Action
             $customer = Ccc::getModel('Customer');
             $row =  $this->getRequest()->getRequest('salesmanCustomer');
 
-            if (!isset($row)) 
+            if (!$row) 
             {
-                throw new Exception("Invalid Request.", 1);             
+                throw new Exception("Invalid Request.");             
             }
 
             $customerIds = $row["customerNo"];
@@ -34,7 +34,7 @@ class Controller_salesman_Customer extends Controller_Core_Action
 
                 if(!$result)
                 {
-                    throw new Exception("Update Unsuccessfully", 1);   
+                    throw new Exception("Update Unsuccessfully");   
                 }
                 $message->addMessage('Update Successfully.');
                 $this->redirect($this->getUrl('grid','salesman_Customer',null,false));

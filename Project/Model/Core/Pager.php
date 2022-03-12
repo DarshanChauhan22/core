@@ -54,23 +54,6 @@ class Model_Core_Pager
 		
 	}
 
-	
-	public function getPerPageCountOptions()
-	{
-		return $this->perPageCountOptions;
-	}
-	
-	public function getTotalCount()
-	{
-		return $this->totalCount;
-	}
-
-	public function setTotalCount($totalCount)
-	{
-		$this->totalCount = $totalCount;
-		return $this->totalCount;
-	}
-
 	public function getPageCount()
 	{
 		return $this->pageCount;
@@ -93,6 +76,22 @@ class Model_Core_Pager
 		return $this->perPageCount;
 	}
 
+	public function getPerPageCountOptions()
+	{
+		return $this->perPageCountOptions;
+	}
+	
+	public function getTotalCount()
+	{
+		return $this->totalCount;
+	}
+
+	public function setTotalCount($totalCount)
+	{
+		$this->totalCount = $totalCount;
+		return $this->totalCount;
+	}
+
 	public function getStart()
 	{
 		return $this->start;
@@ -104,6 +103,17 @@ class Model_Core_Pager
 		return $this->start;
 	}
 
+	public function getCurrent()
+	{
+		return $this->current;
+	}
+
+	public function setCurrent($current)
+	{
+		$this->current = $current;
+		return $this->current;
+	}
+	
 	public function getEnd()
 	{
 		return $this->end;
@@ -157,17 +167,6 @@ class Model_Core_Pager
 	{
 		$this->endLimit = $endLimit;
 		return $this->endLimit;
-	}
-
-	public function getCurrent()
-	{
-		return $this->current;
-	}
-
-	public function setCurrent($current)
-	{
-		$this->current = $current;
-		return $this->current;
 	}
 
 }

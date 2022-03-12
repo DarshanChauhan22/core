@@ -6,7 +6,6 @@ class Model_Core_Row_Resource
 {
 	protected $tableName = NULL;
 	protected $primaryKey = NULL;
-	//protected $rowClassName;
 
 	public function __construct()
     {
@@ -115,4 +114,3 @@ class Model_Core_Row_Resource
 	
 }
 
-?>

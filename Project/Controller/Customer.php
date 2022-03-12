@@ -1,7 +1,6 @@
+<?php Ccc::loadClass("Controller_Core_Action"); ?>
+<?php Ccc::loadClass("Model_Core_Request"); ?>
 <?php
-Ccc::loadClass("Controller_Core_Action");
-Ccc::loadClass("Model_Core_Request");
-
 class Controller_Customer extends Controller_Core_Action
 {
     public function gridAction()
@@ -14,9 +13,9 @@ class Controller_Customer extends Controller_Core_Action
 
     public function addAction()
     {
-         $customer = Ccc::getModel('Customer');
+        $customer = Ccc::getModel('Customer');
         $content = $this->getLayout()->getContent();
-        $customerAdd = Ccc::getBlock("Customer_Edit")->addData("customer", $customer);
+        $customerAdd = Ccc::getBlock("Customer_Edit")->setData(['customer' => $customer]);
         $content->addChild($customerAdd);
         $this->renderLayout();  
     }
@@ -40,7 +39,7 @@ class Controller_Customer extends Controller_Core_Action
                 throw new Exception("unable to load customer.");
             }
             $content = $this->getLayout()->getContent();
-            $customerEdit = Ccc::getBlock("Customer_Edit")->addData("customer", $customer);
+            $customerEdit = Ccc::getBlock("Customer_Edit")->setData(['customer' => $customer]);
             $content->addChild($customerEdit);
             $this->renderLayout(); 
         
@@ -63,46 +62,40 @@ class Controller_Customer extends Controller_Core_Action
         $row = $this->getRequest()->getRequest('customer');
         $customer = Ccc::getModel('Customer');
     
-        if (!isset($row)) 
-            {
-                throw new Exception("Invalid Request.", 1);               
-            }           
+        if (!$row) 
+        {
+            throw new Exception("Invalid Request.");               
+        }           
 
         if(array_key_exists('customerId',$row) && $row['customerId'] == null)
         {
-                $customer->firstName = $row['firstName'];
-                $customer->lastName =  $row['lastName'];
-                $customer->email =  $row['email'];
-                $customer->mobile =  $row['mobile'];
-                $customer->status =  $row['status'];
-                $result = $customer->save();
-                return $result;
+            $customer->firstName = $row['firstName'];
+            $customer->lastName =  $row['lastName'];
+            $customer->email =  $row['email'];
+            $customer->mobile =  $row['mobile'];
+            $customer->status =  $row['status'];
+            $result = $customer->save();
+            return $result;
 
-                if(!$result)
-                {
-                   throw new Exception("Insert Unsuccessfully.",1);
-                }
-                    $message->addMessage('Insert Successfully.');
+            if(!$result)
+            {
+               throw new Exception("Insert Unsuccessfully.");
+            }
+            $message->addMessage('Insert Successfully.');
 
         }
-        else{
+        else
+        {
+            $customer->setData($row);
+            $customer->updatedAt =  $date;
+            $customer->save();
+            return $row['customerId'];
 
-                $customer->load($row['customerId']);
-                $customer->customerId = $row["customerId"];
-                $customer->firstName = $row['firstName'];
-                $customer->lastName =  $row['lastName'];
-                $customer->email =  $row['email'];
-                $customer->mobile =  $row['mobile'];
-                $customer->status =  $row['status'];
-                $customer->updatedAt =  $date;
-                $customer->save();
-                return $row['customerId'];
-
-                if(!$result)
-                {
-                throw new Exception("Update Unsuccessfully.",1);
-                }
-                $message->addMessage('Update Successfully.');
+            if(!$result)
+            {
+            throw new Exception("Update Unsuccessfully.");
+            }
+            $message->addMessage('Update Successfully.');
         
         }
             } catch (Exception $e) 
@@ -124,19 +117,21 @@ class Controller_Customer extends Controller_Core_Action
         $row = $this->getRequest()->getRequest('address');
        
 
-        if (!isset($row)) 
+        if (!$row) 
         {
-            throw new Exception("Invalid Request.", 1);
+            throw new Exception("Invalid Request.");
         }
         date_default_timezone_set("Asia/Kolkata");
         $date = date("Y-m-d H:i:s");
         $billing = 2;
         $shipping = 2;
 
-        if (array_key_exists("billing", $row) && $row["billing"] == 1) {
+        if (array_key_exists("billing", $row) && $row["billing"] == 1) 
+        {
             $billing = 1;
         }
-        if (array_key_exists("shipping", $row) && $row["shipping"] == 1) {
+        if (array_key_exists("shipping", $row) && $row["shipping"] == 1) 
+        {
             $shipping = 1;
         }
         $addressData = $address->fetchRow(
@@ -144,43 +139,35 @@ class Controller_Customer extends Controller_Core_Action
         );
 
 
-         if(!$addressData)
+        if(!$addressData)
         {
-                $address->customerId = $customerId;
-                $address->address =  $row['address'];
-                $address->city =  $row['city'];
-                $address->state =  $row['state'];
-                $address->country =  $row['country'];
-                $address->postalCode =  $row['postalCode'];
-                $address->billing =  $row['billing'];
-                $address->shipping =  $row['shipping'];
-                $result = $address->save();
-                
-                 if(!$result)
-                {
-                    throw new Exception("Insert Unsuccessfully.",1);
-                }
-                    $message->addMessage('Insert Successfully.');
+            $address->customerId = $customerId;
+            $address->address =  $row['address'];
+            $address->city =  $row['city'];
+            $address->state =  $row['state'];
+            $address->country =  $row['country'];
+            $address->postalCode =  $row['postalCode'];
+            $address->billing =  $row['billing'];
+            $address->shipping =  $row['shipping'];
+            $result = $address->save();
+            
+            if(!$result)
+            {
+                throw new Exception("Insert Unsuccessfully.");
+            }
+            $message->addMessage('Insert Successfully.');
 
         }
-        else{
-                $address->load($row['addressId']);
-                 $address->addressId = $row["addressId"];
-                $address->customerId = $customerId;
-                $address->address =  $row['address'];
-                $address->city =  $row['city'];
-                $address->state =  $row['state'];
-                $address->country =  $row['country'];
-                $address->postalCode =  $row['postalCode'];
-                $address->billing =  $row['billing'];
-                $address->shipping =  $row['shipping'];
-                $result = $address->save();
+        else
+        {
+            $address->setData($row);
+            $result = $address->save();
 
-                if(!$result)
-                {
-                    throw new Exception("Update Unsuccessfully.",1);
-                }
-                $message->addMessage('Update Successfully.');
+            if(!$result)
+            {
+                throw new Exception("Update Unsuccessfully.");
+            }
+            $message->addMessage('Update Successfully.');
         
         }
         
@@ -209,14 +196,14 @@ class Controller_Customer extends Controller_Core_Action
             $message = $this->getMessage();
             $getId = $this->getRequest()->getRequest('id');
             $customerTable = Ccc::getModel('Customer')->load($getId); 
-            if (!isset($getId)) 
+            if (!$getId) 
             {
-                throw new Exception("Invalid Request.", 1);
+                throw new Exception("Invalid Request.");
             }
             $delete = $customerTable->delete(['customerId' => $getId]);
             if (!$delete) 
             {
-                throw new Exception("System is unable to delete record.", 1);
+                throw new Exception("System is unable to delete record.");
             }
             $message->addMessage('Delete Successfully.');           
             $this->redirect($this->getUrl('grid',null,null,true));      
@@ -227,4 +214,4 @@ class Controller_Customer extends Controller_Core_Action
         }
     }
 }
-?>
+

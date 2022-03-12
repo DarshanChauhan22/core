@@ -4,6 +4,11 @@ class Adapter{
     public $config = [];
     private $connect = NULL;
     
+    public function __construct()
+    { 
+        $this->config  = Ccc::getConfig('connection');
+    }
+
     public function connect()
     {
         $connect = mysqli_connect($this->config['host'],$this->config['username'],$this->config['password'],$this->config['dbname']);
@@ -123,9 +128,4 @@ class Adapter{
 
 } 
 $adapter = new Adapter();
-$adapter->setConfig([
-		'host' => 'localhost',
-		'username' => 'root',
-		'password' => '',
-		'dbname' => 'project_darshan'
-	]);
+

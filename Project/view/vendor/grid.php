@@ -1,8 +1,6 @@
 <?php $vendors = $this->getVendors(); ?>
 <?php $controllerCoreAction = new Controller_Core_Action(); ?>
 
-<body>
-	<div class='container' style="text-align: center; ">
 	<h1> Vendor Details </h1> 
 	<form action="<?php echo $controllerCoreAction->getUrl('add','vendor',null,true) ?>" method="POST">
 		<button type="submit" name="Add" class="Registerbtn"> Add New </button>
@@ -51,5 +49,4 @@
 		<?php endif; ?>
  
 	</table>
-	</div>
-</body>
+	

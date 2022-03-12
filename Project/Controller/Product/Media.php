@@ -1,10 +1,10 @@
-<?php 
-Ccc::loadClass('Controller_Core_Action');
-Ccc::loadClass('Model_Product_Media');
-Ccc::loadClass('Model_Core_Request');
+<?php Ccc::loadClass('Controller_Core_Action'); ?>
+<?php Ccc::loadClass('Model_Product_Media'); ?>
+<?php Ccc::loadClass('Model_Core_Request'); ?>
+<?php
 
-class Controller_Product_Media extends Controller_Core_Action{
-	
+class Controller_Product_Media extends Controller_Core_Action
+{
 	public function gridAction()
 	{
         $content = $this->getLayout()->getContent();
@@ -14,11 +14,11 @@ class Controller_Product_Media extends Controller_Core_Action{
 	}
 
 	public function saveAction()
-   {
-      $message = $this->getMessage();
-      $adapter = $this->getAdapter();;
-      try 
-      {
+    {
+        $message = $this->getMessage();
+        $adapter = $this->getAdapter();
+        try 
+        {
 
           $productId = $this->getRequest()->getRequest('id');
 
@@ -26,7 +26,7 @@ class Controller_Product_Media extends Controller_Core_Action{
 
           if(!$this->getRequest()->isPost())
           {
-            throw new Exception("Invalid Request" , 1);
+            throw new Exception("Invalid Request" );
           }
 
           $rows = $this->getRequest()->getPost();
@@ -56,7 +56,7 @@ class Controller_Product_Media extends Controller_Core_Action{
                 $result = $adapter->delete($query);
                 if(!$result)
                 {
-                    throw new Exception("System is unable to delete record.",1);
+                    throw new Exception("System is unable to delete record.");
                 }
                 $message->addMessage('Delete Successfully.');   
                 foreach($result1 as $key => $value){
@@ -74,7 +74,7 @@ class Controller_Product_Media extends Controller_Core_Action{
 
             if(!$result)
             {
-                throw new Exception("System is unable to fetch Pairs.",1);
+                throw new Exception("System is unable to fetch Pairs.");
             }
             $ids = array_keys($result);
             $implodeIds = implode(",",$ids);
@@ -85,7 +85,7 @@ class Controller_Product_Media extends Controller_Core_Action{
 
             if(!$result)
                 {
-                throw new Exception("Update Unsuccessfully.",1);
+                throw new Exception("Update Unsuccessfully.");
                 }
                 $message->addMessage('Update Successfully.');
 
@@ -105,7 +105,7 @@ class Controller_Product_Media extends Controller_Core_Action{
                  
                  if(!$result)
                 {
-                    throw new Exception("Update Unsuccessfully.",1);
+                    throw new Exception("Update Unsuccessfully.");
                 }
                 $message->addMessage('Update Successfully.');
             }
@@ -128,7 +128,7 @@ class Controller_Product_Media extends Controller_Core_Action{
                  
                  if(!$result)
                 {
-                    throw new Exception("Update Unsuccessfully.",1);
+                    throw new Exception("Update Unsuccessfully.");
                 }
                 $message->addMessage('Update Successfully.');
             }
@@ -143,7 +143,7 @@ class Controller_Product_Media extends Controller_Core_Action{
                  
                  if(!$result)
                 {
-                    throw new Exception("Update Unsuccessfully.",1);
+                    throw new Exception("Update Unsuccessfully.");
                 }
                 $message->addMessage('Update Successfully.');
             }
@@ -156,7 +156,7 @@ class Controller_Product_Media extends Controller_Core_Action{
                  
                  if(!$result)
                 {
-                    throw new Exception("Update Unsuccessfully.",1);
+                    throw new Exception("Update Unsuccessfully.");
                 }
                 $message->addMessage('Update Successfully.');
             }
@@ -169,7 +169,7 @@ class Controller_Product_Media extends Controller_Core_Action{
                  
                  if(!$result)
                 {
-                    throw new Exception("Update Unsuccessfully.",1);
+                    throw new Exception("Update Unsuccessfully.");
                 }
                 $message->addMessage('Update Successfully.');
             }
@@ -205,7 +205,7 @@ class Controller_Product_Media extends Controller_Core_Action{
            
             if(!$result)
                 {
-                    throw new Exception("Insert Unsuccessfully.",1);
+                    throw new Exception("Insert Unsuccessfully.");
                 }
                     $message->addMessage('Insert Successfully.');
 

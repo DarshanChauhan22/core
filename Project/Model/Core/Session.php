@@ -63,23 +63,6 @@ class Model_Core_Session
 		return session_regenerate_id();
 	}
 
-	/*public function getData()
-	{
-		return $_SESSION;
-	}
-
-	public function setData(array $data)
-	{
-		$_SESSION = $data;
-		return $this;
-	}
-
-	public function resetData()
-	{
-		$_SESSION = [];
-		return $this;
-	}*/
-
 	public function __set($name, $value)
 	{
 		if(!$this->isStarted())

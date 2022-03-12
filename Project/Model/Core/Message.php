@@ -33,6 +33,7 @@ class Model_Core_Message
 
 		$messages[$type] = $message;
 		$this->getSession()->messages = $messages;
+		return $this;
 	}
 
 	public function getMessages()

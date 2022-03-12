@@ -1,6 +1,6 @@
-<?php 
+<?php Ccc::loadClass('Block_Core_Template'); ?>
+<?php
 
-Ccc::loadClass('Block_Core_Template');
 class Block_salesman_Customer_Grid extends Block_Core_Template
 {
 	public function __construct()

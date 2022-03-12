@@ -1,37 +1,25 @@
+<?php Ccc::loadClass('Controller_Core_Action'); ?>
+<?php Ccc::loadClass('Model_Config'); ?>
+<?php Ccc::loadClass('Model_Core_Request'); ?>
 <?php
-Ccc::loadClass('Controller_Core_Action');
-Ccc::loadClass('Model_Config');
-Ccc::loadClass('Model_Core_Request');
-
-class Controller_Config extends Controller_Core_Action{
+class Controller_Config extends Controller_Core_Action
+{
 	
 	public function gridAction()
 	{
-		/*$adminMessage = $this->getMessage();
-		//print_r($adminMessage);
-
-		$adminMessage->addMessage("helloooo");
-		$adminMessage->addMessage("heoo");
-		$adminMessage->unsetMessage();
-
-		//print_r($adminSession);
-		//print_r($coreSession);
-		//print_r($adminMessage);
-		print_r($_SESSION);
-		die;*/
 		$content = $this->getLayout()->getContent();
-        $configGrid = Ccc::getBlock("Config_Grid");
-        $content->addChild($configGrid);
-        $this->renderLayout();			
+      $configGrid = Ccc::getBlock("Config_Grid");
+      $content->addChild($configGrid);
+      $this->renderLayout();			
 	}
 
 	public function addAction()
 	{
 		$config = Ccc::getModel('Config');
 		$content = $this->getLayout()->getContent();
-        $configAdd = Ccc::getBlock("Config_Edit")->addData("config", $config);
-        $content->addChild($configAdd);
-        $this->renderLayout();	
+	   $configAdd = Ccc::getBlock("Config_Edit")->setData(['config' => $config]);
+	   $content->addChild($configAdd);
+	   $this->renderLayout();	
 	}
 
 	public function editAction()
@@ -51,9 +39,9 @@ class Controller_Config extends Controller_Core_Action{
 			}
 			
 			$content = $this->getLayout()->getContent();
-            $configEdit = Ccc::getBlock("Config_Edit")->addData("config", $config);
-            $content->addChild($configEdit);
-            $this->renderLayout();	
+         $configEdit = Ccc::getBlock("Config_Edit")->setData(['config' => $config]);
+         $content->addChild($configEdit);
+         $this->renderLayout();	
 		} 
 		catch (Exception $e) 
 		{
@@ -73,9 +61,9 @@ class Controller_Config extends Controller_Core_Action{
 
 			$row = $this->getRequest()->getRequest('config');
 			print_r($row);
-			if (!isset($row)) 
+			if (!$row) 
 			{
-				throw new Exception("Invalid Request.", 1);				
+				throw new Exception("Invalid Request.");				
 			}			
 
 			 if(array_key_exists('configId',$row) && $row['configId'] == null)
@@ -89,25 +77,19 @@ class Controller_Config extends Controller_Core_Action{
 
              if(!$result)
                 {
-                	throw new Exception("Insert Unsuccessfully.",1);
+                	throw new Exception("Insert Unsuccessfully.");
                 }
-				$message->addMessage('Insert Successfully.');
-        	}
-        	else
-        	{
+					$message->addMessage('Insert Successfully.');
+	        	}
+	        	else
+	        	{	
+	        		$config->setData($row);
+               $result = $config->save();
 
-                $config->load($row['configId']);
-                $config->configId = $row["configId"];
-                $config->name = $row['name'];
-                $config->code =  $row['code'];
-                $config->value =  $row['value'];
-                $config->status =  $row['status'];
-                $result = $config->save();
-
-                if(!$result)
-                {
-						throw new Exception("Update Unsuccessfully.",1);
-                }
+               if(!$result)
+               {
+						throw new Exception("Update Unsuccessfully.");
+             	}
 				$message->addMessage('Update Successfully.');
        		}
 
@@ -127,14 +109,14 @@ class Controller_Config extends Controller_Core_Action{
 			$message = $this->getMessage();
 			$getId = $this->getRequest()->getRequest('id'); 
 			$configTable = Ccc::getModel('Config')->load($getId);
-			if (!isset($getId)) 
+			if (!$getId) 
 			{	
-				throw new Exception("Invalid Request.", 1);
+				throw new Exception("Invalid Request.");
 			}
 			$delete = $configTable->delete(['configId' => $getId]);
 			if(!$delete)
 			{
-				throw new Exception("System is unable to delete record.", 1);
+				throw new Exception("System is unable to delete record.");
 										
 			}
 			$message->addMessage('Delete Successfully.');	
@@ -147,4 +129,3 @@ class Controller_Config extends Controller_Core_Action{
 		}
 	}
 }
-?>

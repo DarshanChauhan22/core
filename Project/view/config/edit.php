@@ -3,10 +3,7 @@
 
 
 
-<html>
-<head>
-</head>
-<body>
+
   <form action="<?php echo $controllerCoreAction->getUrl('save','config',null,true) ?>" method="POST">
   <table border="1" width="100%" cellspacing="4">
     <tr>
@@ -42,8 +39,7 @@
     </tr>    
   </table>  
 </form>
-</body>
-  </html>
+
 
 
 

@@ -8,6 +8,7 @@
         }
     } 
   ?>
+  
   <form action="<?php echo $controllerCoreAction->getUrl('loginPost'); ?>" method="POST">
     <table border="1" width="100%">
       <tr>

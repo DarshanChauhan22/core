@@ -1,9 +1,10 @@
-<?php
-Ccc::loadClass('Controller_Core_Action');
-Ccc::loadClass('Model_Page');
-Ccc::loadClass('Model_Core_Request');
+<?php Ccc::loadClass('Controller_Core_Action'); ?>
+<?php Ccc::loadClass('Model_Page'); ?>
+<?php Ccc::loadClass('Model_Core_Request'); ?>
 
-class Controller_Page extends Controller_Core_Action{
+<?php
+class Controller_Page extends Controller_Core_Action
+{
 	
 	public function testAction()
 	{
@@ -23,7 +24,7 @@ class Controller_Page extends Controller_Core_Action{
 	{
 		$page = Ccc::getModel('Page');
 		$content = $this->getLayout()->getContent();
-        $pageAdd = Ccc::getBlock("Page_Edit")->addData("page", $page);
+        $pageAdd = Ccc::getBlock("Page_Edit")->setData(['page'=> $page]);
         $content->addChild($pageAdd);
         $this->renderLayout();	
 	}
@@ -44,7 +45,7 @@ class Controller_Page extends Controller_Core_Action{
 				throw new Exception("unable to load page.");
 			}
 			$content = $this->getLayout()->getContent();
-            $pageEdit = Ccc::getBlock("Page_Edit")->addData("page", $page);
+            $pageEdit = Ccc::getBlock("Page_Edit")->setData(['page'=> $page]);
             $content->addChild($pageEdit);
             $this->renderLayout();	
 		} 
@@ -66,9 +67,9 @@ class Controller_Page extends Controller_Core_Action{
 
 			$row = $this->getRequest()->getRequest('page');
 
-			if (!isset($row)) 
+			if (!$row) 
 			{
-				throw new Exception("Invalid Request.", 1);				
+				throw new Exception("Invalid Request.");				
 			}			
 
 
@@ -79,7 +80,6 @@ class Controller_Page extends Controller_Core_Action{
                 $page->content =  $row['content'];
                 $page->status =  $row['status'];
                 $page->createdAt =  $date;
-                $page->updatedAt =  null;
                 $result = $page->save();
 
                 if($result)
@@ -87,25 +87,18 @@ class Controller_Page extends Controller_Core_Action{
                 	$message->addMessage('Insert Successfully.');
 					$this->redirect($this->getUrl('grid',null,null,false));
                 }
-                	throw new Exception("Insert Unsuccessfully.",1);
+                	throw new Exception("Insert Unsuccessfully.");
 					
         	}
         	else
         	{
-
-                $page->load($row['pageId']);
-                $page->pageId = $row["pageId"];
-                 $page->name = $row['name'];
-                $page->code =  $row['code'];
-                $page->content =  $row['content'];
-                $page->status =  $row['status'];
-                //$page->createdAt = $row['createdAt'];
+        		$page->setData($row);
                 $page->updatedAt =  $date;
                 $result = $page->save();
 
                 if(!$result)
                 {
-					throw new Exception("Update Unsuccessfully.",1);
+					throw new Exception("Update Unsuccessfully.");
                 }
 					$message->addMessage('Update Successfully.');
 			$this->redirect($this->getUrl('grid',null,['id' => null],false));
@@ -126,14 +119,14 @@ class Controller_Page extends Controller_Core_Action{
 			$message = $this->getMessage();
 			$getId = $this->getRequest()->getRequest('id'); 
 			$pageTable = Ccc::getModel('Page')->load($getId);
-			if (!isset($getId)) 
+			if (!$getId) 
 			{
-				throw new Exception("Invalid Request.", 1);
+				throw new Exception("Invalid Request.");
 			}
 			$delete = $pageTable->delete(['pageId' => $getId]);
 			if(!$delete)
 			{
-				throw new Exception("System is unable to delete record.", 1);
+				throw new Exception("System is unable to delete record.");
 										
 			}
 			$message->addMessage('Delete Successfully.');	
@@ -146,4 +139,3 @@ class Controller_Page extends Controller_Core_Action{
 		}
 	}
 }
-?>

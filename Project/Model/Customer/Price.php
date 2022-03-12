@@ -1,6 +1,5 @@
+<?php Ccc::loadClass('Model_Core_Row'); ?>
 <?php
-
-Ccc::loadClass('Model_Core_Row');
 class Model_Customer_Price extends Model_Core_Row
 {
 	

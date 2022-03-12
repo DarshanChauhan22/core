@@ -1,13 +1,7 @@
 <?php $salesmans = $this->getsalesmans(); ?>
 <?php $controllerCoreAction = new Controller_Core_Action(); ?>
 
-<html>
-<head>
-	<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0' />
-	
-</head>
-<body>
-	<div class='container' style="text-align: center; ">
+
 	<h1> salesman Details </h1> 
 	<form action="<?php echo $controllerCoreAction->getUrl('add','salesman',null,true) ?>" method="POST">
 		<button type="submit" name="Add" class="Registerbtn"> Add New </button>
@@ -60,6 +54,4 @@
 				<tr><td colspan='10'>No Record Available</td></tr>			
 			<?php endif; ?>
 		</table>
-	</div>
-</body>
-</html>
+

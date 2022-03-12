@@ -1,6 +1,5 @@
+<?php Ccc::loadClass('Block_Core_Template'); ?>
 <?php
-
-Ccc::loadClass('Block_Core_Template');
 
 class Block_Customer_Price_Grid extends Block_Core_Template
 {

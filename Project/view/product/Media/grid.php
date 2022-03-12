@@ -1,15 +1,9 @@
-<?php $medias = $this->getMedias(); 
-$id= $_GET['id'];?>	
+<?php $medias = $this->getMedias(); ?>	
 <?php $controllerCoreAction = new Controller_Core_Action(); ?>
-<html>
-<head>
-	<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0' />
-	
-</head>
-<body>
+
 	
 
-	<form action="<?php echo $controllerCoreAction->getUrl('save','product_media',['id' =>  $id],true) ?>" method="POST" align="center">
+	<form action="<?php echo $controllerCoreAction->getUrl('save','product_media',null,false) ?>" method="POST" align="center">
 		<input type="submit" name="update" value="UPDATE"> 
 	<button ><a href="<?php echo $controllerCoreAction->getUrl('grid','product',null,true) ?>">Cancel</a></button>
 
@@ -49,15 +43,9 @@ $id= $_GET['id'];?>
 	<br>
 	<br>
 	<br>
-				<form align="center" action="<?php echo $controllerCoreAction->getUrl('add','product_media',['id' =>  $id],true) ?>" method="POST" enctype="multipart/form-data">
+				<form align="center" action="<?php echo $controllerCoreAction->getUrl('add','product_media',null,false) ?>" method="POST" enctype="multipart/form-data">
 				<input type="file" name="image[]" value="Chouse Image" accept="image/*">
 				<input type="submit" name="submit" value="Upload">
-
-
-
 </form>
 
 
-
-</body>
-</html>

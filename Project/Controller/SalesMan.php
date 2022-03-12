@@ -1,9 +1,9 @@
+<?php Ccc::loadClass('Controller_Core_Action'); ?>
+<?php Ccc::loadClass('Model_salesman'); ?>
+<?php Ccc::loadClass('Model_Core_Request'); ?>
 <?php
-Ccc::loadClass('Controller_Core_Action');
-Ccc::loadClass('Model_salesman');
-Ccc::loadClass('Model_Core_Request');
-
-class Controller_salesman extends Controller_Core_Action{
+class Controller_salesman extends Controller_Core_Action
+{
 	
 	public function testAction()
 	{
@@ -23,7 +23,7 @@ class Controller_salesman extends Controller_Core_Action{
 	{
 		$salesman = Ccc::getModel('salesman');
 		$content = $this->getLayout()->getContent();
-        $salesmanAdd = Ccc::getBlock("salesman_Edit")->addData("salesman", $salesman);
+        $salesmanAdd = Ccc::getBlock("salesman_Edit")->setData(['salesman' => $salesman]);
         $content->addChild($salesmanAdd);
         $this->renderLayout();	
 	}
@@ -45,7 +45,7 @@ class Controller_salesman extends Controller_Core_Action{
 			}
 				
 			$content = $this->getLayout()->getContent();
-            $salesmanEdit = Ccc::getBlock("salesman_Edit")->addData("salesman", $salesman);
+            $salesmanEdit = Ccc::getBlock("salesman_Edit")->setData(['salesman' => $salesman]);
             $content->addChild($salesmanEdit);
             $this->renderLayout();	
 		} 
@@ -66,47 +66,33 @@ class Controller_salesman extends Controller_Core_Action{
 			$salesman = Ccc::getModel('salesman');
 
 			$row = $this->getRequest()->getRequest('salesman');
-			if (!isset($row)) 
+			if (!$row) 
 			{
-				throw new Exception("Invalid Request.", 1);				
+				throw new Exception("Invalid Request.");				
 			}			
 
 
 			 if(array_key_exists('salesmanId',$row) && $row['salesmanId'] == null)
        		 {
-                $salesman->firstName = $row['firstName'];
-                $salesman->lastName =  $row['lastName'];
-                $salesman->email =  $row['email'];
-                $salesman->mobile =  $row['mobile'];
-                $salesman->status =  $row['status'];
-                $salesman->percentage =  $row['percentage'];
+       		 	$salesman = Ccc::getModel('Salesman');
                 $salesman->createdAt =  $date;
-                $salesman->updatedAt =  null;
                 $result = $salesman->save();
 
                 if(!$result)
                 {
-                	throw new Exception("Insert Unsuccessfully.",1);
+                	throw new Exception("Insert Unsuccessfully.");
                 }
 					$message->addMessage('Insert Successfully.');
         	}
         	else
         	{
-
-                $salesman->load($row['salesmanId']);
-                $salesman->salesmanId = $row["salesmanId"];
-                $salesman->firstName = $row['firstName'];
-                $salesman->lastName =  $row['lastName'];
-                $salesman->email =  $row['email'];
-                $salesman->mobile =  $row['mobile'];
-                $salesman->status =  $row['status'];
-                $salesman->percentage =  $row['percentage'];
+        		$salesman->setData($row);
                 $salesman->updatedAt =  $date;
                 $result = $salesman->save();
 
                 if(!$result)
                 {
-					throw new Exception("Update Unsuccessfully.",1);
+					throw new Exception("Update Unsuccessfully.");
                 }
 				$message->addMessage('Update Successfully.');
        			}
@@ -127,14 +113,14 @@ class Controller_salesman extends Controller_Core_Action{
 			$message = $this->getMessage();
 			$getId = $this->getRequest()->getRequest('id'); 
 			$salesmanTable = Ccc::getModel('salesman')->load($getId);
-			if (!isset($getId)) 
+			if (!$getId) 
 			{
-				throw new Exception("Invalid Request.", 1);
+				throw new Exception("Invalid Request.");
 			}
 			$delete = $salesmanTable->delete(['salesmanId' => $getId]);
 			if(!$delete)
 			{
-				throw new Exception("System is unable to delete record.", 1);
+				throw new Exception("System is unable to delete record.");
 										
 			}
 			$message->addMessage('Delete Successfully.');			
@@ -147,4 +133,3 @@ class Controller_salesman extends Controller_Core_Action{
 		}
 	}
 }
-?>

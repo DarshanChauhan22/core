@@ -1,7 +1,6 @@
+<?php Ccc::loadClass('Block_Core_Layout'); ?>
+<?php Ccc::loadClass('Model_Core_Request');?>
 <?php
-Ccc::loadClass('Block_Core_Layout');
-Ccc::loadClass('Model_Core_Request');
-
 
 class Controller_Core_Action
 {
@@ -35,7 +34,7 @@ class Controller_Core_Action
 			$login = Ccc::getModel('Admin_Login')->isLoggedIn();
 			if(!$login)
 			{
-				throw new Exception("First Login.",1);
+				throw new Exception("First Login.");
 			}
 		}	
 		} catch (Exception $e) 
@@ -73,6 +72,12 @@ class Controller_Core_Action
 		exit();			
 	}
 
+	protected function setTitle($title)
+    {
+        $this->getLayout()->getHead()->setTitle($title);
+        return $this;
+    }
+
 	public function setLayout($layout)
 	{
 		$this->layout = $layout;
@@ -89,15 +94,19 @@ class Controller_Core_Action
 
 	public function renderLayout()
 	{		
-		return $this->getLayout()->toHtml();	
+		echo $this->getLayout()->toHtml();	
 	}
 
 	public function getRequest()
 	{
 		return Ccc::getFront()->getRequest();
-		//var_dump($a);
-		//exit();
 	}
+
+	public function getResponse()
+    {
+        return Ccc::getFront()->getResponse();
+    }
+
 	public function getUrl($action=null,$controller=null,$parameters=[],$reset=false)
     {
     	$tmp = [];
