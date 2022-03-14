@@ -54,9 +54,7 @@ class Model_Core_Row_Resource
         $adapter = $this->getAdapter();
         $key = '`'.implode("`,`", array_keys($queryInsert)).'`';
         $value = '\''.implode("','", array_values($queryInsert)).'\'';
-
         $sqlResult = "INSERT INTO `{$this->getTableName()}` ({$key}) VALUES ({$value});";
-
         $result = $adapter->insert($sqlResult);
         return $result;
     }

@@ -7,6 +7,7 @@ class Controller_Config extends Controller_Core_Action
 	
 	public function gridAction()
 	{
+		$this->setTitle("Config Grid");
 		$content = $this->getLayout()->getContent();
       $configGrid = Ccc::getBlock("Config_Grid");
       $content->addChild($configGrid);
@@ -15,6 +16,7 @@ class Controller_Config extends Controller_Core_Action
 
 	public function addAction()
 	{
+		$this->setTitle("Customer Add");
 		$config = Ccc::getModel('Config');
 		$content = $this->getLayout()->getContent();
 	   $configAdd = Ccc::getBlock("Config_Edit")->setData(['config' => $config]);
@@ -26,6 +28,7 @@ class Controller_Config extends Controller_Core_Action
 	{	
 		try 
 		{
+			$this->setTitle("Customer Edit");
 			$message = $this->getMessage();
 			$id = (int) $this->getRequest()->getRequest('id');
 			if(!$id)
@@ -55,52 +58,44 @@ class Controller_Config extends Controller_Core_Action
 		$message = $this->getMessage();
 		date_default_timezone_set("Asia/Kolkata");
 		$date = date("Y-m-d H:i:s");
+		
 		try
-		{
-			$config = Ccc::getModel('Config');
+        {
+            $row = $this->getRequest()->getPost('config');
+            if (!$row) 
+            {
+                throw new Exception("Invalid Request.");             
+            } 
 
-			$row = $this->getRequest()->getRequest('config');
-			print_r($row);
-			if (!$row) 
-			{
-				throw new Exception("Invalid Request.");				
-			}			
+            $configId = (int)$this->getRequest()->getRequest('id');
+            $config = Ccc::getModel('Config')->load($configId);
 
-			 if(array_key_exists('configId',$row) && $row['configId'] == null)
-       		 {
-                $config->name = $row['name'];
-                $config->code =  $row['code'];
-                $config->value =  $row['value'];
-                $config->status =  $row['status'];
-                $config->createdAt =  $date;
-                $result = $config->save();
+            if(!$config)
+            {
+               $config = Ccc::getModel('Config');
+            	$config->setData($row);
+               $config->createdAt = $date;
+            }
+            else
+            {
+            	$config->setData($row);
+            }
+            $result = $config->save();
 
-             if(!$result)
-                {
-                	throw new Exception("Insert Unsuccessfully.");
-                }
-					$message->addMessage('Insert Successfully.');
-	        	}
-	        	else
-	        	{	
-	        		$config->setData($row);
-               $result = $config->save();
+            if (!$result)
+            {
+                throw new Exception("Update Unsuccessfully");
+            }
+            $message->addMessage('Update Successfully'); 
+            $this->redirect($this->getUrl('grid','config',null,true));
+        }
+        catch(Exception $e)
+        {
+            $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);         
+            $this->redirect($this->getUrl('grid','config',null,true));
+        }
 
-               if(!$result)
-               {
-						throw new Exception("Update Unsuccessfully.");
-             	}
-				$message->addMessage('Update Successfully.');
-       		}
-
-			$this->redirect($this->getUrl('grid','config',null,true));
-		} 
-		catch (Exception $e) 
-		{
-			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect($this->getUrl('grid',null,null,true));
-		}
-	}
+}
 
 	public function deleteAction()
 	{

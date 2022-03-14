@@ -7,6 +7,7 @@ class Controller_Product_Media extends Controller_Core_Action
 {
 	public function gridAction()
 	{
+        $this->setTitle("Media Grid");
         $content = $this->getLayout()->getContent();
         $mediaGrid = Ccc::getBlock("Product_Media_grid");
         $content->addChild($mediaGrid);
@@ -49,10 +50,10 @@ class Controller_Product_Media extends Controller_Core_Action
                 }
                 $removeIdsImplode = implode(",",$removeIds);
 
-                $query1 = "SELECT imageId , image FROM `product_media` WHERE imageId IN($removeIdsImplode) ";
+                $query1 = "SELECT imageId , image FROM `product_media` WHERE `imageId` IN($removeIdsImplode) ";
                 $result1 = $adapter->fetchPair($query1);
                 
-                $query="DELETE FROM `product_media` WHERE imageId IN($removeIdsImplode)";
+                $query="DELETE FROM `product_media` WHERE `imageId` IN($removeIdsImplode)";
                 $result = $adapter->delete($query);
                 if(!$result)
                 {
@@ -69,7 +70,7 @@ class Controller_Product_Media extends Controller_Core_Action
             }
 
             
-            $query = "SELECT imageId,productId FROM `product_media` WHERE productId = $productId";
+            $query = "SELECT imageId,productId FROM `product_media` WHERE `productId` = $productId";
             $result = $adapter->fetchPair($query);
 
             if(!$result)
@@ -100,7 +101,7 @@ class Controller_Product_Media extends Controller_Core_Action
                 }
                 $statusIdsImplode = implode(",",$statusIds);
                
-                $query="UPDATE `product_media` SET `status`= 1 WHERE imageId IN($statusIdsImplode)";
+                $query="UPDATE `product_media` SET `status`= 1 WHERE `imageId` IN($statusIdsImplode)";
                 $result = $adapter->update($query);
                  
                  if(!$result)
@@ -121,7 +122,7 @@ class Controller_Product_Media extends Controller_Core_Action
                 }
                 print_r($galleryIds);
                 $galleryIdsImplode = implode(",",$galleryIds);
-                $query="UPDATE `product_media` SET `gallery`= 1 WHERE imageId IN($galleryIdsImplode)";
+                $query="UPDATE `product_media` SET `gallery`= 1 WHERE `imageId` IN($galleryIdsImplode)";
                
          
                 $result = $adapter->update($query);
@@ -138,7 +139,7 @@ class Controller_Product_Media extends Controller_Core_Action
              $base = $rows['media']['base'];
             if(array_key_exists('base',$media))
             {
-                $query="UPDATE `product_media` SET `base`= 1 WHERE imageId = {$base}";
+                $query="UPDATE `product_media` SET `base`= 1 WHERE `imageId` = {$base}";
                 $result = $adapter->update($query);
                  
                  if(!$result)
@@ -151,7 +152,7 @@ class Controller_Product_Media extends Controller_Core_Action
             $thumb = $rows['media']['thumb'];
             if(array_key_exists('thumb',$media))
             {
-                $query="UPDATE `product_media` SET `thumb`= 1 WHERE imageId = {$thumb}";
+                $query="UPDATE `product_media` SET `thumb`= 1 WHERE `imageId` = {$thumb}";
                 $result = $adapter->update($query);
                  
                  if(!$result)
@@ -164,7 +165,7 @@ class Controller_Product_Media extends Controller_Core_Action
             $small = $rows['media']['small'];
             if(array_key_exists('small',$media))
             {
-                $query="UPDATE `product_media` SET `small`= 1 WHERE imageId = {$small}";
+                $query="UPDATE `product_media` SET `small`= 1 WHERE `imageId` = {$small}";
                 $result = $adapter->update($query);
                  
                  if(!$result)
@@ -199,7 +200,7 @@ class Controller_Product_Media extends Controller_Core_Action
       if(move_uploaded_file($imageAddress , $this->getBaseUrl('Media/product/') . $imageName))
          {
             $adapter = $this->getAdapter();
-            $query =  "INSERT INTO `product_media`( `productId`, `image`, `base`, `thumb`, `small`, `gallery`, `status`) VALUES ($productId,'$imageName',0,0,0,0,0)";
+            $query =  "INSERT INTO `product_media`( `productId`, `image`, `base`, `thumb`, `small`, `gallery`, `status`) VALUES ({$productId},'$imageName',0,0,0,0,0)";
           
             $result = $adapter->insert($query);
            

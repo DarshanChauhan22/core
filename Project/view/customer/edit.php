@@ -1,7 +1,7 @@
 <?php $customer = $this->getCustomer(); ?>
 <?php $controllerCoreAction = new Controller_Core_Action(); ?>
 
-  <form action="<?php echo $controllerCoreAction->getUrl('save',null,null,true) ?>" method="POST">
+  <form action="<?php echo $controllerCoreAction->getUrl('save',null,null,false) ?>" method="POST">
   <table border="1" width="100%" cellspacing="4">
     <tr>
       <td colspan="2"><b>Personal Information</b></td>

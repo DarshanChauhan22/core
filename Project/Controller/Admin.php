@@ -74,7 +74,6 @@ class Controller_Admin extends Controller_Core_Action
 
 			 if(array_key_exists('adminId',$row) && $row['adminId'] == null)
        		 {
-       		 	
                 $admin->firstName = $row['firstName'];
                 $admin->lastName =  $row['lastName'];
                 $admin->email =  $row['email'];
@@ -118,7 +117,7 @@ class Controller_Admin extends Controller_Core_Action
 			$message = $this->getMessage();
 			$getId = $this->getRequest()->getRequest('id'); 
 			$adminTable = Ccc::getModel('Admin')->load($getId);	
-			if (!$getId)) 
+			if (!$getId) 
 			{	
 				throw new Exception("Invalid Request.");
 			}

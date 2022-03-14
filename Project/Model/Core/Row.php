@@ -69,7 +69,8 @@ class Model_Core_Row
 
     public function save()
     {
-        if(array_key_exists($this->getTable()->getPrimaryKey(), $this->data))
+        
+        if(array_key_exists($this->getTable()->getPrimaryKey(), $this->data) && $this->data[$this->getTable()->getPrimaryKey()] != null)
         {
             $tableName = $this->getTable()->getPrimaryKey();
             $id = $this->data[$this->getTable()->getPrimaryKey()];
@@ -79,7 +80,8 @@ class Model_Core_Row
         {
             $id = $this->getTable()->insert($this->data);
         }
-        return $id;
+        $this->data = $this->load($id)->data;
+        return $this;
     }
 
     public function load($id, $column = null)

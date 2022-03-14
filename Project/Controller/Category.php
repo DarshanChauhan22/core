@@ -7,6 +7,7 @@ class Controller_Category extends Controller_Core_Action
 {
 	public function gridAction()
 	{
+		$this->setTitle("Category Grid");
 		$content = $this->getLayout()->getContent();
         $categoryGrid = Ccc::getBlock("Category_Grid");
         $content->addChild($categoryGrid);
@@ -15,6 +16,7 @@ class Controller_Category extends Controller_Core_Action
 
 	public function addAction()
 	{
+		$this->setTitle("Category Add");
 		$category = Ccc::getModel('category');
 		$content = $this->getLayout()->getContent();
         $categoryAdd = Ccc::getBlock("Category_Edit")->setData(['category' => $category]);
@@ -24,38 +26,40 @@ class Controller_Category extends Controller_Core_Action
 
 	public function editAction()
 	{
-		try {
+		try 
+		{
+			$this->setTitle("Category Edit");
 			$message = $this->getMessage();
-	    $pid=(int) $this->getRequest()->getRequest('id');
+		    $pid=(int) $this->getRequest()->getRequest('id');
 
-	    if(!$pid)
-		{
-			throw new Exception("Id not valid.");
-		}
-		$category = Ccc::getModel('category')->load($pid);;   
+		    if(!$pid)
+			{
+				throw new Exception("Id not valid.");
+			}
+			$category = Ccc::getModel('category')->load($pid);;   
 
-		if(!$category)
-		{	
-			throw new Exception("unable to load admin.");
-		}   
-	    $query = "SELECT 
-	                  * 
-	    FROM Category WHERE categoryId=".$pid;
-	    $row = $category-> fetchRow($query);
-	
-    	$categoryPathPair = $category->fetchAll('SELECT categoryId,categoryPath FROM Category');
-   	    $content = $this->getLayout()->getContent();
-        $categoryEdit = Ccc::getBlock("Category_Edit")->setData(['category' => $category]);
-        $content->addChild($categoryEdit);
-        $this->renderLayout();
-		} 
-		catch (Exception $e) 
-		{
-			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect($this->getUrl('grid',null,null,true));		
+			if(!$category)
+			{	
+				throw new Exception("unable to load admin.");
+			}   
+		    $query = "SELECT 
+		                  * 
+		    FROM Category WHERE categoryId=".$pid;
+		    $row = $category-> fetchRow($query);
+		
+	    	$categoryPathPair = $category->fetchAll('SELECT categoryId,categoryPath FROM `Category`');
+	   	    $content = $this->getLayout()->getContent();
+	        $categoryEdit = Ccc::getBlock("Category_Edit")->setData(['category' => $category]);
+	        $content->addChild($categoryEdit);
+	        $this->renderLayout();
+			} 
+			catch (Exception $e) 
+			{
+				$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
+				$this->redirect($this->getUrl('grid',null,null,true));		
+			}
+				
 		}
-			
-	}
 
 	public function saveAction()
 	{
@@ -107,7 +111,7 @@ class Controller_Category extends Controller_Core_Action
 			    $category->name = $row['name'];
                 $category->status =  $row['status'];
                 $insert=$category->save();
-
+                $insert = $insert->categoryId;
 				}
 				else
 				{
@@ -116,6 +120,7 @@ class Controller_Category extends Controller_Core_Action
                 $category->status =  $row['status'];
                 $category->parentId =  $row['parentId'];
                 $insert= $category->save();
+                $insert = $insert->categoryId;
 
 				}
 				if(!$insert)
@@ -123,7 +128,7 @@ class Controller_Category extends Controller_Core_Action
 					throw new Exception("System is unable to insert.");			
 				}
 
-				$parent=$category->fetchRow("SELECT parentId FROM Category WHERE categoryId=".$insert);
+				$parent=$category->fetchRow("SELECT `parentId` FROM `Category` WHERE `categoryId`=".$insert);
 				$pid = $parent->getData();
 				$parent = $pid['parentId'];
 				
@@ -134,7 +139,7 @@ class Controller_Category extends Controller_Core_Action
 				}
 				else
 				{	
-					$result=$category->fetchRow("SELECT * FROM Category WHERE categoryId= ".$parent);
+					$result=$category->fetchRow("SELECT * FROM `Category` WHERE `categoryId`= ".$parent);
 					$res = $result->getData();
 					$result = $res['categoryPath'];
 					$path = $result.'/'.$insert;
@@ -169,7 +174,7 @@ class Controller_Category extends Controller_Core_Action
 			$row = $this->getRequest()->getRequest('category');
 			
 			$category = Ccc::getModel('category');
-			$categoryRow=$category->fetchRow("SELECT * FROM Category WHERE categoryId= ".$categoryId);
+			$categoryRow=$category->fetchRow("SELECT * FROM `Category` WHERE `categoryId`= ".$categoryId);
 			
 
 			$res = $categoryRow->getData();
@@ -177,7 +182,7 @@ class Controller_Category extends Controller_Core_Action
 
 			$query = "LIKE '$categoryRow%' ORDER BY categoryPath";
 			
-			$categoryPath=$category->fetchAll("SELECT * FROM Category WHERE categoryPath $query");
+			$categoryPath=$category->fetchAll("SELECT * FROM `Category` WHERE `categoryPath` $query");
 			
 			if($parentId == 'NULL')
 			{	
@@ -191,7 +196,7 @@ class Controller_Category extends Controller_Core_Action
 			else
 			{
 
-				$parent=$category->fetchRow("SELECT * FROM Category WHERE categoryId = $parentId");
+				$parent=$category->fetchRow("SELECT * FROM `Category` WHERE `categoryId` = $parentId");
 				$res = $parent->getData();
 				
 				$parent = $res['categoryPath'];
@@ -218,8 +223,7 @@ class Controller_Category extends Controller_Core_Action
 
 				if(!$parentId == null)
 				{
-				$parent=$category->fetchRow("SELECT * FROM Category WHERE categoryId= ".$parentId);
-				
+				$parent=$category->fetchRow("SELECT * FROM `Category` WHERE `categoryId`= ".$parentId);
 				$res = $parent->getData();
 				$categoryPath = $res['categoryPath'];
 				}
@@ -257,7 +261,7 @@ class Controller_Category extends Controller_Core_Action
 			$id = $this->getRequest()->getRequest('id');
 			$category = Ccc::getModel('Category')->load($id);
 
-			$query1 = "SELECT imageId,image FROM category c LEFT JOIN category_media cm ON c.categoryId = cm.categoryId  WHERE c.categoryId = $id;";
+			$query1 = "SELECT imageId,image FROM category c LEFT JOIN `category_media` cm ON c.categoryId = cm.categoryId  WHERE c.categoryId = $id;";
             $result1 = $adapter->fetchPair($query1);
 
 
@@ -289,25 +293,25 @@ class Controller_Category extends Controller_Core_Action
 	public function taskAction()
 	{	
 		$adapter = $this->getAdapter();
-		$result=$adapter->fetchOne('SELECT categoryPath FROM Category where categoryId = 149');
+		$result=$adapter->fetchOne('SELECT `categoryPath` FROM `Category` where `categoryId` = 149');
 	}
 
 	public function getCategoryToPath()
     {		
     	$adapter = $this->getAdapter();
     	$categories=[];
-        $categoryName=$adapter->fetchPair('SELECT categoryId,name FROM category');
+        $categoryName=$adapter->fetchPair('SELECT categoryId,name FROM `category`');
         if (!$this->getRequest()->getRequest('id')) 
         {
 
-            $query = "SELECT categoryId, categoryPath FROM category ORDER BY categoryPath"; 
+            $query = "SELECT `categoryId`, `categoryPath` FROM `category` ORDER BY `categoryPath`"; 
         }
         else 
         {
             $categoryId = $this->getRequest()->getRequest('id');
-            $excludePath = $adapter->fetchOne("SELECT categoryPath FROM category WHERE categoryId = '$categoryId'");
+            $excludePath = $adapter->fetchOne("SELECT `categoryPath` FROM `category` WHERE `categoryId` = '$categoryId'");
             $excludePath = $excludePath . '/%';
-            $query = "SELECT categoryId,categoryPath FROM category WHERE categoryId <> '$categoryId' AND categoryPath NOT LIKE('$excludePath') ORDER BY categoryPath";  
+            $query = "SELECT `categoryId`,`categoryPath` FROM `category` WHERE categoryId <> '$categoryId' AND categoryPath NOT LIKE('$excludePath') ORDER BY `categoryPath`";  
         }
         $categoryPath = $adapter->fetchPair($query);
      

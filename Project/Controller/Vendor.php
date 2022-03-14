@@ -5,6 +5,7 @@ class Controller_Vendor extends Controller_Core_Action
 { 
     public function gridAction()
     {
+        $this->setTitle("Vendor Grid");
         $content = $this->getLayout()->getContent();
         $vendorGrid = Ccc::getBlock("Vendor_Grid");
         $content->addChild($vendorGrid);
@@ -13,6 +14,7 @@ class Controller_Vendor extends Controller_Core_Action
 
     public function addAction()
     {
+        $this->setTitle("Vendor Add");
         $vendor = Ccc::getModel('Vendor');
         $content = $this->getLayout()->getContent();
         $vendorAdd = Ccc::getBlock("Vendor_Edit")->setData(['vendor' => $vendor]);
@@ -25,6 +27,7 @@ class Controller_Vendor extends Controller_Core_Action
     {
          try 
         {
+            $this->setTitle("Vendor Edit");
             $message = $this->getMessage();
             $id = (int) $this->getRequest()->getRequest('id');
             if(!$id)
@@ -33,7 +36,7 @@ class Controller_Vendor extends Controller_Core_Action
             }
             $vendor = Ccc::getModel('Vendor')->load($id);
 
-            $vendor = $vendor->fetchRow("select c.*,a.* from vendor c join vendor_address a on a.vendorId = c.vendorId WHERE c.vendorId = {$id} ");
+            $vendor = $vendor->fetchRow("SELECT c.*,a.* FROM vendor c join `vendor_address` a on a.vendorId = c.vendorId WHERE c.vendorId = {$id} ");
             
             if(!$vendor)
             {
@@ -51,80 +54,60 @@ class Controller_Vendor extends Controller_Core_Action
             $this->redirect($this->getUrl('grid',null,null,true));  
         }
     }
-    protected function saveVendor()
-    {
 
-        try 
+    public function saveVendor()
+    {
+        $message = $this->getMessage();
+        date_default_timezone_set("Asia/Kolkata");
+        $date = date("Y-m-d H:i:s");
+        
+        try
         {
-            $message = $this->getMessage();
-            date_default_timezone_set("Asia/Kolkata");
-            $date = date("Y-m-d H:i:s");
-            $row = $this->getRequest()->getRequest('vendor');
-            $vendor = Ccc::getModel('Vendor');
-            
+            $row = $this->getRequest()->getPost('vendor');
             if (!$row) 
             {
-                throw new Exception("Invalid Request.");               
-            }   
+                throw new Exception("Invalid Request.");             
+            } 
+            $vendorId = (int)$this->getRequest()->getRequest('id');
+            $vendor = Ccc::getModel('Vendor')->load($vendorId);
 
-        if(array_key_exists('vendorId',$row) && $row['vendorId'] == null)
-        {
-            $vendor->firstName = $row['firstName'];
-            $vendor->lastName =  $row['lastName'];
-            $vendor->email =  $row['email'];
-            $vendor->mobile =  $row['mobile'];
-            $vendor->status =  $row['status'];
-            $vendor->createdAt =  $date;
-            $result = $vendor->save();
-             if(!$result)
+            if(!$vendor)
             {
-                throw new Exception("Insert Unsuccessfully.");
+                $vendor = Ccc::getModel('Vendor');
+                $vendor->setData($row);
+                $vendor->createdAt = $date;
             }
-                $message->addMessage('Insert Successfully.');
-            return $result;
-
-
-        }
-        else
-        {
-            $vendor->setData($row);
-            /*$vendor->load($row['vendorId']);
-            $vendor->vendorId = $row["vendorId"];
-            $vendor->firstName = $row['firstName'];
-            $vendor->lastName =  $row['lastName'];
-            $vendor->email =  $row['email'];
-            $vendor->mobile =  $row['mobile'];
-            $vendor->status =  $row['status'];*/
-            $vendor->updatedAt =  $date;
-            $result = $vendor->save();
-            if(!$result)
+            else
             {
-                throw new Exception("Update Unsuccessfully.");
+                $vendor->setData($row);
+                $vendor->updatedAt = $date;
             }
-            $message->addMessage('Update Successfully.');
-            return $row['vendorId'];
+            $result = $vendor->save();
+            return $result->vendorId;
 
-
+            if (!$result)
+            {
+                throw new Exception("Update Unsuccessfully");
+            }
+            $message->addMessage('Update Successfully'); 
+            $this->redirect($this->getUrl('grid','vendor',null,true));
         }
-            } catch (Exception $e) 
+        catch(Exception $e)
         {
-           $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-            $this->redirect($this->getUrl('grid',null,null,true));  
+            $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);         
+            $this->redirect($this->getUrl('grid','vendor',null,true));
         }
-    }
 
-
-
-
+}
+    
       
     protected function saveAddress($vendorId)
     {
-        
         $address = Ccc::getModel('Vendor_Address'); 
         try 
         {
             $message = $this->getMessage();
-        $row = $this->getRequest()->getRequest('address');
+            $row = $this->getRequest()->getRequest('address');
 
         if (!$row) 
         {
@@ -133,18 +116,14 @@ class Controller_Vendor extends Controller_Core_Action
         date_default_timezone_set("Asia/Kolkata");
         $date = date("Y-m-d H:i:s");
         $addressData = $address->fetchRow(
-            "SELECT * FROM vendor_address WHERE vendorId = $vendorId"
+            "SELECT * FROM `vendor_address` WHERE `vendorId` = {$vendorId}"
         );
 
-         if(!$addressData)
+        if(!$addressData)
         {
-            
+            $address = Ccc::getModel('Vendor_Address');
+            $address->setData($row);
             $address->vendorId = $vendorId;
-            $address->address =  $row['address'];
-            $address->city =  $row['city'];
-            $address->state =  $row['state'];
-            $address->country =  $row['country'];
-            $address->postalCode =  $row['postalCode'];
             $result = $address->save();
             
             if(!$result)

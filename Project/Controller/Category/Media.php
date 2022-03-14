@@ -6,6 +6,7 @@ class Controller_Category_Media extends Controller_Core_Action{
 	
 	public function gridAction()
 	{
+        $this->setTitle("Media Grid");
         $content = $this->getLayout()->getContent();
         $mediaGrid = Ccc::getBlock("Category_Media_grid");
         $content->addChild($mediaGrid);
@@ -50,10 +51,10 @@ class Controller_Category_Media extends Controller_Core_Action{
                 }
                 $removeIdsImplode = implode(",",$removeIds);
 
-                $query1 = "SELECT imageId , image FROM `category_media` WHERE imageId IN($removeIdsImplode) ";
+                $query1 = "SELECT imageId , image FROM `category_media` WHERE `imageId` IN($removeIdsImplode) ";
                 $result1 = $adapter->fetchPair($query1);
 
-                $query="DELETE FROM `category_media` WHERE imageId IN($removeIdsImplode)";
+                $query="DELETE FROM `category_media` WHERE `imageId` IN($removeIdsImplode)";
                 $result = $adapter->delete($query);
                 if(!$result)
                 {
@@ -69,7 +70,7 @@ class Controller_Category_Media extends Controller_Core_Action{
             }
 
             
-            $query = "SELECT imageId,categoryId FROM `category_media` WHERE categoryId = $categoryId";
+            $query = "SELECT imageId,categoryId FROM `category_media` WHERE `categoryId` = {$categoryId}";
             $result = $adapter->fetchPair($query);
 
             if(!$result)
@@ -101,7 +102,7 @@ class Controller_Category_Media extends Controller_Core_Action{
                 }
                 $statusIdsImplode = implode(",",$statusIds);
                 
-                $query="UPDATE `category_media` SET `status`= 1 WHERE imageId IN($statusIdsImplode)";
+                $query="UPDATE `category_media` SET `status`= 1 WHERE `imageId` IN($statusIdsImplode)";
                 $result = $adapter->update($query);
 
                 if(!$result)
@@ -123,7 +124,7 @@ class Controller_Category_Media extends Controller_Core_Action{
                 }
                 print_r($galleryIds);
                 $galleryIdsImplode = implode(",",$galleryIds);
-                $query="UPDATE `category_media` SET `gallery`= 1 WHERE imageId IN($galleryIdsImplode)";
+                $query="UPDATE `category_media` SET `gallery`= 1 WHERE `imageId` IN($galleryIdsImplode)";
                
          
                 $result = $adapter->update($query);
@@ -141,7 +142,7 @@ class Controller_Category_Media extends Controller_Core_Action{
              $base = $rows['media']['base'];
             if(array_key_exists('base',$media))
             {
-                $query="UPDATE `category_media` SET `base`= 1 WHERE imageId = {$base}";
+                $query="UPDATE `category_media` SET `base`= 1 WHERE `imageId` = {$base}";
                 $result = $adapter->update($query);
 
                 if(!$result)
@@ -156,7 +157,7 @@ class Controller_Category_Media extends Controller_Core_Action{
             $thumb = $rows['media']['thumb'];
             if(array_key_exists('thumb',$media))
             {
-                $query="UPDATE `category_media` SET `thumb`= 1 WHERE imageId = {$thumb}";
+                $query="UPDATE `category_media` SET `thumb`= 1 WHERE `imageId` = {$thumb}";
                 $result = $adapter->update($query);
                  
                  if(!$result)
@@ -164,13 +165,12 @@ class Controller_Category_Media extends Controller_Core_Action{
                     throw new Exception("Update Unsuccessfully.");
                 }
                 $message->addMessage('Update Successfully.');
-                //print_r($result);
             }
 
             $small = $rows['media']['small'];
             if(array_key_exists('small',$media))
             {
-                $query="UPDATE `category_media` SET `small`= 1 WHERE imageId = {$small}";
+                $query="UPDATE `category_media` SET `small`= 1 WHERE `imageId` = {$small}";
                 $result = $adapter->update($query);
                  
                  if(!$result)
@@ -193,6 +193,7 @@ class Controller_Category_Media extends Controller_Core_Action{
        {
             try 
             {
+                $this->setTitle("Media Add");
                $message = $this->getMessage();
                $categoryId = $_GET['id'];
 
@@ -205,7 +206,7 @@ class Controller_Category_Media extends Controller_Core_Action{
       if(move_uploaded_file($imageAddress , $this->getBaseUrl('Media/Category/') . $imageName))
          {
             $adapter = $this->getAdapter();
-            $query =  "INSERT INTO `category_media`( `categoryId`, `image`, `base`, `thumb`, `small`, `gallery`, `status`) VALUES ($categoryId,'$imageName',0,0,0,0,0)";
+            $query =  "INSERT INTO `category_media`( `categoryId`, `image`, `base`, `thumb`, `small`, `gallery`, `status`) VALUES ({$categoryId},'$imageName',0,0,0,0,0)";
           
             $result = $adapter->insert($query);
            

@@ -11,7 +11,7 @@ class Block_salesman_Grid extends Block_Core_Template
 	public function getsalesmans()
 	{
 		$salesman = Ccc::getModel('salesman');
-		$salesmans = $salesman->fetchAll("SELECT * FROM sales_man");
+		$salesmans = $salesman->fetchAll("SELECT * FROM `sales_man`");
 		return $salesmans;
 	}
 }

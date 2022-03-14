@@ -6,14 +6,9 @@
 class Controller_Page extends Controller_Core_Action
 {
 	
-	public function testAction()
-	{
-		$pageTable = new Model_Page(); 
-		$pageTable->setTableName('page');
-		$pageTable->setPrimaryKey('pageId');
-	}
 	public function gridAction()
 	{
+		$this->setTitle("Page Grid");
 		$content = $this->getLayout()->getContent();
         $pageGrid = Ccc::getBlock("Page_Grid");
         $content->addChild($pageGrid);
@@ -22,6 +17,7 @@ class Controller_Page extends Controller_Core_Action
 
 	public function addAction()
 	{
+		$this->setTitle("Page Add");
 		$page = Ccc::getModel('Page');
 		$content = $this->getLayout()->getContent();
         $pageAdd = Ccc::getBlock("Page_Edit")->setData(['page'=> $page]);
@@ -33,6 +29,7 @@ class Controller_Page extends Controller_Core_Action
 	{	
 		try 
 		{
+			$this->setTitle("Page Edit");
 			$message = $this->getMessage();
 			$id = (int) $this->getRequest()->getRequest('id');
 			if(!$id)
@@ -55,63 +52,52 @@ class Controller_Page extends Controller_Core_Action
 			$this->redirect($this->getUrl('grid',null,null,true));
 		}
 	}
-	
+
 	public function saveAction()
 	{
+		$message = $this->getMessage();
 		date_default_timezone_set("Asia/Kolkata");
 		$date = date("Y-m-d H:i:s");
+		
 		try
-		{
-			$message = $this->getMessage();
-			$page = Ccc::getModel('Page');
+        {
+            $row = $this->getRequest()->getPost('page');
+            if (!$row) 
+            {
+                throw new Exception("Invalid Request.");             
+            } 
+            $pageId = (int)$this->getRequest()->getRequest('id');
+            $page = Ccc::getModel('Page')->load($pageId);
 
-			$row = $this->getRequest()->getRequest('page');
+            if(!$page)
+            {
+            	$page = Ccc::getModel('Page');
+            	$page->setData($row);
+               	$page->createdAt = $date;
+            }
+            else
+            {
+            	$page->setData($row);
+            	$page->updatedAt = $date;
+            }
+            $result = $page->save();
 
-			if (!$row) 
-			{
-				throw new Exception("Invalid Request.");				
-			}			
+            if (!$result)
+            {
+                throw new Exception("Update Unsuccessfully");
+            }
+            $message->addMessage('Update Successfully'); 
+            $this->redirect($this->getUrl('grid','page',['id' => null],false));
+        }
+        catch(Exception $e)
+        {
+            $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);         
+            $this->redirect($this->getUrl('grid','page',null,true));
+        }
 
-
-			 if(array_key_exists('pageId',$row) && $row['pageId'] == null)
-       		 {
-                $page->name = $row['name'];
-                $page->code =  $row['code'];
-                $page->content =  $row['content'];
-                $page->status =  $row['status'];
-                $page->createdAt =  $date;
-                $result = $page->save();
-
-                if($result)
-                {
-                	$message->addMessage('Insert Successfully.');
-					$this->redirect($this->getUrl('grid',null,null,false));
-                }
-                	throw new Exception("Insert Unsuccessfully.");
-					
-        	}
-        	else
-        	{
-        		$page->setData($row);
-                $page->updatedAt =  $date;
-                $result = $page->save();
-
-                if(!$result)
-                {
-					throw new Exception("Update Unsuccessfully.");
-                }
-					$message->addMessage('Update Successfully.');
-			$this->redirect($this->getUrl('grid',null,['id' => null],false));
-       			}
-
-		} 
-		catch (Exception $e) 
-		{
-			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect($this->getUrl('grid',null,['id' => null],false));	
-		}
-	}
-
+}
+	
+	
 	public function deleteAction()
 	{
 		try 

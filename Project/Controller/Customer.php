@@ -5,6 +5,7 @@ class Controller_Customer extends Controller_Core_Action
 {
     public function gridAction()
     {
+        $this->setTitle("Customer Grid");
         $content = $this->getLayout()->getContent();
         $customerGrid = Ccc::getBlock("Customer_Grid");
         $content->addChild($customerGrid);
@@ -13,6 +14,7 @@ class Controller_Customer extends Controller_Core_Action
 
     public function addAction()
     {
+        $this->setTitle("Customer Add");
         $customer = Ccc::getModel('Customer');
         $content = $this->getLayout()->getContent();
         $customerAdd = Ccc::getBlock("Customer_Edit")->setData(['customer' => $customer]);
@@ -22,8 +24,9 @@ class Controller_Customer extends Controller_Core_Action
 
     public function editAction()
     {
-         try 
+        try 
         {
+            $this->setTitle("Customer Edit");
             $message = $this->getMessage();
             $id = (int) $this->getRequest()->getRequest('id');
             if(!$id)
@@ -50,62 +53,52 @@ class Controller_Customer extends Controller_Core_Action
             $this->redirect($this->getUrl('grid',null,null,true));
         }
     }
-    protected function saveCustomer()
+
+
+    public function saveCustomer()
     {
-
-        try 
-        {
-
         $message = $this->getMessage();
         date_default_timezone_set("Asia/Kolkata");
         $date = date("Y-m-d H:i:s");
-        $row = $this->getRequest()->getRequest('customer');
-        $customer = Ccc::getModel('Customer');
-    
-        if (!$row) 
-        {
-            throw new Exception("Invalid Request.");               
-        }           
-
-        if(array_key_exists('customerId',$row) && $row['customerId'] == null)
-        {
-            $customer->firstName = $row['firstName'];
-            $customer->lastName =  $row['lastName'];
-            $customer->email =  $row['email'];
-            $customer->mobile =  $row['mobile'];
-            $customer->status =  $row['status'];
-            $result = $customer->save();
-            return $result;
-
-            if(!$result)
-            {
-               throw new Exception("Insert Unsuccessfully.");
-            }
-            $message->addMessage('Insert Successfully.');
-
-        }
-        else
-        {
-            $customer->setData($row);
-            $customer->updatedAt =  $date;
-            $customer->save();
-            return $row['customerId'];
-
-            if(!$result)
-            {
-            throw new Exception("Update Unsuccessfully.");
-            }
-            $message->addMessage('Update Successfully.');
         
-        }
-            } catch (Exception $e) 
+        try
         {
-            $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-            $this->redirect($this->getUrl('grid',null,null,true));  
-        }
-    }
+            $row = $this->getRequest()->getPost('customer');
+            if (!$row) 
+            {
+                throw new Exception("Invalid Request.");             
+            } 
+            $customerId = (int)$this->getRequest()->getRequest('id');
+            $customer = Ccc::getModel('Customer')->load($customerId);
 
-                
+            if(!$customer)
+            {
+                $customer = Ccc::getModel('Customer');
+                $customer->setData($row);
+                $customer->createdAt = $date;
+            }
+            else
+            {
+                $customer->setData($row);
+                $customer->updatedAt = $date;
+            }
+            $result = $customer->save();
+            return $result->customerId;
+
+            if (!$result)
+            {
+                throw new Exception("Update Unsuccessfully");
+            }
+            $message->addMessage('Update Successfully'); 
+            $this->redirect($this->getUrl('grid','customer',null,true));
+        }
+        catch(Exception $e)
+        {
+            $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);         
+            $this->redirect($this->getUrl('grid','customer',null,true));
+        }
+
+}             
 
     protected function saveAddress($customerId)
     {
@@ -141,14 +134,9 @@ class Controller_Customer extends Controller_Core_Action
 
         if(!$addressData)
         {
+            $address = Ccc::getModel('Customer_Address');
+            $address->setData($row);
             $address->customerId = $customerId;
-            $address->address =  $row['address'];
-            $address->city =  $row['city'];
-            $address->state =  $row['state'];
-            $address->country =  $row['country'];
-            $address->postalCode =  $row['postalCode'];
-            $address->billing =  $row['billing'];
-            $address->shipping =  $row['shipping'];
             $result = $address->save();
             
             if(!$result)
@@ -161,6 +149,8 @@ class Controller_Customer extends Controller_Core_Action
         else
         {
             $address->setData($row);
+            $address->billing =  $row['billing'];
+            $address->shipping =  $row['shipping'];
             $result = $address->save();
 
             if(!$result)

@@ -44,21 +44,6 @@ class Model_Core_View{
 		return $this->data[$key];
 	}
 
-	/*public function addData($key,$value)
-	{
-		$this->data[$key] = $value;
-		return $this;
-	}*/
-
-	/*public function removeData($key)
-	{
-		if(!array_key_exists($key, $this->data))
-		{
-			return false;
-		}
-		unset($this->data[$key]);
-		return $this;
-	}*/
 
 	public function __set($key, $value)
     {

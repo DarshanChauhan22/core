@@ -5,14 +5,9 @@
 class Controller_salesman extends Controller_Core_Action
 {
 	
-	public function testAction()
-	{
-		$salesmanTable = new Model_salesman(); 
-		$salesmanTable->setTableName('salesman');
-		$salesmanTable->setPrimaryKey('salesmanId');
-	}
 	public function gridAction()
 	{
+		$this->setTitle("Salesmana Grid");
 		$content = $this->getLayout()->getContent();
         $salesmanGrid = Ccc::getBlock("salesman_Grid");
         $content->addChild($salesmanGrid);
@@ -21,6 +16,7 @@ class Controller_salesman extends Controller_Core_Action
 
 	public function addAction()
 	{
+		$this->setTitle("Salesmana Add");
 		$salesman = Ccc::getModel('salesman');
 		$content = $this->getLayout()->getContent();
         $salesmanAdd = Ccc::getBlock("salesman_Edit")->setData(['salesman' => $salesman]);
@@ -32,6 +28,7 @@ class Controller_salesman extends Controller_Core_Action
 	{	
 		try 
 		{
+			$this->setTitle("Salesmana Edit");
 			$message = $this->getMessage();
 			$id = (int) $this->getRequest()->getRequest('id');
 			if(!$id)
@@ -55,57 +52,52 @@ class Controller_salesman extends Controller_Core_Action
 			$this->redirect($this->getUrl('grid',null,null,true));	;
 		}
 	}
-	
+
 	public function saveAction()
 	{
 		$message = $this->getMessage();
 		date_default_timezone_set("Asia/Kolkata");
 		$date = date("Y-m-d H:i:s");
+		
 		try
-		{
-			$salesman = Ccc::getModel('salesman');
+        {
+            $row = $this->getRequest()->getPost('salesman');
+            if (!$row) 
+            {
+                throw new Exception("Invalid Request.");             
+            } 
 
-			$row = $this->getRequest()->getRequest('salesman');
-			if (!$row) 
-			{
-				throw new Exception("Invalid Request.");				
-			}			
+            $salesmanId = (int)$this->getRequest()->getRequest('id');
+            $salesman = Ccc::getModel('Salesman')->load($salesmanId);
 
+            if(!$salesman)
+            {
+            	$salesman = Ccc::getModel('Salesman');
+            	$salesman->setData($row);
+               	$salesman->createdAt = $date;
+            }
+            else
+            {
+            	$salesman->setData($row);
+            	$salesman->updatedAt = $date;
+            }
+            $result = $salesman->save();
 
-			 if(array_key_exists('salesmanId',$row) && $row['salesmanId'] == null)
-       		 {
-       		 	$salesman = Ccc::getModel('Salesman');
-                $salesman->createdAt =  $date;
-                $result = $salesman->save();
+            if (!$result)
+            {
+                throw new Exception("Update Unsuccessfully");
+            }
+            $message->addMessage('Update Successfully'); 
+            $this->redirect($this->getUrl('grid','salesman',null,true));
+        }
+        catch(Exception $e)
+        {
+            $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);         
+            $this->redirect($this->getUrl('grid','salesman',null,true));
+        }
 
-                if(!$result)
-                {
-                	throw new Exception("Insert Unsuccessfully.");
-                }
-					$message->addMessage('Insert Successfully.');
-        	}
-        	else
-        	{
-        		$salesman->setData($row);
-                $salesman->updatedAt =  $date;
-                $result = $salesman->save();
-
-                if(!$result)
-                {
-					throw new Exception("Update Unsuccessfully.");
-                }
-				$message->addMessage('Update Successfully.');
-       			}
-
-			$this->redirect($this->getUrl('grid','salesman',null,true));
-		} 
-		catch (Exception $e) 
-		{
-			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect($this->getUrl('grid',null,null,true));	
-		}
-	}
-
+}
+	
 	public function deleteAction()
 	{
 		try 

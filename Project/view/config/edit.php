@@ -4,7 +4,7 @@
 
 
 
-  <form action="<?php echo $controllerCoreAction->getUrl('save','config',null,true) ?>" method="POST">
+  <form action="<?php echo $controllerCoreAction->getUrl('save','config',null,false) ?>" method="POST">
   <table border="1" width="100%" cellspacing="4">
     <tr>
       <td width="10%">Name</td>

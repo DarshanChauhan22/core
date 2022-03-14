@@ -50,7 +50,6 @@ class Adapter{
 
     public function insert($query)
     {
-
         $result = $this->query($query);
         if($result)
         {

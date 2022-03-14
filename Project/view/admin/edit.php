@@ -16,7 +16,7 @@
     </tr>
     <tr>
       <td width="10%">Email</td>
-      <td><input type="text" name="admin[email]" value="<?php echo $admin->email ?>"></td>
+      <td><input type="email" name="admin[email]" value="<?php echo $admin->email ?>"></td>
     </tr>
     <tr>
       <td width="10%">Password</td>

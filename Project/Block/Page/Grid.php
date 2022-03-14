@@ -16,9 +16,9 @@ class Block_Page_Grid extends Block_Core_Template
 		$pager = Ccc::getModel('Core_Pager');
 		$this->setPager($pager);
 		$pageModel = Ccc::getModel('Page');
-		$totalCount = $pageModel->getAdapter()->fetchOne("SELECT count('pageId') FROM page");
+		$totalCount = $pageModel->getAdapter()->fetchOne("SELECT count('pageId') FROM `page`");
 		$this->getPager()->execute($totalCount,$page);
-		$pages = $pageModel->fetchAll("SELECT * FROM page LIMIT {$this->getPager()->getStartLimit()},{$perPageCount}");
+		$pages = $pageModel->fetchAll("SELECT * FROM `page` LIMIT {$this->getPager()->getStartLimit()},{$perPageCount}");
 		return $pages;
 	}
 

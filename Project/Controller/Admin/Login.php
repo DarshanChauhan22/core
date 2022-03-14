@@ -5,6 +5,7 @@ class Controller_Admin_Login extends Controller_Core_Action
 {
     public function loginAction()
     {
+        $this->setTitle("Login");
         if(Ccc::getModel('Admin_Login')->isLoggedIn())
         {
             $this->redirect($this->getUrl('grid','product',null,true));
