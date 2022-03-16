@@ -3,6 +3,7 @@
 <?php
 class Controller_Vendor extends Controller_Core_Action
 { 
+    
     public function gridAction()
     {
         $this->setTitle("Vendor Grid");
@@ -14,12 +15,19 @@ class Controller_Vendor extends Controller_Core_Action
 
     public function addAction()
     {
-        $this->setTitle("Vendor Add");
+        $this->setTitle('Vendor Add');
+        $vendorModel = Ccc::getModel('vendor');
+        $content = $this->getLayout()->getContent();
+        $vendorAddress = $vendorModel->getVendorAddress();
+        $vendorAdd = Ccc::getBlock("Vendor_Edit")->setData(['vendor' => $vendorModel , 'vendorAddress' => $vendorAddress]);
+        $content->addChild($vendorAdd);
+        $this->renderLayout();
+        /*$this->setTitle("Vendor Add");
         $vendor = Ccc::getModel('Vendor');
         $content = $this->getLayout()->getContent();
         $vendorAdd = Ccc::getBlock("Vendor_Edit")->setData(['vendor' => $vendor]);
         $content->addChild($vendorAdd);
-        $this->renderLayout();
+        $this->renderLayout();*/
 
     }
 
@@ -34,16 +42,22 @@ class Controller_Vendor extends Controller_Core_Action
             {
                 throw new Exception("Id not valid.");
             }
-            $vendor = Ccc::getModel('Vendor')->load($id);
+            //$vendor = Ccc::getModel('Vendor')->load($id);
 
-            $vendor = $vendor->fetchRow("SELECT c.*,a.* FROM vendor c join `vendor_address` a on a.vendorId = c.vendorId WHERE c.vendorId = {$id} ");
+            $vendorModel = Ccc::getModel('Vendor')->load($id);
+            //$vendorAddressModel = Ccc::getModel('Vendor_Address')->load($id);
+            $vendor = $vendorModel->fetchRow("SELECT * FROM `vendor` WHERE vendorID = '$id'");
+            //$vendor = $vendorAddressModel->getVendor();
+            //print_r(121); die;
+            $vendorAddress = $vendorModel->getVendorAddress();
+            //$vendor = $vendor->fetchRow("SELECT c.*,a.* FROM vendor c join `vendor_address` a on a.vendorId = c.vendorId WHERE c.vendorId = {$id} ");
             
             if(!$vendor)
             {
                 throw new Exception("unable to load vendor.");
             }
          $content = $this->getLayout()->getContent();
-            $vendorEdit = Ccc::getBlock("Vendor_Edit")->setData(['vendor' => $vendor]);
+            $vendorEdit = Ccc::getBlock("Vendor_Edit")->setData(['vendor' => $vendor , 'vendorAddress' => $vendorAddress]);
             $content->addChild($vendorEdit);
             $this->renderLayout();    
         
@@ -76,13 +90,14 @@ class Controller_Vendor extends Controller_Core_Action
                 $vendor = Ccc::getModel('Vendor');
                 $vendor->setData($row);
                 $vendor->createdAt = $date;
+                $result = $vendor->save();
             }
             else
             {
                 $vendor->setData($row);
                 $vendor->updatedAt = $date;
+                $result = $vendor->save();
             }
-            $result = $vendor->save();
             return $result->vendorId;
 
             if (!$result)
@@ -90,7 +105,7 @@ class Controller_Vendor extends Controller_Core_Action
                 throw new Exception("Update Unsuccessfully");
             }
             $message->addMessage('Update Successfully'); 
-            $this->redirect($this->getUrl('grid','vendor',null,true));
+            $this->redirect($this->getUrl('grid','vendor',['id' => null],false));
         }
         catch(Exception $e)
         {
@@ -115,9 +130,11 @@ class Controller_Vendor extends Controller_Core_Action
         }
         date_default_timezone_set("Asia/Kolkata");
         $date = date("Y-m-d H:i:s");
-        $addressData = $address->fetchRow(
+        /*$addressData = $address->fetchRow(
             "SELECT * FROM `vendor_address` WHERE `vendorId` = {$vendorId}"
-        );
+        );*/
+        $vendorModel = Ccc::getModel('Vendor')->load($vendorId);
+        $addressData = $vendorModel->getVendorAddress();
 
         if(!$addressData)
         {
@@ -131,7 +148,7 @@ class Controller_Vendor extends Controller_Core_Action
                 throw new Exception("Insert Unsuccessfully.");
             }
                 $message->addMessage('Insert Successfully.');
-
+                $this->redirect($this->getUrl('grid',null,['id' => null],false)); 
         }
         else
         {
@@ -143,7 +160,7 @@ class Controller_Vendor extends Controller_Core_Action
                 throw new Exception("Update Unsuccessfully.");
             }
             $message->addMessage('Update Successfully.');
-                
+            $this->redirect($this->getUrl('grid',null,['id' => null],false)); 
             
         }
            
@@ -182,11 +199,11 @@ class Controller_Vendor extends Controller_Core_Action
                 throw new Exception("System is unable to delete record.");
             }
             $message->addMessage('Delete Successfully.');       
-            $this->redirect($this->getUrl('grid','vendor',null,true));
+            $this->redirect($this->getUrl('grid','vendor',['id' => null],false));
         } catch (Exception $e) 
         {
             $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-            $this->redirect($this->getUrl('grid',null,null,true));  
+            $this->redirect($this->getUrl('grid',null,['id' => null],false));  
         }
     }
 }

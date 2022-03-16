@@ -23,6 +23,7 @@ class Controller_Customer_Price extends Controller_Core_Action
             }
             $postData = $this->getRequest()->getPost();
             $customerId = (int)$this->getRequest()->getRequest('customerId');
+            
             if(array_key_exists('exists',$postData['price']))
             {
                 foreach ($postData['price']['exists'] as $productId => $price) 

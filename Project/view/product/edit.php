@@ -4,7 +4,7 @@
 <?php $categoryProductPair = $this->getCategoryProductPair();?>
 <?php $controllerCoreAction = new Controller_Core_Action(); ?>
 
-   <form action='<?php echo $controllerCoreAction->getUrl('save','product',null,true) ?>' method='post'>
+   <form action='<?php echo $controllerCoreAction->getUrl('save','product',null,false) ?>' method='post'>
     <table border="1" width="100%" cellspacing="4">
         <tr>
           <input type="hidden" name="product[productId]" value="<?php echo $product->productId ?>">
@@ -67,7 +67,7 @@
           <td width="25%">&nbsp;</td>
           <td>
             <button type="submit" name="submit" class="Registerbtn">Save</button>
-            <a href="<?php echo $controllerCoreAction->getUrl('grid','product',null,true) ?>"><button type="button" class="cancelbtn">Cancel</button></a>
+            <a href="<?php echo $controllerCoreAction->getUrl('grid','product',null,false) ?>"><button type="button" class="cancelbtn">Cancel</button></a>
           </td>
         </tr>    
       </div>  

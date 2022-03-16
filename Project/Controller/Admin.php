@@ -100,7 +100,7 @@ class Controller_Admin extends Controller_Core_Action
                 }
 				$message->addMessage('Update Successfully.');
        		}
-			$this->redirect($this->getUrl('grid',null,null,true));
+			$this->redirect($this->getUrl('grid',null,['id' => null],false));
 		} 
 		catch (Exception $e) 
 		{
@@ -127,12 +127,12 @@ class Controller_Admin extends Controller_Core_Action
 				throw new Exception("System is unable to delete record.");						
 			}
 			$message->addMessage('Delete Successfully.');			
-			$this->redirect($this->getUrl('grid',null,null,true));			
+			$this->redirect($this->getUrl('grid',null,['id' => null],false));			
 		} 
 		catch (Exception $e) 
 		{
 			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect($this->getUrl('grid',null,null,true));	
+			$this->redirect($this->getUrl('grid',null,['id' => null],false));	
 		}
 	}
 

@@ -5,7 +5,7 @@
 
 	<form action="<?php echo $controllerCoreAction->getUrl('save','product_media',null,false) ?>" method="POST" align="center">
 		<input type="submit" name="update" value="UPDATE"> 
-	<button ><a href="<?php echo $controllerCoreAction->getUrl('grid','product',null,true) ?>">Cancel</a></button>
+	<button ><a href="<?php echo $controllerCoreAction->getUrl('grid','product',null,false) ?>">Cancel</a></button>
 
 		<table border=1 width=100%>
 			<tr>

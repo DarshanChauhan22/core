@@ -106,10 +106,19 @@ class Controller_Product extends Controller_Core_Action{
         	}
         	else
         	{
-        		$product = Ccc::getModel('product');
+        		$product->load($row['productId']);
+        			$product->productId = $row["productId"];
+               $product->name = $row['name'];
+               $product->price =  $row['price'];
+               $product->quantity =  $row['quantity'];
+               $product->sku =  $row['sku'];
+               $product->status =  $row['status'];
+               $product->updatedAt =  $date;
+               $result = $product->save();
+        		/*$product = Ccc::getModel('product');
         		$product->setData($row);
             $product->updatedAt =  $date;
-            $result = $product->save();
+            $result = $product->save();*/
 
     		 	$categoryProduct = $row['category'];
     		 	unset($row['category']);
@@ -123,7 +132,7 @@ class Controller_Product extends Controller_Core_Action{
 				$message->addMessage('Update Successfully.');
        			}
 
-			$this->redirect($this->getUrl('grid','product',null,true));
+			$this->redirect($this->getUrl('grid','product',['id' => null],false));
 			
 		} catch (Exception $e) {
 			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
@@ -161,11 +170,11 @@ class Controller_Product extends Controller_Core_Action{
             }
 
 			$message->addMessage('Delete Successfully.');
-			$this->redirect($this->getUrl('grid','product',null,true));
+			$this->redirect($this->getUrl('grid','product',['id' => null],false));
 		} catch (Exception $e) 
 		{
 			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect($this->getUrl('grid',null,null,true));	
+			$this->redirect($this->getUrl('grid',null,['id' => null],false));	
 		}
 	}
 }

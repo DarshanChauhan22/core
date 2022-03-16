@@ -7,7 +7,7 @@
 	function url(ele) 
 	{
 		var page = ele.value;
-		var pageUrl = "http://localhost/core/core/Project/index.php?c=page&a=grid&p=1&ppr="+ele.value;
+		var pageUrl = "<?php echo $controllerCoreAction->getUrl('grid','page',['p' => $this->getPager()->getStart()],true) ?>&ppr="+ele.value;
 		window.open(pageUrl,"_self");	
 	}
 </script>

@@ -2,7 +2,7 @@
 <?php $controllerCoreAction = new Controller_Core_Action(); ?>
 
 	<h1> Customer Details </h1> 
-	<form action="<?php echo $controllerCoreAction->getUrl('add','customer',null,true) ?>" method="POST">
+	<form action="<?php echo $controllerCoreAction->getUrl('add','customer',null,false) ?>" method="POST">
 		<button type="submit" name="Add" class="Registerbtn"> Add New </button>
 	</form>
 

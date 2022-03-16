@@ -87,12 +87,12 @@ class Controller_Config extends Controller_Core_Action
                 throw new Exception("Update Unsuccessfully");
             }
             $message->addMessage('Update Successfully'); 
-            $this->redirect($this->getUrl('grid','config',null,true));
+            $this->redirect($this->getUrl('grid','config',['id' => null],false));
         }
         catch(Exception $e)
         {
             $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);         
-            $this->redirect($this->getUrl('grid','config',null,true));
+            $this->redirect($this->getUrl('grid','config',['id' => null],false));
         }
 
 }
@@ -115,12 +115,12 @@ class Controller_Config extends Controller_Core_Action
 										
 			}
 			$message->addMessage('Delete Successfully.');	
-			$this->redirect($this->getUrl('grid','config',null,true));	
+			$this->redirect($this->getUrl('grid','config',['id' => null],false));	
 				
 		} catch (Exception $e) 
 		{
 			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect($this->getUrl('grid',null,null,true));
+			$this->redirect($this->getUrl('grid',null,['id' => null],false));
 		}
 	}
 }

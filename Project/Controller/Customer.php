@@ -3,6 +3,7 @@
 <?php
 class Controller_Customer extends Controller_Core_Action
 {
+
     public function gridAction()
     {
         $this->setTitle("Customer Grid");
@@ -16,8 +17,10 @@ class Controller_Customer extends Controller_Core_Action
     {
         $this->setTitle("Customer Add");
         $customer = Ccc::getModel('Customer');
+        $billingAddress = Ccc::getModel('Customer_Address');
+        $shippingAddress = Ccc::getModel('Customer_Address');
         $content = $this->getLayout()->getContent();
-        $customerAdd = Ccc::getBlock("Customer_Edit")->setData(['customer' => $customer]);
+        $customerAdd = Ccc::getBlock("Customer_Edit")->setData(['customer' => $customer , 'billingAddress' => $billingAddress , 'shippingAddress' => $shippingAddress]);
         $content->addChild($customerAdd);
         $this->renderLayout();  
     }
@@ -33,16 +36,24 @@ class Controller_Customer extends Controller_Core_Action
             {
                 throw new Exception("Id not valid.");
             }
-            $customer = Ccc::getModel('Customer')->load($id);
+            $customerModel = Ccc::getModel('Customer')->load($id);
+           // $address = Ccc::getModel('Customer_Address');
+            $customer = $customerModel->fetchRow("SELECT * from customer WHERE customerId = {$id} ");
+                //print_r($customer); die;
 
-            $customer = $customer->fetchRow("select c.*,a.* from customer c join address a on a.customerId = c.customerId WHERE c.customerId = {$id} ");
-            
+            $billingAddress = $customerModel->getBillingAddress();
+            $shippingAddress = $customerModel->getShippingAddress();
+
+            //print_r($billingAddress); die;
+           // $billingAddress = $address->fetchRow("SELECT * FROM address WHERE customerId = {$id} AND billing =1; ");
+            //$shippingAddress = $address->fetchRow("SELECT * FROM address WHERE customerId = {$id} AND shipping =1; ");
+
             if(!$customer)
             {
                 throw new Exception("unable to load customer.");
             }
             $content = $this->getLayout()->getContent();
-            $customerEdit = Ccc::getBlock("Customer_Edit")->setData(['customer' => $customer]);
+            $customerEdit = Ccc::getBlock("Customer_Edit")->setData(['customer' => $customer , 'billingAddress' => $billingAddress , 'shippingAddress' => $shippingAddress]);
             $content->addChild($customerEdit);
             $this->renderLayout(); 
         
@@ -63,7 +74,9 @@ class Controller_Customer extends Controller_Core_Action
         
         try
         {
-            $row = $this->getRequest()->getPost('customer');
+            $row = $this->getRequest()->getRequest('customer');
+            /*print_r($row);
+            exit; */   
             if (!$row) 
             {
                 throw new Exception("Invalid Request.");             
@@ -107,36 +120,36 @@ class Controller_Customer extends Controller_Core_Action
         try 
         {
         $message = $this->getMessage();
-        $row = $this->getRequest()->getRequest('address');
-       
-
-        if (!$row) 
+        $billingRow = $this->getRequest()->getRequest('billingaddress');
+        $shippingRow = $this->getRequest()->getRequest('shippingaddress');
+      /* echo "<pre>";
+         print_r($billingRow);
+         print_r($shippingRow);
+            exit;*/
+        /*if (!$row) 
         {
             throw new Exception("Invalid Request.");
-        }
+        }*/
         date_default_timezone_set("Asia/Kolkata");
         $date = date("Y-m-d H:i:s");
-        $billing = 2;
-        $shipping = 2;
-
-        if (array_key_exists("billing", $row) && $row["billing"] == 1) 
-        {
-            $billing = 1;
-        }
-        if (array_key_exists("shipping", $row) && $row["shipping"] == 1) 
-        {
-            $shipping = 1;
-        }
-        $addressData = $address->fetchRow(
+         /*$addressData = $address->fetchRow(
             "SELECT * FROM address WHERE customerId = $customerId"
-        );
-
-
-        if(!$addressData)
+        );*/
+        $customerModel = Ccc::getModel('customer')->load($customerId);
+        $billingData = $customerModel->getBillingAddress();
+        //$shippingData = $customerModel->getShippingAddress();
+        /*print_r($billingData);
+        print_r($shippingData); die;*/
+       /* print_r($addressData); 
+        print_r($billingData); die;*/
+        if($billingData != null)
         {
+            
             $address = Ccc::getModel('Customer_Address');
-            $address->setData($row);
+            $address->setData($billingRow);
             $address->customerId = $customerId;
+            $address->billing =  1;
+            $address->shipping =  0;
             $result = $address->save();
             
             if(!$result)
@@ -148,9 +161,37 @@ class Controller_Customer extends Controller_Core_Action
         }
         else
         {
-            $address->setData($row);
-            $address->billing =  $row['billing'];
-            $address->shipping =  $row['shipping'];
+            $address->setData($billingRow);
+            $result = $address->save();
+                
+            if(!$result)
+            {
+                throw new Exception("Update Unsuccessfully.");
+            }
+            $message->addMessage('Update Successfully.');
+                
+        }
+        
+
+         if($billingData != null)
+        {
+            $address = Ccc::getModel('Customer_Address');
+            $address->setData($shippingRow);
+            $address->customerId = $customerId;
+            $address->billing =  0;
+            $address->shipping =  1;
+            $result = $address->save();
+            
+            if(!$result)
+            {
+                throw new Exception("Insert Unsuccessfully.");
+            }
+            $message->addMessage('Insert Successfully.');
+
+        }
+        else
+        {
+            $address->setData($shippingRow);
             $result = $address->save();
 
             if(!$result)
