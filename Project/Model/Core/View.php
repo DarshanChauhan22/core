@@ -4,6 +4,37 @@ class Model_Core_View{
 	public $templet = null;
 	public $data = null;
 
+	public function getUrl($action=null,$controller=null,$parameters=[],$reset=false)
+	{
+		$temp = [];
+		$request = Ccc::getFront()->getRequest();
+		
+		$temp['a'] = (!$action) ? $request->getRequest('a') : $action;
+		$temp['c'] = (!$controller)? $request->getRequest('c') : $controller;
+		
+		if($reset)
+		{
+			if($parameters)
+			{
+				$temp = array_merge($temp,$parameters);
+			}
+		}
+		else
+		{
+			$temp = array_merge($_GET,$temp);
+			if($parameters)
+			{
+				$temp = array_merge($temp,$parameters);
+			}
+		}
+		if(($key =  array_search(null, $temp)))
+		{
+			unset($temp[$key]);
+		}
+		return 'index.php?'.http_build_query($temp);
+	}
+
+
 
 	public function setTemplate($templet)
 	{

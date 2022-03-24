@@ -23,7 +23,7 @@ class Controller_Category_Media extends Controller_Core_Action{
           $request =$this->getRequest();
           $categoryId = $request->getRequest('id');
 
-          $media = Ccc::getModel('Category_Media');
+          $mediaModel = Ccc::getModel('Category_Media');
 
           if(!$request->isPost())
           {
@@ -64,7 +64,7 @@ class Controller_Category_Media extends Controller_Core_Action{
                 foreach($result1 as $key => $value){
                if($result)
                {                
-                  unlink($this->getBaseUrl('Media/Category/') . $value);
+                  unlink($mediaModel->getImagePath() . $value);
                }
               }  
             }
@@ -76,7 +76,7 @@ class Controller_Category_Media extends Controller_Core_Action{
             if(!$result)
             {
                  $message->addMessage('System is unable to fetch Pairs.',Model_Core_Message::ERROR);           
-                 $this->redirect($this->getUrl('grid',null,null,true));
+                 $this->redirect('grid',null,null,true);
             }
 
             $ids = array_keys($result);
@@ -148,7 +148,7 @@ class Controller_Category_Media extends Controller_Core_Action{
                 if(!$result)
                 {
                 $message->addMessage('Update Unsuccessfully.',Model_Core_Message::ERROR);
-                $this->redirect($this->getUrl('grid',null,null,true));
+                $this->redirect('grid',null,null,true);
                 }
                 $message->addMessage('Update Successfully.');
                  
@@ -180,12 +180,12 @@ class Controller_Category_Media extends Controller_Core_Action{
                 $message->addMessage('Update Successfully.');
             }
 
-          $this->redirect($this->getUrl('grid','category_media',['id'=> $categoryId]));
+          $this->redirect('grid','category_media',['id'=> $categoryId]);
 
       } catch (Exception $e) 
       {
          $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-            $this->redirect($this->getUrl('grid',null,null,true));  
+            $this->redirect('grid',null,null,true);  
       }
    }
 
@@ -194,6 +194,7 @@ class Controller_Category_Media extends Controller_Core_Action{
             try 
             {
                 $this->setTitle("Media Add");
+                $mediaModel = Ccc::getModel('Category_Media');
                $message = $this->getMessage();
                $categoryId = $_GET['id'];
 
@@ -203,7 +204,7 @@ class Controller_Category_Media extends Controller_Core_Action{
               $imageName = date("mjYhis")."-".$imageName;
               $imageAddress = implode("", $imageAddress1);
          
-      if(move_uploaded_file($imageAddress , $this->getBaseUrl('Media/Category/') . $imageName))
+      if(move_uploaded_file($imageAddress , $mediaModel->getImagePath() . $imageName))
          {
             $adapter = $this->getAdapter();
             $query =  "INSERT INTO `category_media`( `categoryId`, `image`, `base`, `thumb`, `small`, `gallery`, `status`) VALUES ({$categoryId},'$imageName',0,0,0,0,0)";
@@ -216,17 +217,17 @@ class Controller_Category_Media extends Controller_Core_Action{
                 }
                     $message->addMessage('Insert Successfully.');
 
-           $this->redirect($this->getUrl('grid','category_media',['id'=> $categoryId]));
+           $this->redirect('grid','category_media',['id'=> $categoryId]);
          }
          else
          {
-            $this->redirect($this->getUrl('grid','category_media',['id' =>  $categoryId],true));
+            $this->redirect('grid','category_media',['id' =>  $categoryId],true);
          }  
     
             } catch (Exception $e) 
             {
                 $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-                $this->redirect($this->getUrl('grid',null,null,true));
+                $this->redirect('grid',null,null,true);
             }
        		
        }

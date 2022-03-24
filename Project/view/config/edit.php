@@ -1,10 +1,9 @@
 <?php $config = $this->getConfig();?>
-<?php $controllerCoreAction = new Controller_Core_Action(); ?>
 
 
 
 
-  <form action="<?php echo $controllerCoreAction->getUrl('save','config',null,false) ?>" method="POST">
+  <form action="<?php echo $this->getUrl('save','config',null,false) ?>" method="POST">
   <table border="1" width="100%" cellspacing="4">
     <tr>
       <td width="10%">Name</td>
@@ -34,7 +33,7 @@
       <input type="hidden" name="config[configId]" value="<?php echo $config->configId; ?>">
       <td>
         <button type="submit" name="submit" class="Registerbtn">Save </button>
-        <a href="<?php echo $controllerCoreAction->getUrl('grid','config',null,true) ?>"><button type="button" class="cancelbtn">Cancel</button></a>
+        <a href="<?php echo $this->getUrl('grid','config',null,true) ?>"><button type="button" class="cancelbtn">Cancel</button></a>
       </td>
     </tr>    
   </table>  

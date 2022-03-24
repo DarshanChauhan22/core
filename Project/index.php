@@ -91,6 +91,25 @@ class Ccc
 		self::loadClass($className);
 		return new $className();
 	}
+
+	public static function getBaseUrl($subUrl)
+	{
+		$url = self::getConfig('baseUrl');
+        if($subUrl){
+            $url = $url.$subUrl;
+        }
+        return $url;
+	}
+
+	public static function getBasePath($subPath)
+	{
+		$path = self::getConfig('basePath');
+        if($subPath){
+            $path = $path.$subPath;
+        }
+        return $path;
+	}
+
 }
 Ccc::init();
 

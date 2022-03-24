@@ -125,6 +125,15 @@ class Adapter{
         return $key;
     }
 
+    public function escapString($value)
+    {
+        if(!$this->getConnect())
+        {
+            $this->connect();
+        }
+        return mysqli_real_escape_string($this->getConnect(),$value);
+    }
+
 } 
 $adapter = new Adapter();
 

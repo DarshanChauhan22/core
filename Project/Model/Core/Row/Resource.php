@@ -55,6 +55,7 @@ class Model_Core_Row_Resource
         $key = '`'.implode("`,`", array_keys($queryInsert)).'`';
         $value = '\''.implode("','", array_values($queryInsert)).'\'';
         $sqlResult = "INSERT INTO `{$this->getTableName()}` ({$key}) VALUES ({$value});";
+        print_r($sqlResult); 
         $result = $adapter->insert($sqlResult);
         return $result;
     }
@@ -70,9 +71,8 @@ class Model_Core_Row_Resource
         return $result;
     }
 
-    public function update(array $queryUpdate, array $queryId)
+    /*public function update(array $queryUpdate, array $queryId)
     {
-
         $adapter = $this->getAdapter();
         $date = date("Y-m-d H:i:s");
         $set = [];
@@ -87,9 +87,47 @@ class Model_Core_Row_Resource
         
         $sql1 = implode(",", $set);
         $update = "UPDATE $tableName SET $sql1 WHERE $key = $value;";
+        //print_r($update); die;
         $result = $adapter->update($update);
         return $result;
+    }*/
+
+
+    public function update($data,$id)
+    {
+        $whereClause = null;
+        $fields = null;     
+        if(!is_array($id))
+        {
+            $whereClause = '`'.$this->getPrimaryKey().'`'." = '".$this->getAdapter()->escapString($id)."'";
+        }
+        else
+        {
+            foreach ($id as $key => $value) 
+            {
+                $whereClause = $whereClause .'`'.$key.'`'. " = '".$value."' and ";
+            }
+            $whereClause = rtrim($whereClause,' and ');
+        }
+        foreach ($data as $col => $value) 
+        {
+            if($value != null)
+            {
+                $fields = $fields .'`'.$col.'`'. " = '".$this->getAdapter()->escapString($value)."',";
+
+            }
+            else
+            {
+                $fields = $fields . $col . ' = null ,';
+            }
+        }
+
+        $fields = rtrim($fields,',');
+        $query = "UPDATE ".'`'.$this->getTableName().'`'." SET ".$fields." WHERE ".$whereClause;
+        return $this->getAdapter()->update($query);
     }
+
+
 
     public function fetchRow($queryFetchRow)
     {

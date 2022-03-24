@@ -1,9 +1,8 @@
 <?php $vendorAddress = $this->getVendor(); //print_r($vendorAddress); die;?>
 <?php $vendor = $vendorAddress['vendor']; //print_r($vendor); die;?>
 <?php $address = $vendorAddress['vendorAddress']; //print_r($vendorAddress); die;?>
-<?php $controllerCoreAction = new Controller_Core_Action(); ?>
 
-  <form action="<?php echo $controllerCoreAction->getUrl('save',null,null,false) ?>" method="POST">
+  <form action="<?php echo $this->getUrl('save',null,null,false) ?>" method="POST">
   <table border="1" width="100%" cellspacing="4">
     <tr>
       <td colspan="2"><b>Personal Information</b></td>
@@ -65,7 +64,7 @@
       <input type="hidden" name="address[vendorAddressId]" value="<?php echo $address->vendorAddressId ?>">
       <td>
         <button type="submit" name="submit" class="Registerbtn">Save</button>
-        <a href="<?php echo $controllerCoreAction->getUrl('grid','vendor',null,false) ?>"><button type="button" class="cancelbtn">Cancel</button></a>
+        <a href="<?php echo $this->getUrl('grid','vendor',null,false) ?>"><button type="button" class="cancelbtn">Cancel</button></a>
       </td>
     </tr>    
   </table>  

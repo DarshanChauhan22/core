@@ -13,16 +13,48 @@ class Model_Product extends Model_Core_Row
 	const STATUS_ENABLED_LBL = 'Active';
 	const STATUS_DISABLED_LBL = 'InActive';
 
+    const DISCOUNT_MODE_PER = 1;
+    const DISCOUNT_MODE_PRICE = 2;
+    const DISCOUNT_MODE_DEFAULT = 1;
+    const DISCOUNT_MODE_PER_LBL = 'AS Percentage';
+    const DISCOUNT_MODE_PRICE_LBL = 'As Price';
+
 	public function __construct()
 	{
 		$this->setResourceClassName('Product_Resource');
 		parent::__construct();
 	}
 
+    public function saveCategories($categoryIds , $productId = null)
+    {
+
+        global $adapter;
+        $query = "DELETE FROM category_product WHERE productId = {$this->productId}";
+        $adapter->delete($query);
+
+        if($productId)
+        {
+            foreach ($categoryIds as $categoryId) 
+                {       
+                    $categoryProduct = Ccc::getModel('Category_Product');
+                    $categoryProduct->productId = $productId;
+                    $categoryProduct->categoryId = $categoryId;
+                    $categoryProduct->save();
+                }
+
+        }
+        foreach ($categoryIds as $categoryId) 
+        {       
+            $categoryProduct = Ccc::getModel('Category_Product');
+            $categoryProduct->productId = $this->productId;
+            $categoryProduct->categoryId = $categoryId;
+            $categoryProduct->save();
+        }
+    }
     public function getStatus($key = null)
     {       
         
-        $statues = [self::STATUS_ENABLED => self::STATUS_ENABLED_LBL,
+        $statues = [self::DISCOUNT_MODE_PER => self::STATUS_ENABLED_LBL,
                     self::STATUS_DISABLED => self::STATUS_DISABLED_LBL];
 
         if(!$key)
@@ -33,6 +65,25 @@ class Model_Product extends Model_Core_Row
         if(array_key_exists($key , $statues))
         {
             return $statues[$key];
+        }
+
+        return self::DISCOUNT_MODE_DEFAULT;
+    }
+
+    public function getDiscountMode($key = null)
+    {       
+        
+        $discountModes = [self::DISCOUNT_MODE_PER => self::DISCOUNT_MODE_PER_LBL,
+                    self::DISCOUNT_MODE_PRICE => self::DISCOUNT_MODE_PRICE_LBL];
+
+        if(!$key)
+        {
+            return $discountModes;
+        }
+
+        if(array_key_exists($key , $discountModes))
+        {
+            return $discountModes[$key];
         }
 
         return self::STATUS_DEFAULT;

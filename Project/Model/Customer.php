@@ -6,6 +6,8 @@ class Model_Customer extends Model_Core_Row
     protected $shippingAddress = null;
     protected $salesman = null;
     protected $price = null;
+    protected $cart = null;
+    protected $order = null;
 
 	const STATUS_ENABLED = 1;
 	const STATUS_DISABLED = 2;
@@ -52,6 +54,35 @@ class Model_Customer extends Model_Core_Row
 	return $result;
 	}
 
+    public function getCart($reload = false)
+    {
+        $cartModel = Ccc::getModel('Cart');
+        
+        if(!$this->customerId)
+        {
+            return $cartModel;
+        }
+
+        if($this->cart && !$reload)
+        { 
+            return $this->cartModel;
+        }
+
+        $cart = $cartModel->fetchRow("SELECT * from cart WHERE customerId = {$this->customerId};");
+        if(!$cart)
+        {
+            return $this->cartModel;
+        }
+        $this->setCart($cart);
+        return $cart;
+    }
+
+    public function setCart(Model_Cart $cart)
+    {
+        $this->cart = $cart;
+        return $this;
+    }
+
     
     public function getBillingAddress($reload = false)
     {
@@ -67,7 +98,6 @@ class Model_Customer extends Model_Core_Row
             return $this->billingAddress;
         }
 
-        	//echo "11"; die;
         $billingAddress = $billingAddressModel->fetchRow("SELECT * from address WHERE customerId = {$this->customerId} AND billing = 1");
         if(!$billingAddress)
         {
@@ -165,6 +195,35 @@ class Model_Customer extends Model_Core_Row
     public function setprice(Model_price $price)
     {
         $this->price = $price;
+        return $this;
+    }
+
+     public function getOrder($reload = false)
+    {
+        $orderModel = Ccc::getModel('Order');
+        
+        if(!$this->customerId)
+        {
+            return $orderModel;
+        }
+
+        if($this->order && !$reload)
+        { 
+            return $this->orderModel;
+        }
+
+        $order = $orderModel->fetchRow("SELECT * from orders WHERE customerId = {$this->customerId};");
+        if(!$order)
+        {
+            return $this->orderModel;
+        }
+        $this->setorder($order);
+        return $order;
+    }
+
+    public function setorder(Model_order $order)
+    {
+        $this->order = $order;
         return $this;
     }
 }

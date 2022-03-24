@@ -46,6 +46,10 @@ class Controller_Vendor extends Controller_Core_Action
 
             $vendorModel = Ccc::getModel('Vendor')->load($id);
             //$vendorAddressModel = Ccc::getModel('Vendor_Address')->load($id);
+            if(!$vendorModel)
+            {
+                throw new Exception("Unable To Load Admin.");
+            }
             $vendor = $vendorModel->fetchRow("SELECT * FROM `vendor` WHERE vendorID = '$id'");
             //$vendor = $vendorAddressModel->getVendor();
             //print_r(121); die;
@@ -65,7 +69,7 @@ class Controller_Vendor extends Controller_Core_Action
         catch (Exception $e) 
         {
             $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-            $this->redirect($this->getUrl('grid',null,null,true));  
+            $this->redirect('grid',null,null,true);  
         }
     }
 
@@ -105,12 +109,12 @@ class Controller_Vendor extends Controller_Core_Action
                 throw new Exception("Update Unsuccessfully");
             }
             $message->addMessage('Update Successfully'); 
-            $this->redirect($this->getUrl('grid','vendor',['id' => null],false));
+            $this->redirect('grid','vendor',['id' => null],false);
         }
         catch(Exception $e)
         {
             $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);         
-            $this->redirect($this->getUrl('grid','vendor',null,true));
+            $this->redirect('grid','vendor',null,true);
         }
 
 }
@@ -148,7 +152,7 @@ class Controller_Vendor extends Controller_Core_Action
                 throw new Exception("Insert Unsuccessfully.");
             }
                 $message->addMessage('Insert Successfully.');
-                $this->redirect($this->getUrl('grid',null,['id' => null],false)); 
+                $this->redirect('grid',null,['id' => null],false); 
         }
         else
         {
@@ -160,14 +164,14 @@ class Controller_Vendor extends Controller_Core_Action
                 throw new Exception("Update Unsuccessfully.");
             }
             $message->addMessage('Update Successfully.');
-            $this->redirect($this->getUrl('grid',null,['id' => null],false)); 
+            $this->redirect('grid',null,['id' => null],false); 
             
         }
            
         } catch (Exception $e) 
         {
             $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-            $this->redirect($this->getUrl('grid',null,null,true));  
+            $this->redirect('grid',null,null,true);  
         }
        
     }
@@ -177,9 +181,9 @@ class Controller_Vendor extends Controller_Core_Action
         try {
             $vendorId = $this->saveVendor();
             $this->saveAddress($vendorId);
-            $this->redirect($this->getUrl('grid','vendor',null,true));
+            $this->redirect('grid','vendor',null,true);
         } catch (Exception $e) {
-            $this->redirect($this->getUrl('grid','vendor',null,true));
+            $this->redirect('grid','vendor',null,true);
         }
     }
 
@@ -199,11 +203,11 @@ class Controller_Vendor extends Controller_Core_Action
                 throw new Exception("System is unable to delete record.");
             }
             $message->addMessage('Delete Successfully.');       
-            $this->redirect($this->getUrl('grid','vendor',['id' => null],false));
+            $this->redirect('grid','vendor',['id' => null],false);
         } catch (Exception $e) 
         {
             $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-            $this->redirect($this->getUrl('grid',null,['id' => null],false));  
+            $this->redirect('grid',null,['id' => null],false);  
         }
     }
 }

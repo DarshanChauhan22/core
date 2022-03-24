@@ -56,7 +56,7 @@ class Controller_Category extends Controller_Core_Action
 			catch (Exception $e) 
 			{
 				$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-				$this->redirect($this->getUrl('grid',null,null,true));		
+				$this->redirect('grid',null,null,false);		
 			}
 				
 		}
@@ -156,12 +156,12 @@ class Controller_Category extends Controller_Core_Action
 				}				
 			}
 			$message->addMessage('Insert Successfully.');
-		$this->redirect($this->getUrl('grid','category',null,true));
+		$this->redirect('grid','category',null,false);
 		
 		} catch (Exception $e) 
 		{
 			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect($this->getUrl('grid',null,null,true));		
+			$this->redirect('grid',null,null,false);		
 		}
 	}
 	
@@ -242,11 +242,11 @@ class Controller_Category extends Controller_Core_Action
 
 			}
 			$message->addMessage('Update Successfully.');
-			$this->redirect($this->getUrl('grid','category',null,true));
+			$this->redirect('grid','category',null,false);
 			} catch (Exception $e) 
 			{
 				$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-				$this->redirect($this->getUrl('grid',null,null,true));	
+				$this->redirect('grid',null,null,false);	
 		    }
 		
 	}
@@ -258,6 +258,7 @@ class Controller_Category extends Controller_Core_Action
 		try 
 		{
 			$message = $this->getMessage();
+			$mediaModel = Ccc::getModel('Category_Media');
 			$id = $this->getRequest()->getRequest('id');
 			$category = Ccc::getModel('Category')->load($id);
 
@@ -279,13 +280,13 @@ class Controller_Category extends Controller_Core_Action
 			foreach($result1 as $key => $value){
             if($delete)
             {
-              unlink($this->getBaseUrl('Media/Category/') . $value);               }
+              unlink($mediaModel->getImagePath() . $value);               }
             }
             $message->addMessage('Delete Successfully.');
-			$this->redirect($this->getUrl('grid','category',null,true));		
+			$this->redirect('grid','category',['id' => null],false);		
 		} catch (Exception $e) {
 			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect($this->getUrl('grid',null,null,true));			
+			$this->redirect('grid',null,['id' => null],false);			
 		}
 			
 	}
@@ -312,6 +313,7 @@ class Controller_Category extends Controller_Core_Action
             $excludePath = $adapter->fetchOne("SELECT `categoryPath` FROM `category` WHERE `categoryId` = '$categoryId'");
             $excludePath = $excludePath . '/%';
             $query = "SELECT `categoryId`,`categoryPath` FROM `category` WHERE categoryId <> '$categoryId' AND categoryPath NOT LIKE('$excludePath') ORDER BY `categoryPath`";  
+            //print_r($query); die;
         }
         $categoryPath = $adapter->fetchPair($query);
      

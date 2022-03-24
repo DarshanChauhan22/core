@@ -1,8 +1,7 @@
 <?php $page = $this->getPage(); ?>
-<?php $controllerCoreAction = new Controller_Core_Action(); ?>
 
 
-  <form action="<?php echo $controllerCoreAction->getUrl('save','page',null,false) ?>" method="POST">
+  <form action="<?php echo $this->getUrl('save','page',null,false) ?>" method="POST">
   <table border="1" width="100%" cellspacing="4">
     <tr>
       <td width="10%">Name</td>
@@ -32,7 +31,7 @@
       <input type="hidden" name="page[pageId]" value="<?php echo $page->pageId ?>">
       <td>
         <button type="submit" name="submit" class="Registerbtn">Save</button>
-        <a href="<?php echo $controllerCoreAction->getUrl('grid','page',null,true) ?>"><button type="button" class="cancelbtn">Cancel</button></a>
+        <a href="<?php echo $this->getUrl('grid','page',null,true) ?>"><button type="button" class="cancelbtn">Cancel</button></a>
       </td>
     </tr>    
   </table>  

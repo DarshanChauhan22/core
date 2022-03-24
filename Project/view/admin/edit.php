@@ -1,10 +1,7 @@
 <?php $admin = $this->getAdmin(); ?>
-<?php $controllerCoreAction = new Controller_Core_Action(); ?>
 
 
-
-
-  <form action="<?php echo $controllerCoreAction->getUrl('save','admin',null,false) ?>" method="POST">
+  <form action="<?php echo $this->getUrl('save') ?>" method="POST">
   <table border="1" width="100%" cellspacing="4">
     <tr>
       <td width="10%">First Name</td>
@@ -18,11 +15,12 @@
       <td width="10%">Email</td>
       <td><input type="email" name="admin[email]" value="<?php echo $admin->email ?>"></td>
     </tr>
+       <?php if(!$admin->password): ?>
     <tr>
       <td width="10%">Password</td>
       <td><input type="Password" name="admin[password]" value="<?php echo $admin->password ?>"></td>
     </tr>
-    
+    <?php endif; ?>   
     <tr>
       <td width="10%">Status</td>
       <td>
@@ -38,7 +36,7 @@
       <input type="hidden" name="admin[adminId]" value="<?php echo $admin->adminId ?>">
       <td>
         <button type="submit" name="submit" class="Registerbtn">Save </button>
-        <a href="<?php echo $controllerCoreAction->getUrl('grid','admin',null,true) ?>"><button type="button" class="cancelbtn">Cancel</button></a>
+        <a href="<?php echo $this->getUrl('grid','admin',['id'=>null],false) ?>"><button type="button" class="cancelbtn">Cancel</button></a>
       </td>
     </tr>    
   </table>  

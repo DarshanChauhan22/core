@@ -52,7 +52,7 @@ class Controller_Product extends Controller_Core_Action{
 		catch (Exception $e) 
 		{
 			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect($this->getUrl('grid',null,null,true));	
+			$this->redirect('grid',null,null,true);	
 		}
 
 	}
@@ -65,7 +65,7 @@ class Controller_Product extends Controller_Core_Action{
 			$message = $this->getMessage();
 			$product = Ccc::getModel('Product');
 			$row =  $this->getRequest()->getRequest('product');
-			
+			//print_r($row); die;
 			$categoryProductRow =  Ccc::getModel('Category_Product');
 
 			$categoryIds = $this->getRequest()->getPost('category');
@@ -110,7 +110,11 @@ class Controller_Product extends Controller_Core_Action{
         			$product->productId = $row["productId"];
                $product->name = $row['name'];
                $product->price =  $row['price'];
+               $product->tax =  $row['tax'];
                $product->quantity =  $row['quantity'];
+               $product->cost =  $row['cost'];
+               $product->discount =  $row['discount'];
+               $product->discountMode =  $row['discountMode'];
                $product->sku =  $row['sku'];
                $product->status =  $row['status'];
                $product->updatedAt =  $date;
@@ -132,11 +136,11 @@ class Controller_Product extends Controller_Core_Action{
 				$message->addMessage('Update Successfully.');
        			}
 
-			$this->redirect($this->getUrl('grid','product',['id' => null],false));
+			$this->redirect('grid','product',['id' => null],false);
 			
 		} catch (Exception $e) {
 			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect($this->getUrl('grid',null,null,true));	
+			$this->redirect('grid',null,null,true);	
 		}
 	}
 
@@ -146,6 +150,7 @@ class Controller_Product extends Controller_Core_Action{
 		{	
 			$message = $this->getMessage();
 			$adapter = $this->getAdapter();
+			$mediaModel = Ccc::getModel('Product_Media');
 			$getId = $this->getRequest()->getRequest('id');
 			$customerTable = Ccc::getModel('Product')->load($getId);
 			$query1 = "SELECT imageId,image FROM product p LEFT JOIN `product_media` b ON p.productId = b.productId  WHERE p.productId = $getId;";
@@ -165,16 +170,16 @@ class Controller_Product extends Controller_Core_Action{
                if($delete)
                {
               
-                  unlink($this->getBaseUrl('Media/Product/') . $value);
+                  unlink( $mediaModel->getImagePath() . $value);
                }
             }
 
 			$message->addMessage('Delete Successfully.');
-			$this->redirect($this->getUrl('grid','product',['id' => null],false));
+			$this->redirect('grid','product',['id' => null],false);
 		} catch (Exception $e) 
 		{
 			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect($this->getUrl('grid',null,['id' => null],false));	
+			$this->redirect('grid',null,['id' => null],false);	
 		}
 	}
 }

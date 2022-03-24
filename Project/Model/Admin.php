@@ -14,8 +14,7 @@ class Model_Admin extends Model_Core_Row
 	}
 
 	public function getStatus($key = null)
-	{		
-		
+	{			
 		$statues = [self::STATUS_ENABLED => self::STATUS_ENABLED_LBL,
 					self::STATUS_DISABLED => self::STATUS_DISABLED_LBL];
 

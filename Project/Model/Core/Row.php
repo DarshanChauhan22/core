@@ -22,7 +22,7 @@ class Model_Core_Row
 
     public function setData(array $data)
     {
-        $this->data = $data;
+        $this->data = array_merge($this->data,$data);
         return $this;       
     }
 
@@ -90,7 +90,6 @@ class Model_Core_Row
         }
         $tableName = $this->getTable()->getTableName();
         $query = "SELECT * FROM $tableName WHERE $column = $id";
-
         return $this->fetchRow($query);
         
     }

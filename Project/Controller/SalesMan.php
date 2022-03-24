@@ -49,7 +49,7 @@ class Controller_salesman extends Controller_Core_Action
 		catch (Exception $e) 
 		{
 			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect($this->getUrl('grid',null,null,true));	;
+			$this->redirect('grid',null,null,true);	;
 		}
 	}
 
@@ -88,12 +88,12 @@ class Controller_salesman extends Controller_Core_Action
                 throw new Exception("Update Unsuccessfully");
             }
             $message->addMessage('Update Successfully'); 
-            $this->redirect($this->getUrl('grid','salesman',['id' => null],false));
+            $this->redirect('grid','salesman',['id' => null],false);
         }
         catch(Exception $e)
         {
             $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);         
-            $this->redirect($this->getUrl('grid','salesman',null,true));
+            $this->redirect('grid','salesman',null,true);
         }
 
 }
@@ -116,12 +116,12 @@ class Controller_salesman extends Controller_Core_Action
 										
 			}
 			$message->addMessage('Delete Successfully.');			
-			$this->redirect($this->getUrl('grid','salesman',['id' => null],false));	
+			$this->redirect('grid','salesman',['id' => null],false);	
 				
 		} catch (Exception $e) 
 		{
 			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect($this->getUrl('grid',null,['id' => null],false));	
+			$this->redirect('grid',null,['id' => null],false);	
 		}
 	}
 }

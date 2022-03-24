@@ -12,6 +12,13 @@ class Controller_Core_Action
 		$this->authenticate();			
 	}
 
+	public function redirect($action=null,$controller=null,$parameters=[],$reset=false)
+	{
+		$url = $this->getLayout()->getUrl($action,$controller,$parameters,$reset);
+		header('location:'.$url);	
+		exit();			
+	}
+
 	public function authenticate()
 	{
 		try 
@@ -40,7 +47,7 @@ class Controller_Core_Action
 		} catch (Exception $e) 
 		{
 			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect($this->getUrl('login','Admin_Login',null,true));	
+			$this->redirect('login','Admin_Login',null,true);	
 		}
 		
 	}	
@@ -66,11 +73,11 @@ class Controller_Core_Action
         return $adapter;
     }
 	
-	public function redirect($url)
+	/*public function redirect($url)
 	{
 		header('location:'.$url);	
 		exit();			
-	}
+	}*/
 
 	protected function setTitle($title)
     {
@@ -107,7 +114,7 @@ class Controller_Core_Action
         return Ccc::getFront()->getResponse();
     }
 
-	public function getUrl($action=null,$controller=null,$parameters=[],$reset=false)
+	/*public function getUrl($action=null,$controller=null,$parameters=[],$reset=false)
     {
     	$tmp = [];
     	if(!$controller)
@@ -145,7 +152,7 @@ class Controller_Core_Action
     	}
     	$url = 'index.php?'.http_build_query($tmp);
     	return $url;
-	}
+	}*/
 
 	public function getBaseUrl($subUrl = null)
     {

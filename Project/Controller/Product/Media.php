@@ -23,7 +23,7 @@ class Controller_Product_Media extends Controller_Core_Action
 
           $productId = $this->getRequest()->getRequest('id');
 
-          $media = Ccc::getModel('Product_Media');
+          $mediaModel = Ccc::getModel('Product_Media');
 
           if(!$this->getRequest()->isPost())
           {
@@ -63,7 +63,7 @@ class Controller_Product_Media extends Controller_Core_Action
                 foreach($result1 as $key => $value){
                if($result)
                {
-                  unlink($this->getBaseUrl('Media/Product/') . $value);
+                  unlink($mediaModel->getImagePath() . $value);
                }
             }
                     
@@ -175,12 +175,12 @@ class Controller_Product_Media extends Controller_Core_Action
                 $message->addMessage('Update Successfully.');
             }
 
-          $this->redirect($this->getUrl('grid','product_media',['id'=> $productId]));
+          $this->redirect('grid','product_media',['id'=> $productId]);
 
       } catch (Exception $e) 
       {
           $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-            $this->redirect($this->getUrl('grid',null,null,true));
+            $this->redirect('grid',null,null,true);
       }
    }
 
@@ -190,14 +190,14 @@ class Controller_Product_Media extends Controller_Core_Action
         try {
               $message = $this->getMessage();
               $productId = $this->getRequest()->getRequest('id');
-
+              $mediaModel = Ccc::getModel('Product_Media');
               $imageName1 = $_FILES['image']['name'];
               $imageAddress1 = $_FILES['image']['tmp_name'];
               $imageName = implode("", $imageName1);
               $imageName = date("mjYhis")."-".$imageName;
               $imageAddress = implode("", $imageAddress1);
     
-      if(move_uploaded_file($imageAddress , $this->getBaseUrl('Media/product/') . $imageName))
+      if(move_uploaded_file($imageAddress , $mediaModel->getImagePath() . $imageName))
          {
             $adapter = $this->getAdapter();
             $query =  "INSERT INTO `product_media`( `productId`, `image`, `base`, `thumb`, `small`, `gallery`, `status`) VALUES ({$productId},'$imageName',0,0,0,0,0)";
@@ -210,18 +210,18 @@ class Controller_Product_Media extends Controller_Core_Action
                 }
                     $message->addMessage('Insert Successfully.');
 
-           $this->redirect($this->getUrl('grid','product_media',['id'=> $productId]));
+           $this->redirect('grid','product_media',['id'=> $productId]);
          }
          else
          {
-            $this->redirect($this->getUrl('grid','product_media',['id' =>  $productId],true));
+            $this->redirect('grid','product_media',['id' =>  $productId],true);
          } 
             
         } 
         catch (Exception $e) 
         {
            $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-            $this->redirect($this->getUrl('grid',null,null,true));   
+            $this->redirect('grid',null,null,true);   
         }
        		 
 

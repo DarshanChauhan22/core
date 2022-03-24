@@ -1,10 +1,10 @@
 <?php $medias = $this->getMedias(); ?>	
-<?php $controllerCoreAction = new Controller_Core_Action(); ?>
+<?php $mediaModel = Ccc::getModel('Category_Media')?>
 
 
-	<form action="<?php echo $controllerCoreAction->getUrl('save','category_media',null,false) ?>" method="POST" align="center">
+	<form action="<?php echo $this->getUrl('save','category_media',null,false) ?>" method="POST" align="center">
 		<input type="submit" name="update" value="UPDATE"> 
-	<button ><a href="<?php echo $controllerCoreAction->getUrl('grid','category',null,true) ?>">Cancel</a></button>
+	<button ><a href="<?php echo $this->getUrl('grid','category',null,true) ?>">Cancel</a></button>
 
 		<table border=1 width=100%>
 			<tr>
@@ -22,7 +22,7 @@
 				<?php foreach ($medias as $media): ?>		
 					<tr>
 			    		<td><?php echo $media->imageId ; ?></td>
-						<td><img src="<?php echo 'Media/category/' . $media->image; ?>" width="100px" height="100px" alt="image"></td>
+						<td><img src="<?php echo $mediaModel->getImageUrl() . $media->image; ?>" width="100px" height="100px" alt="image"></td>
 						<td><input type="radio" name="media[base]" value="<?php echo $media->imageId?>"<?php echo ($media->base==1) ? 'checked' : '' ; ?>></td>
 						<td><input type="radio" name="media[thumb]" value="<?php echo $media->imageId?>"<?php echo ($media->thumb==1) ? 'checked' : '' ;?>></td>
 						<td><input type="radio" name="media[small]" value="<?php echo $media->imageId?>"<?php echo ($media->small==1) ? 'checked' : '' ;?>></td>
@@ -42,7 +42,7 @@
 	<br>
 	<br>
 	<br>
-				<form align="center" action="<?php echo $controllerCoreAction->getUrl('add','category_media',null,false) ?>" method="POST" enctype="multipart/form-data">
+				<form align="center" action="<?php echo $this->getUrl('add','category_media',null,false) ?>" method="POST" enctype="multipart/form-data">
 				<input type="file" name="image[]" accept="image/*">
 				<input type="submit" name="submit" value="Upload" >
 </form>

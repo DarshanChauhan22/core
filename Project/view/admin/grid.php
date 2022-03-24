@@ -1,5 +1,4 @@
 <?php $admins = $this->getAdmins(); ?>
-<?php $controllerCoreAction = new Controller_Core_Action(); ?>
 <?php $perPageCount = $this->getPager()->getPerPageCount(); ?>
 
 
@@ -7,7 +6,7 @@
 	function url(ele) 
 	{
 		var page = ele.value;
-		var pageUrl = "<?php echo $controllerCoreAction->getUrl('grid','admin',['p' => $this->getPager()->getStart()],true) ?>&ppr="+ele.value;
+		var pageUrl = "<?php echo $this->getUrl('grid','admin',['p' => $this->getPager()->getStart()],true) ?>&ppr="+ele.value;
 		window.open(pageUrl,"_self");	
 	}
 </script>
@@ -30,33 +29,33 @@
 <?php if($this->getPager()->getPrev() == null):?>
 <button name='Start' disabled ><a>Start</a></button>
 <?php else: ?>
-<button name='Start'><a href="<?php echo $controllerCoreAction->getUrl('grid','admin',['p' => $this->getPager()->getStart()]) ?>">Start</a></button>
+<button name='Start'><a href="<?php echo $this->getUrl('grid','admin',['p' => $this->getPager()->getStart()]) ?>">Start</a></button>
 <?php endif;?>
 
 <?php if($this->getPager()->getPrev() == null):?>
 <button name='Prev' disabled ><a>Previous</a></button>
 <?php else: ?>
-<button name='Previous'><a href="<?php echo $controllerCoreAction->getUrl('grid','admin',['p' => $this->getPager()->getPrev()]) ?>">Previous</a></button>
+<button name='Previous'><a href="<?php echo $this->getUrl('grid','admin',['p' => $this->getPager()->getPrev()]) ?>">Previous</a></button>
 <?php endif;?>
 
-<button name='Current'><a href="<?php echo $controllerCoreAction->getUrl('grid','admin',['p' => $this->getPager()->getCurrent()]) ?>">Current</a></button>
+<button name='Current'><a href="<?php echo $this->getUrl('grid','admin',['p' => $this->getPager()->getCurrent()]) ?>">Current</a></button>
 
 <?php if($this->getPager()->getNext() == null):?>
 <button name='next' disabled ><a>Next</a></button>
 <?php else: ?>
-<button name='Next'><a href="<?php echo $controllerCoreAction->getUrl('grid','admin',['p' => $this->getPager()->getNext()]) ?>">Next</a></button>
+<button name='Next'><a href="<?php echo $this->getUrl('grid','admin',['p' => $this->getPager()->getNext()]) ?>">Next</a></button>
 <?php endif;?>
 
 <?php if($this->getPager()->getNext() == null):?>
 <button name='end' disabled ><a>End</a></button>
 <?php else: ?>
-<button name='End'><a href="<?php echo $controllerCoreAction->getUrl('grid','admin',['p' => $this->getPager()->getEnd()]) ?>">End</a></button>
+<button name='End'><a href="<?php echo $this->getUrl('grid','admin',['p' => $this->getPager()->getEnd()]) ?>">End</a></button>
 <?php endif;?>
 
 
 	
 	<h1> Admin Details </h1> 
-	<form action="<?php echo $controllerCoreAction->getUrl('add','admin',['p' => $this->getPager()->getEnd()],false) ?>" method="POST">
+	<form action="<?php echo $this->getUrl('add','admin',['p' => $this->getPager()->getEnd()],false) ?>" method="POST">
 		<button type="submit" name="Add" class="Registerbtn"> Add New </button>
 	</form>
 
@@ -67,7 +66,6 @@
 				<th> First Name </th>
 				<th> Last Name </th>
 				<th> Email </th>
-				<th> Password </th>
 				<th> Status </th>
 				<th> Create Date </th>
 				<th> Update Date </th>
@@ -81,7 +79,6 @@
 			    		<td><?php echo $admin->firstName ?></td>
 			    		<td><?php echo $admin->lastName ?></td>
 			    		<td><?php echo $admin->email ?></td>
-			    		<td><?php echo $admin->password ?></td>
 			    		
 			    		<td>
 				    		<?php echo $admin->getStatus($admin->status); ?>
@@ -90,10 +87,10 @@
 			    		<td><?php echo $admin->createdAt ?></td>
 			    		<td><?php echo $admin->updatedAt ?></td>
 			    		<td>
-			    			<a href="<?php echo$controllerCoreAction->getUrl('edit','admin',['id' =>  $admin->adminId],false) ?>">Update</a>
+			    			<a href="<?php echo $this->getUrl('edit','admin',['id' =>  $admin->adminId],false) ?>">Update</a>
 			    		</td>
 			    		<td>
-			    			<a href="<?php echo$controllerCoreAction->getUrl('delete','admin',['id' =>  $admin->adminId],false) ?>">Delete</a> 
+			    			<a href="<?php echo $this->getUrl('delete','admin',['id' =>  $admin->adminId],false) ?>">Delete</a> 
 			    		</td>
 			   		</tr>
 			 	<?php endforeach;?>

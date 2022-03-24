@@ -2,7 +2,8 @@
 <?php
 class Model_Product_Media extends Model_Core_Row
 {
-	protected $product; 
+	protected $product;
+    protected $mediaPath = "Media/product"; 
 	public function __construct()
 	{
 		$this->setResourceClassName('Product_Media_Resource');
@@ -10,7 +11,6 @@ class Model_Product_Media extends Model_Core_Row
 	}
 
 
-	protected $product; 
 
 	public function getproduct($reload = false)
     {
@@ -38,6 +38,16 @@ class Model_Product_Media extends Model_Core_Row
     {
         $this->product = $product;
         return $this;
+    }
+
+    public function getImageUrl()
+    {     
+        return Ccc::getBaseUrl($this->mediaPath.'/'.$this->image);
+    }
+
+    public function getImagePath()
+    {     
+        return Ccc::getBasePath($this->mediaPath.'/'.$this->image);
     }
 }
 
