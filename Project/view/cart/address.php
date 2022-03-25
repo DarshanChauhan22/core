@@ -1,6 +1,6 @@
 
 <?php $billingAddress = $this->getBillingAddress();  ?>
-<?php $shippingAddress = $this->getShippingAddress(); //print_r($shippingAddress); die; ?>
+<?php $shippingAddress = $this->getShippingAddress(); //print_r($billingAddress); die; ?>
 <?php $customer = $this->getCustomer(); //print_r($customer); die; ?>
 <?php $cartBillingAddress= $this->getCartBillingAddress(); //var_dump($cartBillingAddress); die; ?>
 <?php $cartShippingAddress= $this->getCartShippingAddress(); //var_dump($cartBillingAddress); die; ?>

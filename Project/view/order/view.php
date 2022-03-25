@@ -1,12 +1,12 @@
-<?php $order = $this->getOrder(); //print_r($order); die;?>
-<?php $customer = $this->getCustomer(); //print_r($order); die;?>
-<?php $orderAddress = $this->getOrderAddress(); //print_r($orderAddress); die;?>
-<?php $orderItems = $this->getOrderItems(); //print_r($orderItems); die;?>
-<?php $shippingMethod = $this->getShippingMethod(); //print_r($shippingMethod); die;?>
-<?php $paymentMethod = $this->getPaymentMethod(); //print_r($order); die;?>
-<?php $billingAddress = $this->getBillingAddress(); //print_r($billingAddress); die;?>
-<?php $shippingAddress = $this->getShippingAddress(); //print_r($shippingAddress); die;?>
-<?php $products = $this->getProducts(); //print_r($product); die;?>
+<?php $order = $this->getOrder();?>
+<?php $customer = $this->getCustomer(); ?>
+<?php $orderAddress = $this->getOrderAddress();?>
+<?php $orderItems = $this->getOrderItems();?>
+<?php $shippingMethod = $this->getShippingMethod();?>
+<?php $paymentMethod = $this->getPaymentMethod(); ?>
+<?php $billingAddress = $this->getBillingAddress();?>
+<?php $shippingAddress = $this->getShippingAddress();?>
+<?php $products = $this->getProducts();?>
 <?php $mediaModel = Ccc::getModel('Product_Media'); ?>
 
 <h2>Customer Details <h2>
@@ -92,13 +92,13 @@
 </table>
 <hr>
 
-<?php $cartItems = $this->getCartItems(); //print_r($cartItems); die; ?>
-<?php $cart = $this->getCart(); //print_r($cart); die; ?>
+
+<?php $cartItems = $this->getCartItems(); ?>
+<?php $cart = $this->getCart(); \?>
 <?php $totalDiscount = 0; ?>
 <?php foreach ($cartItems as $cartItem)
     {
-        $totalDiscount = $totalDiscount + $cartItem->discount;
-        //print_r($totalDiscount); die;
+        $totalDiscount = $totalDiscount + $cartItem->discount * $cartItem->quantity;
     } 
 ?>
 <h2>Order Details</h2>

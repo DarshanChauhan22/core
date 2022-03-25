@@ -32,7 +32,6 @@ class Controller_Cart extends Controller_Core_Action
 			$message = $this->getMessage();
 			date_default_timezone_set("Asia/Kolkata");
 			$date = date("Y-m-d H:i:s");
-
 			$customerId = $this->getRequest()->getRequest('id');
 			if(!$customerId)
 			{
@@ -49,13 +48,15 @@ class Controller_Cart extends Controller_Core_Action
 				$cartModel = Ccc::getModel('Cart');
 				$cartModel->customerId = $customerId;
 				$cartModel->createdAt = $date;
+				$result = $cartModel->save();
+				$session = $this->getMessage()->getSession();
+				$session->cartId = $result->cartId;
 			}
-			$result = $cartModel->save();
-			$cart = Ccc::getModel('Cart')->fetchRow("SELECT * FROM `cart` WHERE `cartId` = '{$result->cartId}'");
-			Ccc::getModel('Admin_Session')->cart = $cart;
+			$session = $this->getMessage()->getSession();
+			$session->cartId = $cartModel->cartId;
 
-			$message->addMessage('Update Successfully'); 
-            $this->redirect('cartShow','cart',null,false);
+			$message->addMessage('Load Successfully'); 
+            $this->redirect('cartShow','cart',['id' => null],false);
 		} 
 		catch (Exception $e) 
 		{
@@ -71,7 +72,9 @@ class Controller_Cart extends Controller_Core_Action
 		try 
 		{
 			$message = $this->getMessage();
-			$customerId = $this->getRequest()->getRequest('id');
+			$cartId = $this->getMessage()->getSession()->cartId;
+			$cartModel = Ccc::getModel('Cart')->load($cartId);
+			$customerId = $cartModel->customerId;
 			if(!$customerId)
 			{
 				throw new Exception("Invalid Request");
@@ -91,7 +94,6 @@ class Controller_Cart extends Controller_Core_Action
 	      	$content->addChild($address);
 	      	$content->addChild($cartItem);
 	      	$content->addChild($PlaceOrder);
-	      	//$content->addChild($shippingAddress);
 	      	$this->renderLayout();	
 		} 
 		catch (Exception $e) 
@@ -108,7 +110,9 @@ class Controller_Cart extends Controller_Core_Action
 		{
 			$message = $this->getMessage();
 			$paymentMethodId = $this->getRequest()->getPost('paymentMethod');
-			$customerId = $this->getRequest()->getRequest('id');
+			$cartId = $this->getMessage()->getSession()->cartId;
+			$cartModel = Ccc::getModel('Cart')->load($cartId);
+			$customerId = $cartModel->customerId;
 			if(!$customerId)
 			{
 				throw new Exception("Invalid Request");
@@ -142,7 +146,9 @@ class Controller_Cart extends Controller_Core_Action
 			{
 				throw new Exception("Invalid Request");
 			}
-			$customerId = $this->getRequest()->getRequest('id');
+			$cartId = $this->getMessage()->getSession()->cartId;
+			$cartModel = Ccc::getModel('Cart')->load($cartId);
+			$customerId = $cartModel->customerId;
 			if(!$customerId)
 			{
 				throw new Exception("Invalid Request");
@@ -185,19 +191,19 @@ class Controller_Cart extends Controller_Core_Action
 			$billingRow = $this->getRequest()->getPost('billingAddress');
 			$customerBillingRow = $this->getRequest()->getPost('customerBilling');
 
-			//print_r($customerBillingRow); die;
 			if(!$billingRow)
 			{
 				throw new Exception("Invalid Request");
 			}
 	        $shippingRow = (array_key_exists('same', $this->getRequest()->getPost())) ? $billingRow : $this->getRequest()->getPost('shippingAddress'); 
 	        $customerShippingRow = (array_key_exists('same', $this->getRequest()->getPost())) ? $customerBillingRow : $this->getRequest()->getPost('customerShipping'); 
-			//print_r($customerShippingRow); die;
 	        if(!$shippingRow)
 			{
 				throw new Exception("Invalid Request");
 			}
-			$customerId = $this->getRequest()->getRequest('id');
+			$cartId = $this->getMessage()->getSession()->cartId;
+			$cartModel = Ccc::getModel('Cart')->load($cartId);
+			$customerId = $cartModel->customerId;
 			if(!$customerId)
 			{
 				throw new Exception("Invalid Request");
@@ -295,7 +301,9 @@ class Controller_Cart extends Controller_Core_Action
 			}
 			$ids = $postData['selected'];
 			$quantities = $postData['quantity'];
-			$customerId = $this->getRequest()->getRequest('id');
+			$cartId = $this->getMessage()->getSession()->cartId;
+			$cartModel = Ccc::getModel('Cart')->load($cartId);
+			$customerId = $cartModel->customerId;
 			if (!$customerId) 
 			{	
 				throw new Exception("Invalid Request.");
@@ -353,7 +361,9 @@ class Controller_Cart extends Controller_Core_Action
 		$message = $this->getMessage();
 		try 
 		{
-			$customerId = $this->getRequest()->getRequest('id');
+			$cartId = $this->getMessage()->getSession()->cartId;
+			$cartModel = Ccc::getModel('Cart')->load($cartId);
+			$customerId = $cartModel->customerId;
 			$itemIds = $this->getRequest()->getPost('quantity');
 
 			foreach ($itemIds as $itemId => $quantity) 

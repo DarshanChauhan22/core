@@ -101,7 +101,9 @@ class Controller_Order extends Controller_Core_Action
         $message = $this->getMessage();
             date_default_timezone_set("Asia/Kolkata");
             $date = date("Y-m-d H:i:s");
-            $customerId = $this->getRequest()->getRequest('id');
+            $cartId = $this->getMessage()->getSession()->cartId;
+            $cartModel = Ccc::getModel('Cart')->load($cartId);
+            $customerId = $cartModel->customerId;
             if(!$customerId)
             {
                 throw new Exception("Invalid Request.");

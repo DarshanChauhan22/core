@@ -10,7 +10,9 @@ class Block_Cart_PlaceOrder extends Block_Core_Template
 
 	public function getCartItems()
 	{
-		$customerId = Ccc::getFront()->getRequest()->getRequest('id');
+		$cartId = Ccc::getModel('Admin_Message')->getSession()->cartId;
+		$cartModel = Ccc::getModel('Cart')->load($cartId);
+		$customerId = $cartModel->customerId;
 		$customer = Ccc::getModel('Customer')->load($customerId);
 		$customer = $customer->getCart();
 		$cartId = $customer->cartId;
@@ -22,7 +24,9 @@ class Block_Cart_PlaceOrder extends Block_Core_Template
 
 	public function getCart()
 	{
-		$customerId = Ccc::getFront()->getRequest()->getRequest('id');	
+		$cartId = Ccc::getModel('Admin_Message')->getSession()->cartId;
+		$cartModel = Ccc::getModel('Cart')->load($cartId);
+		$customerId = $cartModel->customerId;
 		$cart = Ccc::getModel('Cart');
 		$carts = $cart->fetchRow("SELECT * from `cart` WHERE `customerId` = {$customerId};");
 		return $carts;
