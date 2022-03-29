@@ -69,6 +69,7 @@ class Model_Core_Row
 
     public function save()
     {
+
         if(array_key_exists($this->getTable()->getPrimaryKey(), $this->data) && $this->data[$this->getTable()->getPrimaryKey()] != null)
         {
             $tableName = $this->getTable()->getPrimaryKey();

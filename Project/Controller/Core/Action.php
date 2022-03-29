@@ -99,60 +99,29 @@ class Controller_Core_Action
 		return $this->layout;
 	}
 
-	public function renderLayout()
-	{		
-		echo $this->getLayout()->toHtml();	
-	}
-
 	public function getRequest()
 	{
 		return Ccc::getFront()->getRequest();
 	}
 
+   public function renderLayout()
+    {
+       echo $this->getResponse()
+            ->setHeader('content-type','text/html')
+            ->render($this->getLayout()->toHtml());
+    }
+
+    public function renderJson($content)
+    {
+       echo $this->getResponse()
+            ->setHeader('content-type','application/json')
+            ->render(json_encode($content));
+    }
+
 	public function getResponse()
     {
         return Ccc::getFront()->getResponse();
     }
-
-	/*public function getUrl($action=null,$controller=null,$parameters=[],$reset=false)
-    {
-    	$tmp = [];
-    	if(!$controller)
-    	{
-    		$tmp['c'] = $this->getRequest()->getRequest('c'); 
-    	}
-    	else
-    	{
-    		$tmp['c'] = $controller;
-    	}
-
-    	if(!$action)
-    	{
-    		$tmp['a'] = $this->getRequest()->getRequest('a'); 
-    	}
-    	else
-    	{
-    		$tmp['a'] = $action;
-    	}
-
-    	if($reset)
-    	{
-    		if($parameters)
-    		{
-    			$tmp = array_merge($tmp,$parameters);
-    		}
-    	}
-    	else
-    	{
-    		$tmp = array_merge($_GET,$tmp);
-    		if($parameters)
-    		{
-    			$tmp = array_merge($tmp,$parameters);
-    		}
-    	}
-    	$url = 'index.php?'.http_build_query($tmp);
-    	return $url;
-	}*/
 
 	public function getBaseUrl($subUrl = null)
     {

@@ -4,7 +4,23 @@
 class Block_Core_Template extends Model_Core_View
 {
 	protected $children = [];
+	protected $layout = null;
 
+	public function __construct()
+	{
+		
+	}
+
+	public function getLayout()
+	{
+		return $this->layout;
+	}
+
+	public function setLayout($layout)
+	{
+		$this->layout = $layout;
+		return $this;
+	}
 	public function setChildren($children)		
 	{		
 		$this->children = $children;
@@ -44,6 +60,20 @@ class Block_Core_Template extends Model_Core_View
 			return null;
 	}
 
+	public function setPager($pager)
+	{
+		$this->pager = $pager;
+		return $this;
+	}
+
+	public function getPager()
+	{
+		if(!$this->pager)
+		{
+			$this->setPager(Ccc::getModel('Core_Pager'));
+		}
+		return $this->pager;
+	}
 
 }
 

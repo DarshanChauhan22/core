@@ -1,5 +1,7 @@
 <?php
-class Model_Core_View{
+
+class Model_Core_View
+{
 
 	public $templet = null;
 	public $data = null;

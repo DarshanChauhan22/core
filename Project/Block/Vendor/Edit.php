@@ -1,16 +1,17 @@
-<?php Ccc::loadClass('Block_Core_Template');?>
-<?php
-class Block_Vendor_Edit extends Block_Core_Template
+<?php 
+
+Ccc::loadClass('Block_Vendor_Edit_Tab');
+Ccc::loadClass('Block_Core_Edit');
+class Block_Vendor_Edit extends Block_Core_Edit
 {
 	public function __construct()
 	{
-		$this->setTemplate('view/vendor/edit.php');
+		parent::__construct();
 	}
-	public function getVendor()
+
+	public function getEditUrl()
 	{
-		$vendor = $this->getData('vendor');
-		$vendorAddress = $this->getData('vendorAddress');
-		return ['vendor' => $vendor , 'vendorAddress' => $vendorAddress];
+		return $this->getUrl('save');
 	}
 }
 

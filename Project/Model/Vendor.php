@@ -37,22 +37,22 @@ class Model_Vendor extends Model_Core_Row
 
 	public function getVendorAddress($reload = false)
 	{
+		//print_r($this); die;
 		$vendorAddressModel = Ccc::getModel('Vendor_Address');
 		if(!$this->vendorId)
 		{ 
 			return $vendorAddressModel;
 		}
 		if($this->vendorAddress && !$reload)
-		{ 
-			
+		{ 	
 			return $this->vendorAddressModel;
 		}
 
 		$vendorAddress = $vendorAddressModel->fetchRow("SELECT * from vendor_address WHERE vendorId = {$this->vendorId}");
+		//print_r("SELECT * from vendor_address WHERE vendorId = {$this->vendorId}"); die;
 		if(!$vendorAddress)
 		{
-			
-			return $vendorModel;
+			return $vendorAddressModel;
 		}
 		$this->setVendorAddress($vendorAddress);
 		return $vendorAddress;

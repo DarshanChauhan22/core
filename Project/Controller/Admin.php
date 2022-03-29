@@ -9,17 +9,32 @@ class Controller_Admin extends Controller_Core_Action
 	{
 		$this->setTitle("Admin Grid");
 		$content = $this->getLayout()->getContent();
+
         $adminGrid = Ccc::getBlock("Admin_Grid");
         $content->addChild($adminGrid);
         $this->renderLayout();
 	}
+
+	public function indexAction()
+    {
+        $content = $this->getLayout()->getContent();
+        $adminGrid = Ccc::getBlock('Admin_Index');
+        $content->addChild($adminGrid);
+        $this->renderLayout();
+    }
+
+    public function grid1Action()
+    {
+        $this->renderJson(['status' => 'success']);
+    }
 
 	public function addAction()
 	{
 		$this->setTitle("Admin Add");
 		$admin = Ccc::getModel('Admin');
 		$content = $this->getLayout()->getContent();
-        $adminAdd = Ccc::getBlock("Admin_Edit")->setData(['admin' => $admin]);
+		Ccc::register('admin',$admin);
+        $adminAdd = Ccc::getBlock("Admin_Edit");//->setData(['admin' => $admin]);
         $content->addChild($adminAdd);
         $this->renderLayout();	
 	}
@@ -41,9 +56,9 @@ class Controller_Admin extends Controller_Core_Action
 			{	
 				throw new Exception("Unable To Load Admin.");
 			}
-
+			Ccc::register('admin',$admin);
 			$content = $this->getLayout()->getContent();
-            $adminEdit = Ccc::getBlock("Admin_Edit")->setData(['admin' => $admin]);
+            $adminEdit = Ccc::getBlock("Admin_Edit");//->setData(['admin' => $admin]);
             $content->addChild($adminEdit);
             $this->renderLayout();	
            

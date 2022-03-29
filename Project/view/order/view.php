@@ -9,12 +9,12 @@
 <?php $products = $this->getProducts();?>
 <?php $mediaModel = Ccc::getModel('Product_Media'); ?>
 
-<h2>Customer Details <h2>
 <table border=1 width=100%>
+<th colspan="3"><h2>Customer Details </h2></th>
     <tr>
-        <th> Id </th>
-        <th> First Name </th>
-        <th> Last Name </th>
+        <th><h2> Id </h2></th>
+        <th><h2> First Name </h2></th>
+        <th><h2> Last Name </h2></th>
         
     </tr>
     <?php if($customer):?>
@@ -71,7 +71,7 @@
 
 <table border="1" width="100%">
     <tr>
-        <th><h2>Product Details</h2></th>
+        <th colspan="2"><h2>Product Details</h2></th>
     </tr>
         <?php foreach ($orderItems as $orderItem): ?>
     <tr>
@@ -82,7 +82,7 @@
             <?php endif;?>
                     </td>
         <td>
-            <?php echo $orderItem->name;?><br>
+            <b><?php echo $orderItem->name;?></b><br>
             <?php echo $orderItem->sku;?><br>
             <?php echo "₹" ." ".$orderItem->price;?><br>
             <?php echo "Quantity: " .$orderItem->quantity;?><br>
@@ -94,15 +94,15 @@
 
 
 <?php $cartItems = $this->getCartItems(); ?>
-<?php $cart = $this->getCart(); \?>
+<?php $cart = $this->getCart(); ?>
 <?php $totalDiscount = 0; ?>
 <?php foreach ($cartItems as $cartItem)
     {
         $totalDiscount = $totalDiscount + $cartItem->discount * $cartItem->quantity;
     } 
 ?>
-<h2>Order Details</h2>
 <table border="1" width="100%" cellspacing="4">
+<th colspan="2"><h2>Order Details</h2></th>
 <?php if(!$cartItems):?>
     <tr>
         <th>Sub Total</th>

@@ -18,17 +18,13 @@ class Controller_Vendor extends Controller_Core_Action
         $this->setTitle('Vendor Add');
         $vendorModel = Ccc::getModel('vendor');
         $content = $this->getLayout()->getContent();
-        $vendorAddress = $vendorModel->getVendorAddress();
-        $vendorAdd = Ccc::getBlock("Vendor_Edit")->setData(['vendor' => $vendorModel , 'vendorAddress' => $vendorAddress]);
+        Ccc::register('vendor',$vendorModel);
+        $vendorId = $this->getRequest()->getRequest('id');
+        $vendorAddress = $vendorModel->getVendorAddress();    
+        Ccc::register('vendorAddress',$vendorAddress);
+        $vendorAdd = Ccc::getBlock("Vendor_Edit");//->setData(['vendor' => $vendorModel , 'vendorAddress' => $vendorAddress]);
         $content->addChild($vendorAdd);
         $this->renderLayout();
-        /*$this->setTitle("Vendor Add");
-        $vendor = Ccc::getModel('Vendor');
-        $content = $this->getLayout()->getContent();
-        $vendorAdd = Ccc::getBlock("Vendor_Edit")->setData(['vendor' => $vendor]);
-        $content->addChild($vendorAdd);
-        $this->renderLayout();*/
-
     }
 
     public function editAction()
@@ -42,29 +38,25 @@ class Controller_Vendor extends Controller_Core_Action
             {
                 throw new Exception("Id not valid.");
             }
-            //$vendor = Ccc::getModel('Vendor')->load($id);
-
             $vendorModel = Ccc::getModel('Vendor')->load($id);
-            //$vendorAddressModel = Ccc::getModel('Vendor_Address')->load($id);
             if(!$vendorModel)
             {
                 throw new Exception("Unable To Load Admin.");
             }
             $vendor = $vendorModel->fetchRow("SELECT * FROM `vendor` WHERE vendorID = '$id'");
-            //$vendor = $vendorAddressModel->getVendor();
-            //print_r(121); die;
+    
             $vendorAddress = $vendorModel->getVendorAddress();
-            //$vendor = $vendor->fetchRow("SELECT c.*,a.* FROM vendor c join `vendor_address` a on a.vendorId = c.vendorId WHERE c.vendorId = {$id} ");
             
             if(!$vendor)
             {
                 throw new Exception("unable to load vendor.");
             }
-         $content = $this->getLayout()->getContent();
-            $vendorEdit = Ccc::getBlock("Vendor_Edit")->setData(['vendor' => $vendor , 'vendorAddress' => $vendorAddress]);
+            $content = $this->getLayout()->getContent();
+            Ccc::register('vendor',$vendor);
+            Ccc::register('vendorAddress',$vendorAddress);
+            $vendorEdit = Ccc::getBlock("Vendor_Edit");//->setData(['vendor' => $vendor , 'vendorAddress' => $vendorAddress]);
             $content->addChild($vendorEdit);
-            $this->renderLayout();    
-        
+            $this->renderLayout();            
         } 
         catch (Exception $e) 
         {
@@ -73,7 +65,7 @@ class Controller_Vendor extends Controller_Core_Action
         }
     }
 
-    public function saveVendor()
+    protected function saveVendor()
     {
         $message = $this->getMessage();
         date_default_timezone_set("Asia/Kolkata");
@@ -82,11 +74,12 @@ class Controller_Vendor extends Controller_Core_Action
         try
         {
             $row = $this->getRequest()->getPost('vendor');
+            $vendorId = (int)$this->getRequest()->getRequest('id');
             if (!$row) 
             {
-                throw new Exception("Invalid Request.");             
+                return;           
             } 
-            $vendorId = (int)$this->getRequest()->getRequest('id');
+    
             $vendor = Ccc::getModel('Vendor')->load($vendorId);
 
             if(!$vendor)
@@ -98,49 +91,44 @@ class Controller_Vendor extends Controller_Core_Action
             }
             else
             {
-                $vendor->setData($row);
+                $vendor->setData($row);     
                 $vendor->updatedAt = $date;
                 $result = $vendor->save();
             }
-            return $result->vendorId;
 
             if (!$result)
             {
                 throw new Exception("Update Unsuccessfully");
             }
             $message->addMessage('Update Successfully'); 
-            $this->redirect('grid','vendor',['id' => null],false);
+            $this->redirect('edit','vendor',['id' => $result->vendorId , 'tab' => address],true);
         }
         catch(Exception $e)
         {
             $message->addMessage($e->getMessage(),Model_Core_Message::ERROR);         
             $this->redirect('grid','vendor',null,true);
         }
-
 }
     
       
-    protected function saveAddress($vendorId)
+    protected function saveAddress()
     {
+        $vendorId = $this->getRequest()->getRequest('id');
+        $vendor = Ccc::getModel('vendor')->load($vendorId);
+        $address = $vendor->getVendorAddress();
+        $vandorAddressId = $address->vendorAddressId;
+        Ccc::register('address',$address);
         $address = Ccc::getModel('Vendor_Address'); 
         try 
         {
             $message = $this->getMessage();
-            $row = $this->getRequest()->getRequest('address');
-
-        if (!$row) 
-        {
-            throw new Exception("Invalid Request.");
-        }
+           $row = $this->getRequest()->getPost('address');
         date_default_timezone_set("Asia/Kolkata");
         $date = date("Y-m-d H:i:s");
-        /*$addressData = $address->fetchRow(
-            "SELECT * FROM `vendor_address` WHERE `vendorId` = {$vendorId}"
-        );*/
+        
         $vendorModel = Ccc::getModel('Vendor')->load($vendorId);
         $addressData = $vendorModel->getVendorAddress();
-
-        if(!$addressData)
+        if(!$addressData->vendorAddressId)
         {
             $address = Ccc::getModel('Vendor_Address');
             $address->setData($row);
@@ -177,10 +165,10 @@ class Controller_Vendor extends Controller_Core_Action
     }
 
     public function saveAction()
-    {
+    {      
         try {
             $vendorId = $this->saveVendor();
-            $this->saveAddress($vendorId);
+            $this->saveAddress();
             $this->redirect('grid','vendor',null,true);
         } catch (Exception $e) {
             $this->redirect('grid','vendor',null,true);
