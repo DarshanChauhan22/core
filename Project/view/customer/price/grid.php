@@ -1,10 +1,22 @@
+
 <?php $productsWithPercentage = $this->getProducts(); ?>
 <?php $products = $productsWithPercentage['products']; ?>
 <?php $percentage = $productsWithPercentage['percentage']; ?>
 <?php $prices = $this->getPrices(); ?>
 
-<table border="1" width="100%" cellspacing="4">
-	<tr>
+
+<div class="content-wrapper">
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="example2" class="table table-bordered table-hover">
+                
+              	<tr>
 		<th>Product ID</th>
 		<th>Name</th>
 		<th>Sku</th>
@@ -36,8 +48,91 @@
 		<tr>
 			<td colspan="6">
 				<input type="submit" name="save" value="Save">
-				<button ><a href="<?php echo $this->getUrl('grid','salesman_customer',null,false) ?>">Cancel</a></button>
+				<button class="btn btn-primary"><a href="<?php echo $this->getUrl('grid','salesman_customer',null,false) ?>">Cancel</a></button>
 			</td>
 		</tr>
 	</form>
-</table>
+
+              </table>
+
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+
+
+</div>
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+  function saveAndNext() 
+  {
+    admin.setForm(jQuery('#indexForm'));
+    admin.setUrl("<?php echo $this->getEdit()->getSaveUrl(); ?>");
+    //alert(admin.getUrl());
+    admin.load();
+  }
+
+  function vendorCancel() 
+  {
+    admin.setUrl("<?php echo $this->getUrl('gridBlock') ?>");
+    admin.load();
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

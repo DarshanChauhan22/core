@@ -2,7 +2,7 @@
 
 
 <form action="<?php echo $this->getUrl('add','cart',null,false) ?>" method="POST">
-        <button type="submit" name="Add" class="Registerbtn">Add To Cart</button>
+        <button type="submit" class="btn btn-success" name="Add" class="Registerbtn">Add To Cart</button>
     </form>
 
 <div id='info'>

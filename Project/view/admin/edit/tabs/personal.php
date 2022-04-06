@@ -1,8 +1,18 @@
 <?php $admin = $this->getAdmin(); ?>
 
 
-  <table border="1" width="100%" cellspacing="4">
-    <tr>
+
+<div class="content-wrapper">
+<section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example2" class="table table-bordered table-hover">
+                <tr>
       <td width="10%">First Name</td>
       <td><input type="text" name="admin[firstName]" value="<?php echo $admin->firstName ?>"></td>
     </tr>
@@ -34,8 +44,40 @@
       <td width="25%">&nbsp;</td>
       <input type="hidden" name="admin[adminId]" value="<?php echo $admin->adminId ?>">
       <td>
-        <button type="submit" name="submit" class="Registerbtn">Save </button>
-        <a href="<?php echo $this->getUrl('grid','admin',['id'=>null],false) ?>"><button type="button" class="cancelbtn">Cancel</button></a>
+        <button type="button" class="btn btn-success" onclick="adminSave()">Save</button>
+      <button type="button" class="btn btn-danger" onclick="adminCancel()">Cancel</button>
       </td>
     </tr>    
-  </table>  
+  
+                </table>
+                  
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+
+
+</div>
+
+<script type="text/javascript">
+
+  function adminSave() 
+  {
+        admin.setForm(jQuery('#indexForm'));
+        admin.setUrl("<?php echo $this->getEdit()->getSaveUrl(); ?>");
+        admin.load();
+  }
+
+  function adminCancel() 
+  {
+        admin.setUrl("<?php echo $this->getUrl('gridBlock') ?>");
+        admin.load();
+  }
+</script>

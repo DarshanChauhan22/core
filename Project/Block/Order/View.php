@@ -113,4 +113,13 @@ class Block_Order_View extends Block_Core_Template
 		$carts = $cart->fetchRow("SELECT * from `cart` WHERE `customerId` = {$customerId};");
 		return $carts;
 	}
+
+	public function getOrderComment()
+	{
+		$orderCommentModel = Ccc::getModel('Order_Comment');
+		$orderId = Ccc::getFront()->getRequest()->getRequest('id');
+		$order = $orderCommentModel->fetchRow("SELECT * FROM order_comment WHERE orderId = $orderId order by createdAt DESC Limit 1 ");
+		
+		return $order;
+	}
 }

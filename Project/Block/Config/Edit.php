@@ -1,16 +1,17 @@
-<?php Ccc::loadClass('Block_Core_Template'); ?>
-<?php
-class Block_Config_Edit extends Block_Core_Template
+<?php 
+
+Ccc::loadClass('Block_Core_Edit');
+Ccc::loadClass('Block_Config_Edit_Tab');
+class Block_Config_Edit extends Block_Core_Edit
 {
 	public function __construct()
 	{
-		$this->setTemplate('view/config/edit.php');
+		parent::__construct();
 	}
-	
-	public function getConfig()
+
+	public function getSaveUrl()
 	{
-		return $this->getData('config');
+		return $this->getUrl('save',null,['tab' => null]);
 	}
 }
 
-?>

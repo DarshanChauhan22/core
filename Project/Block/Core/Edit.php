@@ -41,6 +41,7 @@ class Block_Core_Edit extends Block_Core_Template
 	{
 		$tabs = $this->getTab()->getSelectedTab(); 
 		$object = Ccc::getBlock($tabs ['block']); 
+		$object->setEdit($this);
 		return $object;
 	}
 }

@@ -29,27 +29,26 @@ class Model_Product extends Model_Core_Row
     {
 
         global $adapter;
-        $query = "DELETE FROM category_product WHERE productId = {$this->productId}";
+        $query = "DELETE FROM category_product WHERE productId = {$productId}";
         $adapter->delete($query);
 
-        if($productId)
-        {
             foreach ($categoryIds as $categoryId) 
-                {       
+                {   
                     $categoryProduct = Ccc::getModel('Category_Product');
                     $categoryProduct->productId = $productId;
                     $categoryProduct->categoryId = $categoryId;
                     $categoryProduct->save();
                 }
-
-        }
-        foreach ($categoryIds as $categoryId) 
+        
+        /*foreach ($categoryIds as $categoryId) 
         {       
             $categoryProduct = Ccc::getModel('Category_Product');
-            $categoryProduct->productId = $this->productId;
+            $categoryProduct->productId = $productId;
             $categoryProduct->categoryId = $categoryId;
             $categoryProduct->save();
-        }
+            print_r($productId); die;
+        }*/
+       return;
     }
     public function getStatus($key = null)
     {       
@@ -101,13 +100,14 @@ class Model_Product extends Model_Core_Row
         { 
             return $this->medias;
         }
-        $medias = $mediasModel->fetchAll("SELECT * from product_media");
+        $medias = $mediasModel->fetchAll("SELECT * from product_media where productId = $this->productId");
+
         if(!$medias)
         {
             return $mediasModel;
         }
-        $this->setMedias($medias);
         return $medias;
+        $this->setMedias($medias);
     }
 
     public function setMedias(Model_Product_Media $medias)

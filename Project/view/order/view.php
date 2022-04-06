@@ -8,8 +8,18 @@
 <?php $shippingAddress = $this->getShippingAddress();?>
 <?php $products = $this->getProducts();?>
 <?php $mediaModel = Ccc::getModel('Product_Media'); ?>
+<?php $orderComment = $this->getOrderComment(); ?>
 
-<table border=1 width=100%>
+<div class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
 <th colspan="3"><h2>Customer Details </h2></th>
     <tr>
         <th><h2> Id </h2></th>
@@ -167,7 +177,80 @@
         </td>
     </tr>
         <?php endif; ?>
+
+        <tr>
+                                        <td colspan="4">
+                                            <h1>Order details</h1>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Id</td>
+                                        <td>
+                                            <input type="text" name="orderComment[orderId]" value="<?php echo $orderComment->orderId; ?>" readonly>
+                                        </td>
+                                    </tr>
+                                   <!--  <tr>
+                                        <td>State</td>
+                                        <td><select name="order[state]">
+                                            <?php //foreach ($orders->getState() as $key => $value): ?>
+                                                <option <?php// if($orders->state == $key): ?> selected <?php //endif; ?> value="<?php //echo $key; ?>"> <?php //echo $value; ?></option>
+                                            <?php //endforeach; ?>
+                                        </select></td>
+                                    </tr> -->
+
+                                    <tr>
+                                        <td>note</td>
+                                        <td><input type="text" name="orderComment[note]" value="<?php echo $orderComment->note ; ?>" ></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Status</td>
+                                        <td><select name="orderComment[status]">
+                                            <?php foreach ($orderComment->getStatus() as $key => $value): ?>
+                                                <option <?php if($orderComment->status == $key): ?> selected <?php endif; ?> value="<?php echo $key; ?>"> <?php echo $value; ?></option>
+                                            <?php endforeach; ?>
+                                        </select></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Notify Comment</td>
+                                        <td><input type="checkbox" name="orderComment[checkbox]" value="<?php echo $orderComment->commentId ?>"<?php echo ($orderComment->customerNotified==1) ? 'checked' : '' ; ?>></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td width="10%">&nbsp;</td>
+                                        <td><button onclick="saveComment()" class="btn btn-success" type="button" value="save">Save</button> </td>
+                                    </tr>
     
 </table>
+
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </section>
+    <button type="button" class="btn btn-primary" onclick="orderCancel()">Back To Orders</button>
+    </div>
+
 <hr>
-    <button type="button"><a href="<?php echo $this->getUrl('grid','order',null,true) ?>">Back To Orders</a></button>
+
+<script type="text/javascript">
+
+  function orderCancel() 
+  {
+        admin.setUrl("<?php echo $this->getUrl('gridBlock') ?>");
+        admin.load();
+  }
+
+  function saveComment() 
+{
+        admin.setForm(jQuery('#indexForm'));
+        admin.setUrl("<?php echo $this->getUrl('orderComment','order',null,false) ?>");
+        admin.load();  
+}
+</script>

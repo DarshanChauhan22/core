@@ -1,9 +1,9 @@
 var admin = {
-	url = null,
-	type = 'POST',
-	data = {},
-	dataType = 'json',
-	form = null,
+	url : null,
+	type : 'POST',
+	data : {},
+	dataType : 'json',
+	form : null,
 
 	setUrl : function(url){
 		this.url = url;
@@ -39,9 +39,11 @@ var admin = {
 	},
 
 	prepareFormParams: function(){
+		//alert(this.getForm().serializeArray());
 		this.setUrl(this.getForm().attr('action'));
 		this.setType(this.getForm().attr('method'));
 		this.setData(this.getForm().serializeArray());
+		//alert(this.getData());
 	},
 
 	setDataType : function(dataType){
@@ -58,9 +60,11 @@ var admin = {
 		  type: this.getType(),
 		  data: this.getData(),
 		  success: function(data){
-		  	console.log(data);
-		  },
-		  dataType: this.getDataType()
+			//alert(data);
+		  	jQuery('#indexContent').html(data.content);
+		  	jQuery('#adminMessage').html(data.message);
+		  }
+		  //dataType: this.getDataType()
 		});
 
 

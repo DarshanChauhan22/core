@@ -18,15 +18,68 @@ class Controller_Admin extends Controller_Core_Action
 	public function indexAction()
     {
         $content = $this->getLayout()->getContent();
+
         $adminGrid = Ccc::getBlock('Admin_Index');
         $content->addChild($adminGrid);
+
         $this->renderLayout();
     }
 
-    public function grid1Action()
+    public function gridBlockAction()
     {
-        $this->renderJson(['status' => 'success']);
+         $adminGrid = Ccc::getBlock("admin_Grid")->toHtml();
+        $messageBlock = Ccc::getBlock('Core_Message')->toHtml();
+         //$messageBlock->addMessage('hiiiiiiii');
+         $response = [
+            'status' => 'success',
+            'content' => $adminGrid,
+            'message' => $messageBlock,
+         ] ;
+        $this->renderJson($response);
+
     }
+
+    public function addBlockAction()
+    {
+        $admin = Ccc::getModel('Admin');
+        Ccc::register('admin',$admin);
+        $adminAdd = $this->getLayout()->getBlock('Admin_Edit')->toHtml();
+
+        $response = [
+            'status' => 'success',
+            'content' => $adminAdd
+         ];
+        $this->renderJson($response);
+    }
+
+   
+    public function editBlockAction()
+    {
+
+        $id = (int) $this->getRequest()->getRequest('id');
+            if(!$id)
+            {
+                throw new Exception("Id not valid.");
+            }
+            $adminModel = Ccc::getModel('admin')->load($id);
+            $admin = $adminModel->fetchRow("SELECT * FROM `admin` WHERE `adminId` = $id");
+
+            
+            if(!$admin)
+            {
+                throw new Exception("unable to load admin.");
+            }
+            $content = $this->getLayout()->getContent();
+             Ccc::register('admin',$admin);
+           
+            $adminEdit = Ccc::getBlock("admin_Edit")->toHtml();
+                $response = [
+            'status' => 'success',
+            'content' => $adminEdit
+         ] ;
+        $this->renderJson($response);
+    }
+
 
 	public function addAction()
 	{
@@ -115,7 +168,7 @@ class Controller_Admin extends Controller_Core_Action
                 }
 				$message->addMessage('Update Successfully.');
        		}
-			$this->redirect('grid',null,['id' => null],false);
+			$this->redirect('gridBlock',null,['id' => null],false);
 		} 
 		catch (Exception $e) 
 		{
@@ -142,12 +195,12 @@ class Controller_Admin extends Controller_Core_Action
 				throw new Exception("System is unable to delete record.");						
 			}
 			$message->addMessage('Delete Successfully.');			
-			$this->redirect('grid',null,['id' => null],false);			
+			$this->redirect('gridBlock',null,['id' => null],false);			
 		} 
 		catch (Exception $e) 
 		{
 			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect($this->getUrl('grid',null,['id' => null],false));	
+			$this->redirect($this->getUrl('gridBlock',null,['id' => null],false));	
 		}
 	}
 

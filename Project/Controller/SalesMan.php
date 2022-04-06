@@ -4,7 +4,7 @@
 <?php
 class Controller_salesman extends Controller_Core_Action
 {
-	
+
 	public function gridAction()
 	{
 		$this->setTitle("Salesmana Grid");
@@ -14,12 +14,73 @@ class Controller_salesman extends Controller_Core_Action
         $this->renderLayout();
 	}
 
+	 public function indexAction()
+    {
+        $content = $this->getLayout()->getContent();
+        $salesManGrid = Ccc::getBlock('salesMan_Index');
+        $content->addChild($salesManGrid);
+        $this->renderLayout();
+    }
+
+    public function gridBlockAction()
+    {
+         $salesManGrid = Ccc::getBlock("salesMan_Grid")->toHtml();
+         $messageBlock = Ccc::getBlock('Core_Message')->toHtml();
+         $response = [
+            'status' => 'success',
+            'content' => $salesManGrid,
+            'message' => $messageBlock,
+         ] ;
+        $this->renderJson($response);
+    }
+
+    public function addBlockAction()
+    {
+        $salesMan = Ccc::getModel('salesMan');
+        Ccc::register('salesMan',$salesMan);
+        $customer = $salesMan->getCustomers();
+        Ccc::register('customer',$customer);
+        $salesManAdd =$this->getLayout()->getBlock('salesMan_Edit')->toHtml();
+        $response = [
+            'status' => 'success',
+            'content' => $salesManAdd
+        ];
+        $this->renderJson($response);
+    }
+
+    public function editBlockAction()
+    {
+        $id = (int) $this->getRequest()->getRequest('id');
+            if(!$id)
+            {
+                throw new Exception("Id not valid.");
+            }
+            $salesManModel = Ccc::getModel('salesMan')->load($id);
+            $salesMan = $salesManModel->fetchRow("SELECT * FROM `sales_man` WHERE `salesmanId` = $id");
+            Ccc::register('salesMan',$salesMan);
+            $customer = $salesManModel->getCustomers();
+        	Ccc::register('customer',$customer);
+        
+            if(!$salesMan)
+            {
+                throw new Exception("unable to load salesMan.");
+            }
+            $content = $this->getLayout()->getContent();
+            $salesManEdit = Ccc::getBlock("salesMan_Edit")->toHtml();
+                $response = [
+            'status' => 'success',
+            'content' => $salesManEdit
+        ];
+        $this->renderJson($response);
+    }
+
 	public function addAction()
 	{
 		$this->setTitle("Salesmana Add");
 		$salesman = Ccc::getModel('salesman');
 		$content = $this->getLayout()->getContent();
-        $salesmanAdd = Ccc::getBlock("salesman_Edit")->setData(['salesman' => $salesman]);
+		Ccc::register('salesman',$salesman);
+        $salesmanAdd = Ccc::getBlock("salesman_Edit");//->setData(['salesman' => $salesman]);
         $content->addChild($salesmanAdd);
         $this->renderLayout();	
 	}
@@ -40,9 +101,9 @@ class Controller_salesman extends Controller_Core_Action
 			{
 				throw new Exception("unable to load salesman.");
 			}
-				
+			Ccc::register('salesman',$salesman);	
 			$content = $this->getLayout()->getContent();
-            $salesmanEdit = Ccc::getBlock("salesman_Edit")->setData(['salesman' => $salesman]);
+            $salesmanEdit = Ccc::getBlock("salesman_Edit");//->setData(['salesman' => $salesman]);
             $content->addChild($salesmanEdit);
             $this->renderLayout();	
 		} 
@@ -64,6 +125,7 @@ class Controller_salesman extends Controller_Core_Action
             $row = $this->getRequest()->getPost('salesman');
             if (!$row) 
             {
+            	//print_r("$this->redirect('addBlock',null,null,false)"); die;
                 throw new Exception("Invalid Request.");             
             } 
 
@@ -88,7 +150,7 @@ class Controller_salesman extends Controller_Core_Action
                 throw new Exception("Update Unsuccessfully");
             }
             $message->addMessage('Update Successfully'); 
-            $this->redirect('grid','salesman',['id' => null],false);
+            $this->redirect('addBlock',null,['id' => $result->salesmanId , 'tab' => 'customer'],true);
         }
         catch(Exception $e)
         {

@@ -18,11 +18,13 @@ class Block_Vendor_Edit_Tab extends Block_Core_Edit_Tab
 			'title' => 'Personal Information',
 			'block' => 'Vendor_Edit_Tabs_Personal',
 			'url' => $this->getUrl(null,null,['tab' => 'personal'])],'personal');
+
 		$this->addTab(
 			[
-			'title' => 'address Information',
+			'title' => 'Address Information',
 			'block' => 'Vendor_Edit_Tabs_Address',
 			'url' => $this->getUrl(null,null,['tab' => 'address'])],'address');	
+		
 		return $this;
 	}
 

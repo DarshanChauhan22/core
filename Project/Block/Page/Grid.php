@@ -1,14 +1,80 @@
-<?php 
+<?php Ccc::loadClass('Block_Core_Grid'); ?>
 
-Ccc::loadClass('Block_Core_Template');
-class Block_Page_Grid extends Block_Core_Template
+<?php 
+class Block_Page_Grid extends Block_Core_Grid
 {
-	protected $pager;
 	public function __construct()
 	{
 		$this->setTemplate('view/page/grid.php');
+		parent::__construct();
 	}
 
+	public function getEditUrl($page)
+	{
+		return $this->getUrl('edit',null,['id'=>$page->pageId]);
+	}
+	
+	public function getDeleteUrl($page)
+	{
+		return $this->getUrl('delete',null,['id'=>$page->pageId]);
+	}
+	public function prepareActions()
+	{
+		$this->setActions([
+			['title'=>'Edit','method'=>'getEditUrl'],
+			['title'=>'Delete','method'=>'getDeleteUrl']
+			]);
+		return $this;
+	}
+
+	public function prepareCollections()
+	{
+		$this->setCollections(
+			$this->getPages());
+	}
+
+	public function prepareColumns()
+	{
+		parent::prepareColumns();
+
+		$this->addColumn('pageId', [
+			'title' => 'page Id',
+			'type' => 'int',
+		]);
+
+		$this->addColumn('name',[
+			'title' => 'Name',
+			'type' => 'varchar',
+		]);
+
+		$this->addColumn('code',[
+			'title' => 'Code',
+			'type' => 'varchar',
+		]);
+
+		$this->addColumn('content',[
+			'title' => 'Content',
+			'type' => 'varchar',
+		]);
+
+		$this->addColumn('status',[
+			'title' => 'Status',
+			'type' => 'int',
+		]);
+
+		$this->addColumn('createdAt',[
+			'title' => 'Created At',
+			'type' => 'datetime',
+		]);
+
+		$this->addColumn('updatedAt',[
+			'title' => 'UpdatedAt',
+			'type' => 'datetime',
+		]);
+
+		return $this;
+	}
+	
 	public function getPages()
 	{
 		$page = Ccc::getFront()->getRequest()->getRequest('p');
@@ -21,17 +87,12 @@ class Block_Page_Grid extends Block_Core_Template
 		$pages = $pageModel->fetchAll("SELECT * FROM `page` LIMIT {$this->getPager()->getStartLimit()},{$perPageCount}");
 		return $pages;
 	}
-
-	public function getPager()
-	{
-		return $this->pager;
-	}
-
-	public function setPager($pager)
-	{
-		$this->pager = $pager;
-		return $this->pager;
-	}
+	
 }
 
-?>
+
+
+
+	
+
+	

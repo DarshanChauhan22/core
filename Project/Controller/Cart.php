@@ -67,42 +67,23 @@ class Controller_Cart extends Controller_Core_Action
 
 	}
 
+	
 	public function cartShowAction()
-	{
-		try 
-		{
-			$message = $this->getMessage();
-			$cartId = $this->getMessage()->getSession()->cartId;
-			$cartModel = Ccc::getModel('Cart')->load($cartId);
-			$customerId = $cartModel->customerId;
-			if(!$customerId)
-			{
-				throw new Exception("Invalid Request");
-			}
-			$this->setTitle("Cart");
-			$content = $this->getLayout()->getContent();
-			$customer = Ccc::getModel('Customer');
-	    	$customerInfo = Ccc::getBlock("Cart_CustomerInfo");
-	    	$shippingMethod = Ccc::getBlock("Cart_ShippingMethod");
-	    	$paymentMethod = Ccc::getBlock("Cart_PaymentMethod");
-	    	$address = Ccc::getBlock("Cart_Address");
-	    	$cartItem = Ccc::getBlock("Cart_Item");
-	    	$PlaceOrder = Ccc::getBlock("Cart_PlaceOrder");
-	      	$content->addChild($customerInfo);
-	      	$content->addChild($shippingMethod);
-	      	$content->addChild($paymentMethod);
-	      	$content->addChild($address);
-	      	$content->addChild($cartItem);
-	      	$content->addChild($PlaceOrder);
-	      	$this->renderLayout();	
-		} 
-		catch (Exception $e) 
-		{
-			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect('cartShow','cart',null,false);
-		}
-		
-	}
+    {
+        $cartModel = Ccc::getModel('Cart');
+        $customers = $cartModel->getCustomers();
+        Ccc::register('cartCustomer' , $customers);
+        $cartAdd = $this->getLayout()->getBlock('Cart_CartShow')->toHtml();//->setData(['customers' => $customers]);
+         $response = [
+            'status' => 'success',
+            'content' => $cartAdd
+         ] ;
+        $this->renderJson($response);
+    }
+
+
+
+	
 
 	public function updatePaymentMethodAction()
 	{
@@ -361,10 +342,11 @@ class Controller_Cart extends Controller_Core_Action
 		$message = $this->getMessage();
 		try 
 		{
+			
 			$cartId = $this->getMessage()->getSession()->cartId;
 			$cartModel = Ccc::getModel('Cart')->load($cartId);
 			$customerId = $cartModel->customerId;
-			$itemIds = $this->getRequest()->getPost('quantity');
+			$itemIds = $this->getRequest()->getPost('quan');
 
 			foreach ($itemIds as $itemId => $quantity) 
 			{

@@ -1,10 +1,11 @@
-<?php $medias = $this->getMedias(); ?>	
+<?php $medias = $this->getMedias(); print_r($medias)?>	
+<?php $id= $_GET['id'];?>	
 <?php $mediaModel = Ccc::getModel('Category_Media')?>
 
 
-	<form action="<?php echo $this->getUrl('save','category_media',null,false) ?>" method="POST" align="center">
-		<input type="submit" name="update" value="UPDATE"> 
-	<button ><a href="<?php echo $this->getUrl('grid','category',null,true) ?>">Cancel</a></button>
+	<form action="<?php echo $this->getUrl('save','category_media',['id' => $id],true) ?>" method="POST" align="center">
+		<input class="btn btn-success" type="submit" name="update" value="UPDATE"> 
+	<button class="btn btn-primary"  ><a href="<?php echo $this->getUrl('gridBlock','category',['id' => null]) ?>">Cancel</a></button>
 
 		<table border=1 width=100%>
 			<tr>
@@ -42,9 +43,32 @@
 	<br>
 	<br>
 	<br>
-				<form align="center" action="<?php echo $this->getUrl('add','category_media',null,false) ?>" method="POST" enctype="multipart/form-data">
-				<input type="file" name="image[]" accept="image/*">
-				<input type="submit" name="submit" value="Upload" >
+				<!-- <form align="center" action="<?php //echo $this->getUrl('add','category_media',null,false) ?>" method="POST" enctype="multipart/form-data"> -->
+				<input type="file" name="image[]" id="fileToupload" class="fileToupload form-control" accept="image/*">
+				<button type="submit" onclick="uploadFile()">Uploads</button>
+				<!-- <input type="submit" onclick="uploadFile()" value="Upload" > -->
 </form>
 
+<script type="text/javascript">
+	
+	function uploadFile() {
+		alert(123);
+		var file_data = $('.fileToupload').prop('files')[0];
+		var form_data = new FormData();
+		form_data.append("file","file_data");
+		$.ajax({
+			url : "<?php echo $this->getUrl('add','category_media',null,false) ?>",
+			type : "POST",
+			dataType : "script",
+			cache : false,
+			contentType : false,
+			processData : false,
+			data : form_date,
 
+			success:function(dat2){
+				if(dat2==1) alert("success");
+				else alert("un");
+			}
+		});
+	}
+</script>

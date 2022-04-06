@@ -12,6 +12,63 @@ class Controller_Customer_Price extends Controller_Core_Action
         $this->renderLayout();
     }
 
+  
+
+    public function gridBlockAction()
+    {
+
+         $priceGrid = Ccc::getBlock("Customer_Price_Grid")->toHtml();
+        $messageBlock = Ccc::getBlock('Core_Message')->toHtml();
+         $response = [
+            'status' => 'success',
+            'content' => $priceGrid,
+            'message' => $messageBlock,
+         ] ;
+        $this->renderJson($response);
+
+    }
+
+    public function addBlockAction()
+    {
+        $price = Ccc::getModel('Customer_Price');
+        Ccc::register('price',$price);
+        $priceAdd = $this->getLayout()->getBlock('Customer_Price_Grid')->toHtml();
+        
+        $response = [
+            'status' => 'success',
+            'content' => $priceAdd
+         ];
+        $this->renderJson($response);
+    }
+
+   
+    public function editBlockAction()
+    {
+
+        $id = (int) $this->getRequest()->getRequest('id');
+            if(!$id)
+            {
+                throw new Exception("Id not valid.");
+            }
+            $priceModel = Ccc::getModel('Customer_Price')->load($id);
+            $price = $priceModel->fetchRow("SELECT * FROM `price` WHERE `priceId` = $id");
+
+            
+            if(!$price)
+            {
+                throw new Exception("unable to load price.");
+            }
+            $content = $this->getLayout()->getContent();
+             Ccc::register('price',$price);
+           
+            $priceEdit = Ccc::getBlock("price_Edit")->toHtml();
+                $response = [
+            'status' => 'success',
+            'content' => $priceEdit
+         ] ;
+        $this->renderJson($response);
+    }
+
     public function saveAction()
     {
         $message = $this->getMessage();
@@ -53,7 +110,7 @@ class Controller_Customer_Price extends Controller_Core_Action
 
             $salesmanId = (int)$this->getRequest()->getRequest('id');
             $message->addMessage('Update successfully.');
-            $this->redirect($this->getUrl('grid',null,['id'=>$salesmanId,'customerId'=>$customerId],true));
+            $this->redirect('gridBlock','salesman',null,true);
         }
         catch (Exception $e) 
         {

@@ -14,6 +14,67 @@ class Controller_Category extends Controller_Core_Action
         $this->renderLayout();
 	}
 
+	 public function indexAction()
+    {
+        $content = $this->getLayout()->getContent();
+        $categoryGrid = Ccc::getBlock('Category_Index');
+        $content->addChild($categoryGrid);
+        $this->renderLayout();
+    }
+
+    public function gridBlockAction()
+    {
+         $categoryGrid = Ccc::getBlock("Category_Grid")->toHtml();
+         $messageBlock = Ccc::getBlock('Core_Message')->toHtml();
+         $response = [
+            'status' => 'success',
+            'content' => $categoryGrid,
+            'message' => $messageBlock,
+         ] ;
+        $this->renderJson($response);
+    }
+
+    public function addBlockAction()
+    {
+        $category = Ccc::getModel('Category');
+        Ccc::register('category',$category);
+        $media = $category->getMedias();
+        Ccc::register('media',$media);
+        $categoryAdd =$this->getLayout()->getBlock('Category_Edit')->toHtml();
+        $response = [
+            'status' => 'success',
+            'content' => $categoryAdd
+        ];
+        $this->renderJson($response);
+    }
+
+    public function editBlockAction()
+    {
+        $id = (int) $this->getRequest()->getRequest('id');
+            if(!$id)
+            {
+                throw new Exception("Id not valid.");
+            }
+            $categoryModel = Ccc::getModel('category')->load($id);
+            $category = $categoryModel->fetchRow("SELECT * FROM `category` WHERE `categoryId` = $id");
+            $media = $category->getMedias();
+                
+            Ccc::register('category',$category);
+                Ccc::register('media',$media);
+            if(!$category)
+            {
+                throw new Exception("unable to load category.");
+            }
+            $content = $this->getLayout()->getContent();
+            $categoryEdit = Ccc::getBlock("category_Edit")->toHtml();
+                $response = [
+            'status' => 'success',
+            'content' => $categoryEdit
+        ];
+        $this->renderJson($response);
+    }
+
+
 	public function addAction()
 	{
 		$this->setTitle("Category Add");
@@ -94,6 +155,7 @@ class Controller_Category extends Controller_Core_Action
                 $category->status =  $row['status'];
                 $category->updatedAt =  $date;
                 $update = $category=$category->save();
+                $resultCategoryId = $update->categoryId;
 
 				if(!$update)
 				{
@@ -112,6 +174,7 @@ class Controller_Category extends Controller_Core_Action
                 $category->status =  $row['status'];
                 $insert=$category->save();
                 $insert = $insert->categoryId;
+                $resultCategoryId = $inser->categoryId;
 				}
 				else
 				{
@@ -121,6 +184,7 @@ class Controller_Category extends Controller_Core_Action
                 $category->parentId =  $row['parentId'];
                 $insert= $category->save();
                 $insert = $insert->categoryId;
+                $resultCategoryId = $inser->categoryId;
 
 				}
 				if(!$insert)
@@ -149,6 +213,7 @@ class Controller_Category extends Controller_Core_Action
                 $category->categoryPath = $path;
                 $category->status =  $row['status'];
                 $update=$category->save();
+                $resultCategoryId = $update->categoryId;
 				
 				if(!$update)
 				{
@@ -156,12 +221,12 @@ class Controller_Category extends Controller_Core_Action
 				}				
 			}
 			$message->addMessage('Insert Successfully.');
-		$this->redirect('grid','category',null,false);
+		$this->redirect('editBlock','category',['id' => $resultCategoryId,'tab' => 'media'],false);
 		
 		} catch (Exception $e) 
 		{
 			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect('grid',null,null,false);		
+			$this->redirect('editBlock','category',['id' => $resultCategoryId,'tab' => 'media'],false);		
 		}
 	}
 	
@@ -242,7 +307,7 @@ class Controller_Category extends Controller_Core_Action
 
 			}
 			$message->addMessage('Update Successfully.');
-			$this->redirect('grid','category',null,false);
+			$this->redirect('editBlock','category',['id' => $categoryId,'tab' => 'media'],false);
 			} catch (Exception $e) 
 			{
 				$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
@@ -283,10 +348,10 @@ class Controller_Category extends Controller_Core_Action
               unlink($mediaModel->getImagePath() . $value);               }
             }
             $message->addMessage('Delete Successfully.');
-			$this->redirect('grid','category',['id' => null],false);		
+			$this->redirect('gridBlock','category',['id' => null],false);		
 		} catch (Exception $e) {
 			$message->addMessage($e->getMessage(),Model_Core_Message::ERROR);
-			$this->redirect('grid',null,['id' => null],false);			
+			$this->redirect('gridBlock','category',['id' => null],false);			
 		}
 			
 	}
@@ -317,26 +382,29 @@ class Controller_Category extends Controller_Core_Action
         }
         $categoryPath = $adapter->fetchPair($query);
      
-        
-        foreach ($categoryPath as $key => $value) 
+        if($categoryPath)
         {
-                $explodeArray=explode('/', $value);
-             
-       
-                $tempArray = [];
+	        foreach ($categoryPath as $key => $value) 
+	        {
+	                $explodeArray=explode('/', $value);
+	             
+	       
+	                $tempArray = [];
 
-                foreach ($explodeArray as $keys => $value) 
-                {
-                    if(array_key_exists($value,$categoryName))
-                    {
-                        array_push($tempArray,$categoryName[$value]);
-                    }
-                }
+	                foreach ($explodeArray as $keys => $value) 
+	                {
+	                    if(array_key_exists($value,$categoryName))
+	                    {
+	                        array_push($tempArray,$categoryName[$value]);
+	                    }
+	                }
 
-                $implodeArray = implode('/', $tempArray);
-                $categories[$key]= $implodeArray;
-        } 
+	                $implodeArray = implode('/', $tempArray);
+	                $categories[$key]= $implodeArray;
+	        } 
+	        
         return $categories;
+    	}
     }	
 }
 

@@ -1,7 +1,7 @@
-<?php Ccc::loadClass('Block_Core_Grid_Collection'); ?>
+<?php Ccc::loadClass('Block_Core_Grid'); ?>
 
 <?php 
-class Block_Admin_Grid extends Block_Core_Grid_Collection
+class Block_Admin_Grid extends Block_Core_Grid
 {
 	public function __construct()
 	{
@@ -20,18 +20,17 @@ class Block_Admin_Grid extends Block_Core_Grid_Collection
 	}
 	public function prepareActions()
 	{
-		$this->addAction([
+		$this->setActions([
 			['title'=>'Edit','method'=>'getEditUrl'],
 			['title'=>'Delete','method'=>'getDeleteUrl']
-			],'actions');
+			]);
 		return $this;
 	}
 
 	public function prepareCollections()
 	{
-		$this->addCollection([
-			$this->getAdmins()
-		],'collection');
+		$this->setCollections(
+			$this->getAdmins());
 	}
 
 	public function prepareColumns()

@@ -4,7 +4,6 @@
 <?php Ccc::loadClass('Model_Core_Request'); ?>
 <?php date_default_timezone_set("Asia/Kolkata"); ?>
 <?php $date = date('Y-m-d H:i:s'); ?>
-<?php $controllerCoreAction = new Controller_Core_Action(); ?>
  
 
 <?php 

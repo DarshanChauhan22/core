@@ -1,24 +1,23 @@
-<?php $cartItems = $this->getCartItems(); ?>
-<?php $cart = $this->getCart(); ?>
 
+<?php $cartItems = $this->getCartItems(); //print_r($cartItems); die; ?>
+<?php $cart = $this->getCart(); //print_r($cart); die; ?>
 <?php $totalDiscount=0; ?>
 <?php if($cartItems): ?>
 <?php foreach ($cartItems as $cartItem)
- {
-	$totalDiscount = $totalDiscount + $cartItem->discount * $cartItem->quantity ;
+{
+	$totalDiscount = $totalDiscount + $cartItem->discount * $cartItem->quantity;
 } 
- ?>
-<?php endif; ?>
-	<form  action="<?php echo $this->getUrl('saveOrder','order') ?>" method="POST">
-<div style="float:right; margin-right: 50px;">
-	<h2>Order Details</h2>
+?>
+<?php endif;?>
 
-<table border="1" width="100%" cellspacing="4">
+<h2>Order Details</h2>
+<!-- <form  action="<?php //echo $this->getUrl('saveOrder','order') ?>" method="POST"> -->
+<table border="1" width="50%" cellspacing="0">
 
 
 	<?php if(!$cartItems):?>
 		<tr>
-		<th width="100%">Sub Total</th>
+		<th width="20%">Sub Total</th>
 		<td>0</td>
 	</tr>
 	<tr>
@@ -71,19 +70,31 @@
 	</tr>
 	<tr>
 		<th width="20%">Discount</th>
-		<td><?php echo $totalDiscount?></td>
+		<td><?php echo $totalDiscount; ?></td>
 	</tr>
 	<tr>
 		<th width="20%">Grand Total</th>
 		<td>
-			<?php echo $total + $cart->shippingAmount + $taxTotal - $totalDiscount?>
+			<?php echo ($total + $cart->shippingAmount + $taxTotal) - $totalDiscount;?>
 		</td>
 	</tr>
 <?php endif; ?>
 	<td></td>
 	<td>
-		<button type="submit" name="submit" class="Registerbtn">Place Order</button>
+		<button type="button" class="btn btn-success" onclick="placeOrder()">Place Order</button>
 	</td>
 </table>
-</div>
-</form>
+<!-- </form> -->
+
+
+<script type="text/javascript">
+	function placeOrder() 
+	{
+		//alert('button clicked');
+		admin.setForm(jQuery('#indexForm'));
+		admin.setUrl("<?php echo $this->getUrl('saveOrder','order') ?>");
+		alert(admin.getUrl());
+		admin.load();
+	}
+</script>
+

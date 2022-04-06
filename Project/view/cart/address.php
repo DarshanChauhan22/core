@@ -1,12 +1,10 @@
-
 <?php $billingAddress = $this->getBillingAddress();  ?>
-<?php $shippingAddress = $this->getShippingAddress(); //print_r($billingAddress); die; ?>
+<?php $shippingAddress = $this->getShippingAddress(); //print_r($shippingAddress); die; ?>
 <?php $customer = $this->getCustomer(); //print_r($customer); die; ?>
 <?php $cartBillingAddress= $this->getCartBillingAddress(); //var_dump($cartBillingAddress); die; ?>
 <?php $cartShippingAddress= $this->getCartShippingAddress(); //var_dump($cartBillingAddress); die; ?>
 
-
-  <form action="<?php echo $this->getUrl('saveAddress') ?>" method="POST">
+ <!--  <form action="<?php //echo $this->getUrl('saveAddress') ?>" method="POST"> -->
   <table border="1" width="100%" cellspacing="4">
    
     <tr>
@@ -121,6 +119,16 @@
     </tr>  
   </table>  
 </div>
- <button type="submit" name="submit" class="Registerbtn">Save </button>
-</form>
+  <button type="button" class="btn btn-success" onclick="saveAddressForm()">Save</button>
+<!-- </form> -->
 <hr>
+
+<script type="text/javascript">
+  function saveAddressForm() 
+  {
+    //alert('button clicked');
+    admin.setForm(jQuery('#indexForm'));
+    admin.setUrl("<?php echo $this->getUrl('saveAddress') ?>");
+    admin.load();
+  }
+  </script>

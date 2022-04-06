@@ -1,11 +1,81 @@
-<?php Ccc::loadClass('Block_Core_Template'); ?>
-<?php
-class Block_Category_Grid extends Block_Core_Template
+<?php 
+
+Ccc::loadClass('Block_Core_Grid');
+class Block_Category_Grid extends Block_Core_Grid
 {
-	protected $pager;
 	public function __construct()
 	{
-		$this->setTemplate('view/category/grid.php');
+		parent::__construct();
+	}
+
+	public function getEditUrl($category)
+	{
+		return $this->getUrl('edit',null,['id'=>$category->categoryId]);
+	}
+	
+	public function getDeleteUrl($category)
+	{
+		return $this->getUrl('delete',null,['id'=>$category->categoryId]);
+	}
+	public function prepareActions()
+	{
+		$this->setActions([
+			['title'=>'Edit','method'=>'getEditUrl'],
+			['title'=>'Delete','method'=>'getDeleteUrl']
+			]);
+		return $this;
+	}
+
+	public function prepareCollections()
+	{
+		$this->setCollections($this->getCategories());
+	}
+
+	public function prepareColumns()
+	{
+		parent::prepareColumns();
+
+		$this->addColumn('categoryId', [
+			'title' => 'Category Id',
+			'type' => 'int',
+		]);
+
+		$this->addColumn('name',[
+			'title' => 'Name',
+			'type' => 'varchar',
+		]);
+
+		$this->addColumn('baseImage',[
+			'title' => 'Base Image',
+			'type' => 'tinyInt',
+		]);
+
+		$this->addColumn('smallImage',[
+			'title' => 'Small Image',
+			'type' => 'tinyInt',
+		]);
+
+		$this->addColumn('thumbImage',[
+			'title' => 'Thumb Image',
+			'type' => 'tinyInt',
+		]);
+
+		$this->addColumn('status',[
+			'title' => 'Status',
+			'type' => 'int',
+		]);
+
+		$this->addColumn('createdAt',[
+			'title' => 'Created At',
+			'type' => 'datetime',
+		]);
+
+		$this->addColumn('updatedAt',[
+			'title' => 'UpdatedAt',
+			'type' => 'datetime',
+		]);
+
+		return $this;
 	}
 
 	public function getCategories()
@@ -29,7 +99,7 @@ class Block_Category_Grid extends Block_Core_Template
 		return $categories;
 	}
 
-	public function getCategoriePath()
+	public function getCategorieWithPath()
 	{
 		Ccc::loadClass('Controller_Category');
 		$category = new Controller_Category();

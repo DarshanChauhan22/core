@@ -5,7 +5,7 @@ class Block_Product_Media_Grid extends Block_Core_Template
 {
 	public function __construct()
 	{
-		$this->setTemplate('view/product/media/grid.php');
+		$this->setTemplate('view/product/edit/tabs/media.php');
 	}
 
 	public function getMedias()
@@ -17,5 +17,4 @@ class Block_Product_Media_Grid extends Block_Core_Template
 		return $medias;
 	}
 }
-
 ?>

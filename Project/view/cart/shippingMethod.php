@@ -1,8 +1,8 @@
-<?php $shippingMethods = $this->getShippingMethods(); ?>
-<?php $cart = $this->getCart(); ?>
+<?php $shippingMethods = $this->getShippingMethods(); //print_r($shippingMethods); die; ?>
+<?php $cart = $this->getCart(); //print_r($cart); die; ?>
 
 <h2>Shipping Methods<h2>
-    <form action="<?php echo $this->getUrl('updateShippingMethod') ?>" method="POST">
+   <!--  <form action="<?php //echo $this->getUrl('updateShippingMethod') ?>" method="POST"> -->
 <table border="1" width="100%" cellspacing="4">
     
             <?php foreach ($shippingMethods as $shippingMethod):?>
@@ -16,11 +16,21 @@
              <?php endforeach; ?>  
              <tr> 
     <td>
-        <button type="submit" name="submit" class="Registerbtn">Save </button>
+         <button type="button"class="btn btn-success"  onclick="saveShippinForm()">Save</button>
         
       </td>     
       </tr>    
 
 </table>
-</form>
+<!-- </form> -->
 <hr>
+
+<script type="text/javascript">
+  function saveShippinForm() 
+  {
+    //alert('button clicked');
+    admin.setForm(jQuery('#indexForm'));
+    admin.setUrl("<?php echo $this->getUrl('updateShippingMethod') ?>");
+    admin.load();
+  }
+  </script>

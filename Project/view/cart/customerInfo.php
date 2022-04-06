@@ -1,6 +1,4 @@
-<?php $customer = $this->getCustomer(); ?>
-
-
+<?php $customer = $this->getCustomer(); //print_r($customer); die; ?>
 
 <div id='info'>
     <h2>Customer Info <h2>
@@ -21,5 +19,5 @@
                 <tr><td colspan='10'>No Record Available</td></tr>          
             <?php endif; ?>
         </table>
-        <hr>
     
+<hr> 

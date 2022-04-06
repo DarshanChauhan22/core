@@ -14,6 +14,19 @@ class Controller_Product_Media extends Controller_Core_Action
         $this->renderLayout();
 	}
 
+     public function gridBlockAction()
+    {
+         $productMediaGrid = Ccc::getBlock("Product_Media_Grid")->toHtml();
+        $messageBlock = Ccc::getBlock('Core_Message')->toHtml();
+         $response = [
+            'status' => 'success',
+            'content' => $productMediaGrid,
+            'message' => $messageBlock,
+         ] ;
+        $this->renderJson($response);
+
+    }
+
 	public function saveAction()
     {
         $message = $this->getMessage();
@@ -175,7 +188,7 @@ class Controller_Product_Media extends Controller_Core_Action
                 $message->addMessage('Update Successfully.');
             }
 
-          $this->redirect('grid','product_media',['id'=> $productId]);
+          $this->redirect('gridBlock','product',['id'=> $productId]);
 
       } catch (Exception $e) 
       {

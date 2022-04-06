@@ -64,7 +64,7 @@ class Model_Cart extends Model_Core_Row
         if(!$billingAddress)
         {
             return $billingAddressModel;
-        print_r($billingAddressModel); die;
+        //print_r($billingAddressModel); die;
         }
         //$this->setBillingAddress($billingAddress);
         return $billingAddress;

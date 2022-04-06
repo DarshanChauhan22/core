@@ -9,8 +9,9 @@ class Model_Core_Response
 
 	public function setHeader($key, $value)
 	{
-		header("Content-type:$value");
+		header("$key:$value");
 		return $this;
 	}
 }
+
 

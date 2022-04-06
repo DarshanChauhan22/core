@@ -1,13 +1,88 @@
-<?php Ccc::loadClass('Block_Core_Template'); ?>
-<?php
+<?php Ccc::loadClass('Block_Core_Grid'); ?>
 
-class Block_salesman_Grid extends Block_Core_Template
+<?php 
+class Block_SalesMan_Grid extends Block_Core_Grid
 {
-	protected $pager;
-
 	public function __construct()
 	{
-		$this->setTemplate('view/salesman/grid.php');
+		$this->setTemplate('view/salesMan/grid.php');
+		parent::__construct();
+	}
+
+	public function getEditUrl($salesMan)
+	{
+		return $this->getUrl('edit',null,['id'=>$salesMan->salesManId]);
+	}
+
+	public function getDeleteUrl($salesMan)
+	{
+		return $this->getUrl('delete',null,['id'=>$salesMan->salesManId]);
+	}
+	public function prepareActions()
+	{
+		$this->setActions([
+			['title'=>'Edit','method'=>'getEditUrl'],
+			['title'=>'Delete','method'=>'getDeleteUrl']
+			]);
+		return $this;
+	}
+
+	public function prepareCollections()
+	{
+		$this->setCollections(
+			$this->getSalesmans());
+	}
+
+	public function prepareColumns()
+	{
+		parent::prepareColumns();
+
+		$this->addColumn('salesmanId', [
+			'title' => 'salesMan Id',
+			'type' => 'int',
+		]);
+
+		$this->addColumn('firstName',[
+			'title' => 'First Name',
+			'type' => 'varchar',
+		]);
+
+		$this->addColumn('lastName',[
+			'title' => 'Last Name',
+			'type' => 'varchar',
+		]);
+
+		$this->addColumn('email',[
+			'title' => 'Email',
+			'type' => 'varchar',
+		]);
+
+		$this->addColumn('mobile',[
+			'title' => 'Mobile',
+			'type' => 'varchar',
+		]);
+
+		$this->addColumn('percentage',[
+			'title' => 'Percentage',
+			'type' => 'float',
+		]);
+
+		$this->addColumn('status',[
+			'title' => 'Status',
+			'type' => 'int',
+		]);
+
+		$this->addColumn('createdAt',[
+			'title' => 'Created At',
+			'type' => 'datetime',
+		]);
+
+		$this->addColumn('updatedAt',[
+			'title' => 'UpdatedAt',
+			'type' => 'datetime',
+		]);
+
+		return $this;
 	}
 
 	public function getSalesmans()
@@ -22,18 +97,8 @@ class Block_salesman_Grid extends Block_Core_Template
 
 		$salesman = Ccc::getModel('salesman');
 		$salesmans = $salesman->fetchAll("SELECT * FROM `sales_man` LIMIT {$this->getPager()->getStartLimit()},{$perPageCount}");
+		
 		return $salesmans;
-	}
-
-	public function getPager()
-	{
-		return $this->pager;
-	}
-
-	public function setPager($pager)
-	{
-		$this->pager = $pager;
-		return $this->pager;
 	}
 
 }

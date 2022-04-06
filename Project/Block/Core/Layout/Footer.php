@@ -1,4 +1,3 @@
-<?php Ccc::loadClass('Block_Core_Template'); ?>
 
 <?php
 
